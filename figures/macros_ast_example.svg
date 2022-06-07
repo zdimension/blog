@@ -1,0 +1,169 @@
+<figure class="kg-card kg-image-card">
+<svg class="kg-image" style="max-width: 100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="608pt" height="402pt" viewBox="0.00 0.00 608.44 401.73">
+    <style>
+        @media (prefers-color-scheme: dark) {
+	svg .edge text {
+		fill: rgb(192, 186, 178);
+	}
+            
+    svg .edge polygon {
+		fill: rgb(192, 186, 178);
+        stroke: rgb(192, 186, 178);
+	}    
+    
+    svg .edge path {
+        stroke: rgb(192, 186, 178);
+	}  
+	
+	svg ellipse {
+		filter: brightness(.7) contrast(1.2);
+        stroke: transparent;
+	}
+}
+    </style>
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 397.7251)">
+<title>G</title>
+<!-- fdecl -->
+<g id="node1" class="node">
+<title>fdecl</title>
+<ellipse fill="#cae8ff" stroke="#000000" cx="183.5156" cy="-364.3095" rx="100.3619" ry="29.3315"/>
+<text text-anchor="middle" x="183.5156" y="-368.5095" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Function declaration</text>
+<text text-anchor="middle" x="183.5156" y="-351.7095" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">'factorial'</text>
+</g>
+<!-- id1 -->
+<g id="node2" class="node">
+<title>id1</title>
+<ellipse fill="#ff989c" stroke="#000000" cx="61.5156" cy="-252.6782" rx="33.1356" ry="29.3315"/>
+<text text-anchor="middle" x="61.5156" y="-256.8782" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Type</text>
+<text text-anchor="middle" x="61.5156" y="-240.0782" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">'int'</text>
+</g>
+<!-- fdecl&#45;&gt;id1 -->
+<g id="edge1" class="edge">
+<title>fdecl-&gt;id1</title>
+<path fill="none" stroke="#000000" d="M135.374,-338.478C125.5083,-332.0981 115.5785,-324.8006 107.1636,-316.8939 97.9741,-308.2592 89.4835,-297.5161 82.3801,-287.3027"/>
+<polygon fill="#000000" stroke="#000000" points="85.2284,-285.2658 76.7547,-278.906 79.4129,-289.162 85.2284,-285.2658"/>
+<text text-anchor="middle" x="143.6916" y="-304.2939" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Return type</text>
+</g>
+<!-- plist -->
+<g id="node3" class="node">
+<title>plist</title>
+<ellipse fill="#cae8ff" stroke="#000000" cx="183.5156" cy="-252.6782" rx="70.6761" ry="18"/>
+<text text-anchor="middle" x="183.5156" y="-248.4782" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Parameter list</text>
+</g>
+<!-- fdecl&#45;&gt;plist -->
+<g id="edge2" class="edge">
+<title>fdecl-&gt;plist</title>
+<path fill="none" stroke="#000000" d="M183.5156,-334.6874C183.5156,-318.0498 183.5156,-297.3965 183.5156,-280.9788"/>
+<polygon fill="#000000" stroke="#000000" points="187.0157,-280.8864 183.5156,-270.8865 180.0157,-280.8865 187.0157,-280.8864"/>
+<text text-anchor="middle" x="219.6853" y="-304.2939" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Parameters</text>
+</g>
+<!-- body -->
+<g id="node6" class="node">
+<title>body</title>
+<ellipse fill="#cae8ff" stroke="#000000" cx="372.5156" cy="-252.6782" rx="66.0007" ry="18"/>
+<text text-anchor="middle" x="372.5156" y="-248.4782" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">'If' statement</text>
+</g>
+<!-- fdecl&#45;&gt;body -->
+<g id="edge5" class="edge">
+<title>fdecl-&gt;body</title>
+<path fill="none" stroke="#000000" d="M228.306,-337.8544C261.1917,-318.4308 305.3052,-292.3755 336.048,-274.2175"/>
+<polygon fill="#000000" stroke="#000000" points="337.9072,-277.1844 344.7375,-269.0851 334.3473,-271.1572 337.9072,-277.1844"/>
+<text text-anchor="middle" x="305.4665" y="-304.2939" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Body</text>
+</g>
+<!-- p1 -->
+<g id="node4" class="node">
+<title>p1</title>
+<ellipse fill="#cae8ff" stroke="#000000" cx="57.5156" cy="-141.0469" rx="57.5313" ry="29.3315"/>
+<text text-anchor="middle" x="57.5156" y="-145.2469" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Parameter</text>
+<text text-anchor="middle" x="57.5156" y="-128.4469" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">'x'</text>
+</g>
+<!-- plist&#45;&gt;p1 -->
+<g id="edge3" class="edge">
+<title>plist-&gt;p1</title>
+<path fill="none" stroke="#000000" d="M163.8281,-235.2358C145.1728,-218.7079 116.6969,-193.4793 93.9099,-173.2908"/>
+<polygon fill="#000000" stroke="#000000" points="96.2286,-170.6691 86.4226,-166.6574 91.5866,-175.9086 96.2286,-170.6691"/>
+</g>
+<!-- id4 -->
+<g id="node5" class="node">
+<title>id4</title>
+<ellipse fill="#ff989c" stroke="#000000" cx="57.5156" cy="-29.4156" rx="33.1356" ry="29.3315"/>
+<text text-anchor="middle" x="57.5156" y="-33.6156" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Type</text>
+<text text-anchor="middle" x="57.5156" y="-16.8156" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">'int'</text>
+</g>
+<!-- p1&#45;&gt;id4 -->
+<g id="edge4" class="edge">
+<title>p1-&gt;id4</title>
+<path fill="none" stroke="#000000" d="M57.5156,-111.4249C57.5156,-98.5568 57.5156,-83.2867 57.5156,-69.4319"/>
+<polygon fill="#000000" stroke="#000000" points="61.0157,-69.1761 57.5156,-59.1761 54.0157,-69.1762 61.0157,-69.1761"/>
+<text text-anchor="middle" x="73.0745" y="-81.0313" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Type</text>
+</g>
+<!-- cond -->
+<g id="node7" class="node">
+<title>cond</title>
+<ellipse fill="#cae8ff" stroke="#000000" cx="216.5156" cy="-141.0469" rx="83.2543" ry="29.3315"/>
+<text text-anchor="middle" x="216.5156" y="-145.2469" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Binary operation</text>
+<text text-anchor="middle" x="216.5156" y="-128.4469" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">'=='</text>
+</g>
+<!-- body&#45;&gt;cond -->
+<g id="edge6" class="edge">
+<title>body-&gt;cond</title>
+<path fill="none" stroke="#000000" d="M348.8226,-235.7238C325.7821,-219.2364 290.1909,-193.7678 261.7239,-173.3973"/>
+<polygon fill="#000000" stroke="#000000" points="263.6901,-170.5005 253.521,-167.5274 259.6165,-176.1931 263.6901,-170.5005"/>
+<text text-anchor="middle" x="334.0773" y="-192.6626" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Condition</text>
+</g>
+<!-- body_true -->
+<g id="node10" class="node">
+<title>body_true</title>
+<ellipse fill="#cae8ff" stroke="#000000" cx="382.5156" cy="-141.0469" rx="64.3327" ry="18"/>
+<text text-anchor="middle" x="382.5156" y="-136.8469" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">[code if true]</text>
+</g>
+<!-- body&#45;&gt;body_true -->
+<g id="edge9" class="edge">
+<title>body-&gt;body_true</title>
+<path fill="none" stroke="#000000" d="M374.1669,-234.2446C375.7542,-216.5258 378.1747,-189.5053 380.0015,-169.1129"/>
+<polygon fill="#000000" stroke="#000000" points="383.4888,-169.41 380.8951,-159.1376 376.5167,-168.7854 383.4888,-169.41"/>
+<text text-anchor="middle" x="396.4097" y="-192.6626" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">If true</text>
+</g>
+<!-- body_false -->
+<g id="node11" class="node">
+<title>body_false</title>
+<ellipse fill="#cae8ff" stroke="#000000" cx="532.5156" cy="-141.0469" rx="67.8454" ry="18"/>
+<text text-anchor="middle" x="532.5156" y="-136.8469" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">[code if false]</text>
+</g>
+<!-- body&#45;&gt;body_false -->
+<g id="edge10" class="edge">
+<title>body-&gt;body_false</title>
+<path fill="none" stroke="#000000" d="M396.8162,-235.7238C424.3845,-216.4895 469.4718,-185.0323 500.0391,-163.7056"/>
+<polygon fill="#000000" stroke="#000000" points="502.0505,-166.57 508.249,-157.9776 498.0452,-160.8292 502.0505,-166.57"/>
+<text text-anchor="middle" x="483.1327" y="-192.6626" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">If false</text>
+</g>
+<!-- cop1 -->
+<g id="node8" class="node">
+<title>cop1</title>
+<ellipse fill="#98ff9c" stroke="#000000" cx="186.5156" cy="-29.4156" rx="47.7346" ry="29.3315"/>
+<text text-anchor="middle" x="186.5156" y="-33.6156" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Variable</text>
+<text text-anchor="middle" x="186.5156" y="-16.8156" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">'x'</text>
+</g>
+<!-- cond&#45;&gt;cop1 -->
+<g id="edge7" class="edge">
+<title>cond-&gt;cop1</title>
+<path fill="none" stroke="#000000" d="M208.6335,-111.7171C205.0852,-98.5138 200.8452,-82.7364 197.0311,-68.5441"/>
+<polygon fill="#000000" stroke="#000000" points="200.3206,-67.2985 194.3451,-58.5496 193.5605,-69.1153 200.3206,-67.2985"/>
+<text text-anchor="middle" x="236.5843" y="-81.0313" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Operand 1</text>
+</g>
+<!-- cop2 -->
+<g id="node9" class="node">
+<title>cop2</title>
+<ellipse fill="#fffec9" stroke="#000000" cx="303.5156" cy="-29.4156" rx="50.8492" ry="29.3315"/>
+<text text-anchor="middle" x="303.5156" y="-33.6156" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Constant</text>
+<text text-anchor="middle" x="303.5156" y="-16.8156" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">0</text>
+</g>
+<!-- cond&#45;&gt;cop2 -->
+<g id="edge8" class="edge">
+<title>cond-&gt;cop2</title>
+<path fill="none" stroke="#000000" d="M253.4566,-114.4056C260.676,-108.1246 267.7768,-101.0719 273.5156,-93.6313 279.5395,-85.8211 284.7323,-76.6063 289.0238,-67.6321"/>
+<polygon fill="#000000" stroke="#000000" points="292.2502,-68.9912 293.1668,-58.4361 285.868,-66.1158 292.2502,-68.9912"/>
+<text text-anchor="middle" x="317.5843" y="-81.0313" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#000000">Operand 2</text>
+</g>
+</g>
+</svg></figure>

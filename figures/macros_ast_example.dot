@@ -1,0 +1,43 @@
+digraph G {
+    node [fontname="Helvetica", style=filled];
+    edge [fontname="Helvetica"];
+    
+    subgraph types {
+        node [fillcolor="#ff989c"];
+        id1 [label="Type\n'int'"];
+        id4 [label="Type\n'int'"];
+    }
+    
+    subgraph vars {
+        node [fillcolor="#98ff9c"];
+        cop1 [label="Variable\n'x'"];
+    }
+    
+    subgraph consts {
+        node[fillcolor="#fffec9"];
+        cop2 [label="Constant\n0"];
+    }
+    
+    subgraph compounds {
+        node [fillcolor="#cae8ff"];
+        fdecl [label="Function declaration\n'factorial'"];
+        plist [label="Parameter list"];
+        p1 [label="Parameter\n'x'"];
+        body [label="'If' statement"];
+        cond [label="Binary operation\n'=='"];
+        body_true [label="[code if true]"];
+        body_false [label="[code if false]"];
+    }
+    
+    fdecl -> id1 [label="Return type"];
+    fdecl -> plist [label="Parameters"];
+    
+    plist -> p1;
+    p1 -> id4 [label="Type"];
+    fdecl -> body [label="Body"];
+    body -> cond [label="Condition"];
+    cond -> cop1 [label="Operand 1"];
+    cond -> cop2 [label="Operand 2"];
+    body -> body_true [label="If true"];
+    body -> body_false [label="If false"];
+}
