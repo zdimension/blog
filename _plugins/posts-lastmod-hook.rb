@@ -32,4 +32,12 @@ module Jekyll
       end
     end
   end
+
+  class SeoTag
+    class ImageDrop
+      def alt
+        @alt ||= filters.strip_html(image_hash['alt']) if image_hash['alt']
+      end
+    end
+  end
 end
