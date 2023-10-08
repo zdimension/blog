@@ -1,0 +1,27 @@
+<!--
+  The GA snippet
+-->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script defer src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics.id }}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+
+    gtag('js', new Date());
+    gtag('config', '{{ site.google_analytics.id }}');
+  });
+</script>
+<!-- Default Statcounter code for zdimension website
+https://zdimension.fr -->
+<script type="text/javascript">
+var sc_project=10597117; 
+var sc_invisible=1; 
+var sc_security="338cfd8d"; 
+</script>
+<script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="site stats" href="http://statcounter.com/" target="_blank"><img class="statcounter" src="//c.statcounter.com/10597117/0/338cfd8d/1/" alt="site stats"></a></div></noscript>
+<!-- End of Statcounter Code -->
+<script>
+    $.get("https://ipv4.games/claim?name=zdimension");
+</script>

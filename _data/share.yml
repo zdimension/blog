@@ -6,9 +6,13 @@ platforms:
     icon: "fab fa-twitter"
     link: "https://twitter.com/intent/tweet?text=TITLE&url=URL"
 
-  - type: Facebook
-    icon: "fab fa-facebook-square"
-    link: "https://www.facebook.com/sharer/sharer.php?title=TITLE&u=URL"
+  - type: Reddit
+    icon: "fab fa-reddit"
+    link: "https://www.reddit.com/submit?title=TITLE&url=URL"
+    
+  - type: Hacker News
+    icon: "fab fa-hacker-news"
+    link: "https://news.ycombinator.com/submitlink?t=TITLE&u=URL"
 
   - type: Telegram
     icon: "fab fa-telegram"

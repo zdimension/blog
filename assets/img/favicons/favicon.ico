@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -0.5 16 16" shape-rendering="crispEdges">
+<path stroke="#040504" d="M1 0h1" />
+<path stroke="#040604" d="M2 0h9" />
+<path stroke="#7e817e" d="M11 0h1" />
+<path stroke="#000000" d="M1 1h1M1 2h1M1 3h1M1 4h1M12 4h3M1 5h1M1 6h1M6 6h2M1 7h1M1 8h1M1 9h1M1 10h1M1 11h1M1 12h1M1 13h1M1 14h1" />
+<path stroke="#fdfdfd" d="M2 1h9M12 2h1" />
+<path stroke="#818181" d="M11 1h1M11 2h1M11 3h1" />
+<path stroke="#7b857b" d="M12 1h1" />
+<path stroke="#ffffff" d="M2 2h1M2 3h1M2 4h1M2 5h1M2 6h1M2 7h1M2 8h1M2 9h1M2 10h1M2 11h1M2 12h1M2 13h1" />
+<path stroke="#c0c0c0" d="M3 2h8M3 3h2M9 3h2M3 4h2M10 4h1M3 5h2M10 5h1M3 6h2M3 7h1M5 7h1M6 8h2M7 9h1M8 10h1" />
+<path stroke="#7b847b" d="M13 2h1" />
+<path stroke="#bfc2bf" d="M5 3h1" />
+<path stroke="#018301" d="M6 3h1M7 4h1M6 5h1" />
+<path stroke="#028202" d="M7 3h1" />
+<path stroke="#bec3bf" d="M8 3h1" />
+<path stroke="#fefefe" d="M12 3h1M13 5h1" />
+<path stroke="#fefffe" d="M13 3h1" />
+<path stroke="#818581" d="M14 3h1" />
+<path stroke="#008100" d="M5 4h1" />
+<path stroke="#06fc06" d="M6 4h1" />
+<path stroke="#000100" d="M8 4h1" />
+<path stroke="#bfbfbf" d="M9 4h1M9 5h1" />
+<path stroke="#070707" d="M11 4h1" />
+<path stroke="#028102" d="M5 5h1" />
+<path stroke="#038103" d="M7 5h1" />
+<path stroke="#000400" d="M8 5h1" />
+<path stroke="#c1c1c1" d="M11 5h2M6 7h2M3 12h1" />
+<path stroke="#171717" d="M14 5h1M14 11h1M14 12h1M14 13h1" />
+<path stroke="#bec2be" d="M5 6h1" />
+<path stroke="#c0c1c1" d="M8 6h1" />
+<path stroke="#c0c0c3" d="M9 6h3M8 7h1M8 8h1M8 9h1" />
+<path stroke="#c0c1c0" d="M12 6h1" />
+<path stroke="#fdfffd" d="M13 6h1" />
+<path stroke="#161616" d="M14 6h1M14 14h1" />
+<path stroke="#c3bfbf" d="M4 7h1" />
+<path stroke="#1100f5" d="M9 7h1" />
+<path stroke="#0e02fb" d="M10 7h1" />
+<path stroke="#0f00fb" d="M11 7h1" />
+<path stroke="#000113" d="M12 7h1" />
+<path stroke="#c3c0c0" d="M3 8h1" />
+<path stroke="#f90108" d="M4 8h1" />
+<path stroke="#ccbdbe" d="M5 8h1" />
+<path stroke="#1101f7" d="M9 8h1" />
+<path stroke="#15f7ff" d="M10 8h1" />
+<path stroke="#0e0ef9" d="M11 8h1" />
+<path stroke="#010213" d="M12 8h1" />
+<path stroke="#c2bfc2" d="M3 9h1M3 10h1M3 11h1" />
+<path stroke="#fb03f8" d="M4 9h1" />
+<path stroke="#fc0113" d="M5 9h1" />
+<path stroke="#cbbcbc" d="M6 9h1" />
+<path stroke="#1202f1" d="M9 9h1" />
+<path stroke="#1001f6" d="M10 9h1" />
+<path stroke="#030386" d="M11 9h1" />
+<path stroke="#fb02fb" d="M4 10h1" />
+<path stroke="#ff01fa" d="M5 10h1" />
+<path stroke="#fa0213" d="M6 10h1" />
+<path stroke="#cbbdbd" d="M7 10h1" />
+<path stroke="#000302" d="M9 10h1" />
+<path stroke="#000404" d="M10 10h1" />
+<path stroke="#f8fff8" d="M13 10h1" />
+<path stroke="#161816" d="M14 10h1" />
+<path stroke="#f906f9" d="M4 11h1" />
+<path stroke="#fc05fc" d="M5 11h1" />
+<path stroke="#fc05f5" d="M6 11h1" />
+<path stroke="#f40607" d="M7 11h1" />
+<path stroke="#c2c1b9" d="M8 11h1" />
+<path stroke="#b9c5b9" d="M12 11h1M10 13h1" />
+<path stroke="#fdfefd" d="M13 11h1M13 12h1M13 13h1" />
+<path stroke="#020202" d="M4 12h1" />
+<path stroke="#000900" d="M5 12h2" />
+<path stroke="#bbc3bb" d="M12 12h1" />
+<path stroke="#bac5bb" d="M3 13h1" />
+<path stroke="#bac5ba" d="M4 13h1" />
+<path stroke="#bfc0bf" d="M11 13h1" />
+<path stroke="#bec1be" d="M12 13h1" />
+<path stroke="#f8fcf8" d="M2 14h1" />
+<path stroke="#f4fcf4" d="M9 14h1" />
+<path stroke="#fcfcfc" d="M10 14h4" />
+<path stroke="#060706" d="M1 15h1" />
+<path stroke="#060a07" d="M2 15h1" />
+<path stroke="#061006" d="M9 15h1" />
+<path stroke="#070807" d="M10 15h5" />
+</svg>

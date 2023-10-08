@@ -1,0 +1,42 @@
+---
+---
+
+@import '{{ site.theme }}';
+
+svg text {
+    font-family: var(--font-family-base)!important;
+    fill: var(--text-color)!important;
+}
+
+.fab {
+	&.fa-reddit {
+		@include btn-sharing-color(rgba(255, 69, 0, 1));
+	}
+	
+	&.fa-hacker-news {
+		@include btn-sharing-color(rgba(255, 102, 0, 1));
+	}
+}
+
+@media all and (min-width: 576px) {
+  div[class^='language-'] {
+    .code-header {
+      &::before {
+        background-color: transparent;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+pre {
+	tab-size: 4;
+}
+
+#toc-wrapper {
+	ul {
+		.toc-link {
+			white-space: normal;
+		}
+	}
+}
