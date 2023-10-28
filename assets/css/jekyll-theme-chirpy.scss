@@ -73,3 +73,13 @@ blockquote.prompt-info::before {
     color: var(--prompt-info-icon-color);
     font: var(--fa-font-solid);
 }
+
+main p:has(>a.popup:not(.normal):not(.left):not(.right)) {
+	text-align: center;
+}
+
+main p>a.popup:not(.normal):not(.left):not(.right) {
+	transform: none;
+	left: 0;
+	position: initial;
+}
