@@ -68,3 +68,8 @@ pre {
 	}
 }
 
+blockquote.prompt-info::before {
+    content: "\f05a";
+    color: var(--prompt-info-icon-color);
+    font: var(--fa-font-solid);
+}
