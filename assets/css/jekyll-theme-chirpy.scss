@@ -83,3 +83,9 @@ main p>a.popup:not(.normal):not(.left):not(.right) {
 	left: 0;
 	position: initial;
 }
+
+.shimmer::before {
+	display: none;
+	animation: none;
+	-webkit-animation: none;
+}
