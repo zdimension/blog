@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "brfs": "^2.0.2",
+    "browserify": "^17.0.0",
+    "cowsay": "github:johnnysprinkles/cowsay#master",
+    "tinyify": "^3.1.0",
+    "word-wrap": "^1.2.5"
+  }
+}

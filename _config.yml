@@ -199,3 +199,14 @@ plugins:
 relative_links:
   enabled:     true
   collections: false
+
+browserify:
+
+  # target exts to convert
+  exts: [".js"]
+  
+  # use installed 'browserify'
+  command: "browserify -t brfs -p tinyify -"
+  
+  # execute `npm install` on initialize if true
+  npm_install: false

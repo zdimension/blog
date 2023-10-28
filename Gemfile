@@ -29,5 +29,5 @@ end
 
 group :jekyll_plugins do
   gem 'jekyll-relative-links'
+  gem 'jekyll-browserify'
 end
-
