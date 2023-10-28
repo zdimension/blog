@@ -1,2 +1,7 @@
 copyright:
   brief: Best viewed with Netscape Communicator 4.
+
+meta: Based on the :THEME theme, powered by :PLATFORM
+
+notification:
+  update_found: This page has been updated since your last visit.
