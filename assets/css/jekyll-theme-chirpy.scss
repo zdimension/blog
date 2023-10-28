@@ -8,13 +8,17 @@ svg text {
     fill: var(--text-color)!important;
 }
 
-.fab {
+.share-icons .fab {
 	&.fa-reddit {
 		@include btn-sharing-color(rgba(255, 69, 0, 1));
 	}
 	
 	&.fa-hacker-news {
 		@include btn-sharing-color(rgba(255, 102, 0, 1));
+	}
+
+	&.fa-twitter {
+		@include btn-sharing-color(rgba(29, 161, 242, 1));
 	}
 }
 
@@ -40,3 +44,27 @@ pre {
 		}
 	}
 }
+
+@font-face {
+	font-family: "Caracteres L4";
+	src: url("/assets/fonts/l4.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
+#sidebar {
+	#avatar {
+		box-shadow: none;
+		
+		img:hover {
+			transform: none;
+		}
+	}
+
+	.site-title a {
+		font-family: "Caracteres L4";
+		font-weight: normal;
+		font-size: 2.25rem;
+	}
+}
+
