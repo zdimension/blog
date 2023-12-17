@@ -25,4 +25,5 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 group :jekyll_plugins do
   gem 'jekyll-relative-links'
   gem 'jekyll-browserify'
+  gem 'jekyll-twitter-plugin'
 end

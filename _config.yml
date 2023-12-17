@@ -193,6 +193,7 @@ jekyll-archives:
 
 plugins:
   - jekyll-relative-links
+  - jekyll-twitter-plugin
 
 relative_links:
   enabled:     true
