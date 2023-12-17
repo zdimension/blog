@@ -684,11 +684,7 @@ Do you ever think to yourself, while writing code, "_man, this code would be so 
 
 However, back in August, this Tweet popped in my feed:
 
-> i had a fucking disgusting idea today 🦀 [pic.twitter.com/dU0eEFn8QA](https://t.co/dU0eEFn8QA)
-> 
-> — naomi (forgetful functor) (@fixedpointfae) [August 19, 2022](https://twitter.com/fixedpointfae/status/1560483347150675969?ref_src=twsrc%5Etfw)
-
-<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% twitter https://twitter.com/fixedpointfae/status/1560483347150675969 %}
 
 Our old friend Forth, as a Rust macro.
 
