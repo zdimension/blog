@@ -1,6 +1,8 @@
 ---
 ---
 
+$font-family-base: 'Source Sans Pro', 'Segoe UI', sans-serif;
+
 @import 'main';
 
 svg text {
@@ -88,4 +90,8 @@ main p>a.popup:not(.normal):not(.left):not(.right) {
 	display: none;
 	animation: none;
 	-webkit-animation: none;
+}
+
+.preview-img img {
+    width: 100%;
 }
