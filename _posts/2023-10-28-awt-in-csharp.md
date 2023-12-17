@@ -1,5 +1,5 @@
 ---
-title: 'Using AWT in C#, and other funny things'
+title: 'Using AWT in C#, and other funky things'
 excerpt: "A story of how Microsoft ported Java to .NET and accidentally created Windows Forms in the process, only to throw it away and pretend it never happened."
 category: "Long posts"
 tags: [Programming, History]
@@ -12,7 +12,7 @@ tags: [Programming, History]
 
 In the late 90s, Microsoft started working on a development platform supposed to replace COM, which was back then an absolute behemoth in the world of Windows programming: *everything* new was being built on top of COM. Office? That's OLE, just COM with more spaz. VB6? Just COM libraries. New Windows components all got their own shiny COM interfaces. It worked so well even Apple used it (a bit). 
 
-That said, writing in C or C++ was still a pain, and VB6 still had some kind of "toy language" connotation to it -- sure, it was good, second to only Delphi in terms of fast GUI development ("RAD"), but it was still far from what Sun had been offering for a few years with their amazing new "Java" platform. It lacked true OOP, 
+That said, writing in C or C++ was still a pain, and VB6 still had some kind of "toy language" connotation to it -- sure, it was good, second to only Delphi in terms of fast GUI development ("RAD"), but it was still far from what Sun had been offering for a few years with their amazing new "Java" platform. It lacked true OOP, and tended to become hard to maintain for large projects.
 
 Java, you say? That "*write once, run anywhere*" thing? That's a problem for Microsoft. If I can run my corporate app anywhere, why would I pay for a Windows license? 
 
