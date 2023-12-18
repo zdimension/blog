@@ -1,20 +1,60 @@
----
----
-
+--- 
+--- 
 $font-family-base: 'Source Sans Pro', 'Segoe UI', sans-serif;
 
 @import 'main';
 
+@mixin light-scheme {
+	--btn-share-color: initial;
+}
+
+@mixin dark-scheme {
+	
+}
+
+html {
+	@media (prefers-color-scheme: light) {
+		&:not([data-mode]),
+		&[data-mode='light'] {
+			@include light-scheme;
+		}
+
+		&[data-mode='dark'] {
+			@include dark-scheme;
+		}
+	}
+
+	@media (prefers-color-scheme: dark) {
+		&:not([data-mode]),
+		&[data-mode='dark'] {
+			@include dark-scheme;
+		}
+
+		&[data-mode='light'] {
+			@include light-scheme;
+		}
+	}
+}
+
 svg text {
-    font-family: var(--font-family-base)!important;
-    fill: var(--text-color)!important;
+	font-family: var(--font-family-base) !important;
+	fill: var(--text-color) !important;
+}
+
+@mixin btn-sharing-color($light-color, $important: true) {
+	@if $important {
+		color: var(--btn-share-color, $light-color) !important;
+	}
+	@else {
+		color: var(--btn-share-color, $light-color);
+	}
 }
 
 .share-icons .fab {
 	&.fa-reddit {
 		@include btn-sharing-color(rgba(255, 69, 0, 1));
 	}
-	
+
 	&.fa-hacker-news {
 		@include btn-sharing-color(rgba(255, 102, 0, 1));
 	}
@@ -22,17 +62,21 @@ svg text {
 	&.fa-twitter {
 		@include btn-sharing-color(rgba(29, 161, 242, 1));
 	}
+
+	&.fa-telegram {
+		@include btn-sharing-color(rgb(39, 159, 217));
+	}
 }
 
 @media all and (min-width: 576px) {
-  div[class^='language-'] {
-    .code-header {
-      &::before {
-        background-color: transparent;
-        box-shadow: none;
-      }
-    }
-  }
+	div[class^='language-'] {
+		.code-header {
+			&::before {
+				background-color: transparent;
+				box-shadow: none;
+			}
+		}
+	}
 }
 
 pre {
@@ -57,7 +101,7 @@ pre {
 #sidebar {
 	#avatar {
 		box-shadow: none;
-		
+
 		img:hover {
 			transform: none;
 		}
@@ -71,9 +115,9 @@ pre {
 }
 
 blockquote.prompt-info::before {
-    content: "\f05a";
-    color: var(--prompt-info-icon-color);
-    font: var(--fa-font-solid);
+	content: "\f05a";
+	color: var(--prompt-info-icon-color);
+	font: var(--fa-font-solid);
 }
 
 main p:has(>a.popup:not(.normal):not(.left):not(.right)) {
@@ -93,5 +137,5 @@ main p>a.popup:not(.normal):not(.left):not(.right) {
 }
 
 .preview-img img {
-    width: 100%;
+	width: 100%;
 }
