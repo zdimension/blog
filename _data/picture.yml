@@ -1,0 +1,6 @@
+presets:
+  default: 
+    link_source: true
+    #nomarkdown: false
+    attributes:
+      a: 'class="popup img-link shimmer"'

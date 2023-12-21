@@ -209,3 +209,6 @@ browserify:
   
   # execute `npm install` on initialize if true
   npm_install: false
+
+picture:
+  relative_url: false
