@@ -9,7 +9,9 @@ $font-family-base: 'Source Sans Pro', 'Segoe UI', sans-serif;
 }
 
 @mixin dark-scheme {
-	
+	.content a.popup+em {
+		color: var(--text-color);
+	}
 }
 
 html {
