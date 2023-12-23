@@ -3,14 +3,9 @@ title: Write-up on a fun jigsaw puzzle problem
 math: true
 tags: [Programming]
 image: colors.jpg
+cover_hide: true
 excerpt: "Solving (and bruteforcing) a jigsaw puzzle with Python and Rust."
 ---
-
-<style>
-  .post-meta > div.mt-3.mb-3 {
-    display: none;
-  }
-</style>
 
 ## The Tweet
 

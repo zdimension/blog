@@ -26,6 +26,29 @@ module Jekyll
           post.data['img_path'] = "/assets/posts/#{clean_name}/"
         end
 
+        if post.data['cover_responsive']
+          filename = post.data["image"]
+          # get base filename and extension separately
+          ext = File.extname(filename)
+          basename = File.basename(filename, ext)
+          # puts PictureTag.source_dir
+          # src_img = PictureTag::SourceImage.new(filename)
+          # gen_img = PictureTag::GeneratedImage.new(
+          #   source_file: img, 
+          #   width: 1200, 
+          #   format: PictureTag.formats.first)
+          post.data["image"] = "../../../generated/assets/posts/#{clean_name}/#{basename}-1200#{ext.downcase}"
+          # post.data["image"] = "../../../#{gen_img.uri}"
+        end
+
+        if post.data['cover_hide']
+          post.content = "<style>
+          .post-meta > div.mt-3.mb-3 {
+            display: none;
+          }
+        </style>\n" + post.content
+        end
+
         # name_without_date = clean_name.gsub(/^\d{4}-\d{2}-\d{2}-/, '')
         # if post.data['permalink'] == '/:title/'
         #   post.data['permalink'] = "/#{name_without_date}/"
@@ -54,24 +77,46 @@ module PictureTag
     end
   end
 
+  class GeneratedImage
+    alias_method :initialize_original, :initialize
+
+    def initialize(source_file:, width:, format:, shortfn: false)
+      if width.nil?
+        width = source_file.width
+      end
+
+      @shortfn = shortfn
+
+      initialize_original(source_file: source_file, width: width, format: format)
+    end
+
+    alias_method :name_original, :name
+
+    def name
+      if @shortfn
+        @name ||= "#{@source.base_name}-#{@width}.#{format}"
+      else
+        name_original
+      end
+    end
+  end
+
   module OutputFormats
     class Basic
-      alias_method :wrap_original, :wrap
+      alias_method :build_base_img_original, :build_base_img
 
-      def wrap2(markup)
-        markup = wrap_original(markup)
+      def build_base_img
+        img = build_base_img_original
 
         if PictureTag.html_attributes['legend']
-          legend = DoubleTag.new 'em', content: PictureTag.html_attributes['legend'], oneline: true
-          container = DoubleTag.new 'figure'
-          container.content = markup
-          container.content << legend
-
-          markup = container
-          markup = nomarkdown_wrapper(markup.to_s) if PictureTag.nomarkdown?
+          img.title = PictureTag.html_attributes['legend'].gsub(/"/, '&quot;')
         end
 
-        markup
+        img
+      end
+
+      def add_alt(element, alt)
+        element.alt = alt.gsub(/"/, '&quot;') if alt
       end
 
       alias_method :to_s_original, :to_s
@@ -98,7 +143,16 @@ module PictureTag
           return @target_files
         end
 
-        @target_files = target_files_original + [generate_file(source_width)] 
+        gen_cover = PictureTag.html_attributes['cover']
+
+        @target_files = target_files_original + [generate_file(source_width)] + (
+          gen_cover ? [GeneratedImage.new(
+            source_file: @source_image,
+            width: 1200,
+            format: @input_format,
+            shortfn: true
+          )] : []
+        )
       end
     end
   end
