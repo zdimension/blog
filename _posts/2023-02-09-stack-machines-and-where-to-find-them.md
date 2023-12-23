@@ -609,7 +609,7 @@ It's the lesser known twin of the **Postfix Notation** (operation goes after the
 1 2 3 4 - 5 * - +
 ```
 
-Of course, you may find those harder to read than our usual infix notation – which makes sense! You've been using infix all your life, your brain is wired to detect patterns in formulas written with the operator between its operands.
+Of course, you may find those harder to read than our usual infix notation — which makes sense! You've been using infix all your life, your brain is wired to detect patterns in formulas written with the operator between its operands.
 
 However, these notations have two huge advantages over infix:
 
@@ -722,7 +722,7 @@ fn main() -> Result<(), impl Error> {
 }
 ```
 
-Declarative macros can take all sorts of parameters. Here, I'm specifying `expr`, because I expect `try_!` to be called with an expression, but I could want to process a statement, an identifier, a code block, etc. Everything a Rust file can contain, a declarative macro can process. A bit of code can be matched by multiple parameter types – for example, `foo` could be matched by:
+Declarative macros can take all sorts of parameters. Here, I'm specifying `expr`, because I expect `try_!` to be called with an expression, but I could want to process a statement, an identifier, a code block, etc. Everything a Rust file can contain, a declarative macro can process. A bit of code can be matched by multiple parameter types — for example, `foo` could be matched by:
 
 *   `expr`: an expression containing the binding name `foo`
 *   `stmt`: a statement fetching the value of `foo` and doing nothing with it
@@ -737,7 +737,7 @@ Declarative macros can take all sorts of parameters. Here, I'm specifying `expr`
 *   `stmt`: a statement computing an addition and doing nothing with it
 *   `ty`: a trait constraint (think `where T: foo + bar`)
 
-You can do all sort of things with these types, but there's a special one that I haven't mentioned yet, and that would match all of the above examples – actually, it would match pretty much anything: `tt`.
+You can do all sort of things with these types, but there's a special one that I haven't mentioned yet, and that would match all of the above examples — actually, it would match pretty much anything: `tt`.
 
 It stands for "token tree", and in layman's terms (I'm really oversimplifying here), it basically means "whatever". There are some limitations: you can't write something like `my_macro!( ) )` and expect `tt` to match the single parenthesis in the middle, since the whole isn't valid Rust code. But apart from such edge cases, you're pretty much unstoppable.
 

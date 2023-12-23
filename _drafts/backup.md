@@ -38,7 +38,7 @@ We're gonna try to reason about the _structure_ of the data we're manipulating.
 
 > Structure?
 
-– you ask, wondering what kind of structure I could get out of an unsigned integer. And you would be on the right track. An integer, in itself, doesn't really contain structure. At least, not immediately visible to the eye. There's an infinite number of ways to "create" structure out of an integer; we could, for example, say that a number is either twice another, or twice another plus one:
+— you ask, wondering what kind of structure I could get out of an unsigned integer. And you would be on the right track. An integer, in itself, doesn't really contain structure. At least, not immediately visible to the eye. There's an infinite number of ways to "create" structure out of an integer; we could, for example, say that a number is either twice another, or twice another plus one:
 
 \[ n \in \mathbb{N}^{+} \implies \exists k \in \mathbb{N}, (n = 2 k \lor n = 2 k + 1) \]
 

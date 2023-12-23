@@ -41,7 +41,7 @@ What we have:
 
 `CCSH` calls `CPPSH` with the source file first to get a raw code file to compile, and then actually compiles it. Here, we can see by running `CPPSH` alone that it still triggers the error, which means the problem effectively comes from `CPPSH`. After a thorough analysis in Ida, it seems that even though the code that handles parsing the command-line parameters related to include directories, those paths aren't actually added to the program's internal directory array and thus never actually used. I could have decompiled it and fixed it myself, but I found a faster and simpler way: use the PSX one.
 
-Though `CCSH` and `CCPSX` are very different in nature (one compiles for Super-H and one for MIPS), their preprocessors are actually almost identical – when we think about it, it makes sense: the C language doesn't depend on the underlying architecture (most of the time), so why would its preprocessor do?
+Though `CCSH` and `CCPSX` are very different in nature (one compiles for Super-H and one for MIPS), their preprocessors are actually almost identical — when we think about it, it makes sense: the C language doesn't depend on the underlying architecture (most of the time), so why would its preprocessor do?
 
 So here's the fix: rename `CCSH` to something else and copy `CCPSX` to `CCSH`. Solves all problems and finally allows compiling C code for the Sega Saturn on Windows (the only other working SDK on the Internet is for DOS, which requires using DOSBox and 8.3 filenames, which makes big projects complicated to organize).
 

@@ -355,7 +355,7 @@ The opposite of `quote` is called `eval`:
 9
 ```
 
-Through this simple mechanic, Lisp allows you to modify programs dynamically as if they were any other kind of data you can manipulate – because they really are any other kind of data you can manipulate.
+Through this simple mechanic, Lisp allows you to modify programs dynamically as if they were any other kind of data you can manipulate — because they really are any other kind of data you can manipulate.
 
 Let's rewrite our `MUL` macro from before. I'll define a function which takes two parameters, and returns _code_ that multiply them.
 
@@ -497,7 +497,7 @@ We don't have `eval` either, instead we can compile an expression we built into 
 
 Building code is also more complicated: since C# code is not made of lists, you can't just create a sequence of things and call it a day, code here is stored as objects ("expression trees") that you build using functions such as `Expression.Assign` or `Expression.Block`.
 
-All of this also means that only a subset of the language is available through this feature – you can't have classes in functions for examples. At the end of the day, it's not really a problem, most problems solved by macros are solved through other means in C#, and this metaprogramming-like expression tree wizardry is almost only ever used in contexts where only simple expressions will be used.
+All of this also means that only a subset of the language is available through this feature — you can't have classes in functions for examples. At the end of the day, it's not really a problem, most problems solved by macros are solved through other means in C#, and this metaprogramming-like expression tree wizardry is almost only ever used in contexts where only simple expressions will be used.
 
 ## Long Recaps Considered Harmful
 
@@ -563,7 +563,7 @@ This generates an implementation of the `Debug` trait for the `Person` type, whi
 
 But there are less... orthodox uses for procedural macros.
 
-[Mara Bos](https://twitter.com/m_ou_se) famously wrote some interesting crates – the first one, [inline\_python](https://github.com/fusion-engineering/inline-python), allows running Python code from Rust seamlessly, with bidirectional interaction (for variables):
+[Mara Bos](https://twitter.com/m_ou_se) famously wrote some interesting crates — the first one, [inline\_python](https://github.com/fusion-engineering/inline-python), allows running Python code from Rust seamlessly, with bidirectional interaction (for variables):
 
 ```rust
 use inline_python::python;
@@ -653,9 +653,9 @@ fn main() {
 }
 ```
 
-After seeing Mara's inline\_python crate, I was taken aback by her choice of such an outdated language – Python was created in 1991!
+After seeing Mara's inline\_python crate, I was taken aback by her choice of such an outdated language — Python was created in 1991!
 
-VBScript, first released in 1996, is a much more modern language than Python. It provides transparent COM interoperability, is supported out-of-the-box on every desktop version of Windows since 98 – even Windows CE on ARM is supported; and it has been since 2000, whereas Python won't run on Windows ARM until 3.11 (2022).
+VBScript, first released in 1996, is a much more modern language than Python. It provides transparent COM interoperability, is supported out-of-the-box on every desktop version of Windows since 98 — even Windows CE on ARM is supported; and it has been since 2000, whereas Python won't run on Windows ARM until 3.11 (2022).
 
 As such, I had no other choice but to create [inline\_vbs](https://github.com/zdimension/inline-vbs), for all your daily VBS needs.
 
@@ -690,6 +690,6 @@ It relies on the [Active Scripting](https://docs.microsoft.com/en-us/archive/msd
 
 One major pain point is that VBScript, like Python, is a dynamic language, where values can change type, something that statically-typed languages like Rust are proud to say they do not like at all, thank you very much.
 
-Since VBScript is handled through COM APIs, values are transferred using the `VARIANT` COM type, which is pretty much a giant `union` of every COM type under the sun. Luckily, this matches up perfectly with Rust's discriminated unions – I take it as a sign from the universe that Rust and VBScript were made to work together.
+Since VBScript is handled through COM APIs, values are transferred using the `VARIANT` COM type, which is pretty much a giant `union` of every COM type under the sun. Luckily, this matches up perfectly with Rust's discriminated unions — I take it as a sign from the universe that Rust and VBScript were made to work together.
 
 That's pretty much it for today.
