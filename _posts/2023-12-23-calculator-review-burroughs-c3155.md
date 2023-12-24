@@ -408,8 +408,8 @@ document.addEventListener("DOMContentLoaded", function() {
                   return;
                 }
                 state.times = false;
-                // a small value is added to reproduce the bug
-                // when dividing numbers, the calculator always displays it to the left
+                /* a small value is added to reproduce the bug
+                   when dividing numbers, the calculator always displays it to the left */
                 state.evaluate(a / b + 0.00000001);
               } else {
                 state.minus = !state.minus;
