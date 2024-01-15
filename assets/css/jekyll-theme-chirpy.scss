@@ -4,6 +4,99 @@ $font-family-base: 'Source Sans Pro', 'Segoe UI', sans-serif;
 
 @import 'main';
 
+:root {
+	--bs-font-monospace: "Recursive Mono", SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace
+}
+
+#sidebar {
+	nav {
+		font-family: 'Source Sans Pro', 'Segoe UI', sans-serif;
+	}
+
+	nav i {
+		padding-bottom: 0.06rem;
+	}
+}
+
+main > article {
+	word-spacing: -0.03em;
+	font-family: xcharter, Georgia, $font-family-base;
+
+	h1, h2, h3, h4, h5 {
+		font-family: xcharter, Georgia, $font-family-base;
+	}
+}
+@font-face {
+    font-family: xcharter;
+    font-style: normal;
+    font-weight: normal;
+    font-stretch: normal;
+    font-display: swap;
+    src: url("/assets/fonts/xcharter/xcharter-regular.woff2") format("woff2")
+}
+
+@font-face {
+    font-family: xcharter;
+    font-style: normal;
+    font-weight: bold;
+    font-stretch: normal;
+    font-display: swap;
+    src: url("/assets/fonts/xcharter/xcharter-bold.woff2") format("woff2")
+}
+
+@font-face {
+    font-family: xcharter;
+    font-style: italic;
+    font-weight: normal;
+    font-stretch: normal;
+    font-display: swap;
+    src: url("/assets/fonts/xcharter/xcharter-italic.woff2") format("woff2")
+}
+
+@font-face {
+    font-family: xcharter;
+    font-style: italic;
+    font-weight: bold;
+    font-stretch: normal;
+    font-display: swap;
+    src: url("/assets/fonts/xcharter/xcharter-bold-italic.woff2") format("woff2")
+}
+
+@font-face {
+    font-family: "Recursive Mono";
+    font-style: normal;
+    font-weight: 300 800;
+    font-display: swap;
+    src: url("/assets/fonts/recursive-mono/cyrillic-ext.woff2") format("woff2");
+    unicode-range: U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F
+}
+
+@font-face {
+    font-family: "Recursive Mono";
+    font-style: normal;
+    font-weight: 300 800;
+    font-display: swap;
+    src: url("/assets/fonts/recursive-mono/vietnamese.woff2") format("woff2");
+    unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+1EA0-1EF9,U+20AB
+}
+
+@font-face {
+    font-family: "Recursive Mono";
+    font-style: normal;
+    font-weight: 300 800;
+    font-display: swap;
+    src: url("/assets/fonts/recursive-mono/latin-ext.woff2") format("woff2");
+    unicode-range: U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF
+}
+
+@font-face {
+    font-family: "Recursive Mono";
+    font-style: normal;
+    font-weight: 300 800;
+    font-display: swap;
+    src: url("/assets/fonts/recursive-mono/latin.woff2") format("woff2");
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD
+}
 @mixin light-scheme {
 	--btn-share-color: initial;
 }
