@@ -20,17 +20,17 @@ int main()
     return 0;
 }
 ```
-_main.c_
+{: file="main.c" }
 
-```shell
+```batchfile
 C:\Psyq\bin>ccsh -ITHING/ -S main.c
 ```
-_build.bat_
+{: file="build.bat" }
 
 ```c
 int a = 98;
 ```
-_abc.h_
+{: file="abc.h" }
 
 This will crash with the following error: `main.c:1: abc.h: No such file or directory`, which is quite strange given that we explicitly told the compiler to look in that `THING` folder.
 
@@ -76,7 +76,7 @@ It seems that the `STDLIB.H` file in the SDK is somehow wrong, in that it has th
 typedef	__SIZE_TYPE__DEF	size_t;
 #endif
 ```
-_STDLIB.H_
+{: file="STDLIB.H" }
 
 Whereas its friend `STDDEF.H` looks like this:
 
@@ -88,7 +88,7 @@ Whereas its friend `STDDEF.H` looks like this:
 typedef __SIZE_TYPE__ size_t;
 #endif /* !(defined (__GNUG__) && defined (size_t)) */
 ```
-_STDDEF.H_
+{: file="STDDEF.H" }
 
 Two incompatible declarations, the compiler dies. The simple fix is to remove the `DEF` at the end of the names in `STDLIB.H`, to get something like this:
 
@@ -98,4 +98,4 @@ Two incompatible declarations, the compiler dies. The simple fix is to remove th
 typedef	__SIZE_TYPE__	size_t;
 #endif
 ```
-_STDLIB.H_
+{: file="STDLIB.H" }
