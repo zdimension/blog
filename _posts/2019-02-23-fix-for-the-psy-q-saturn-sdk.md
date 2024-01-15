@@ -36,8 +36,8 @@ This will crash with the following error: `main.c:1: abc.h: No such file or dire
 
 What we have:
 
-*   `CCSH.EXE` : main compiler executable (**C** **C**ompiler **S**uper-**H**)
-*   `CPPSH.EXE` preprocessor (**C** **P**re**P**rocessor **S**uper-**H**)
+*   `CCSH.EXE`: main compiler executable (**C** **C**ompiler **S**uper-**H**)
+*   `CPPSH.EXE`: preprocessor (**C** **P**re**P**rocessor **S**uper-**H**)
 
 `CCSH` calls `CPPSH` with the source file first to get a raw code file to compile, and then actually compiles it. Here, we can see by running `CPPSH` alone that it still triggers the error, which means the problem effectively comes from `CPPSH`. After a thorough analysis in Ida, it seems that even though the code that handles parsing the command-line parameters related to include directories, those paths aren't actually added to the program's internal directory array and thus never actually used. I could have decompiled it and fixed it myself, but I found a faster and simpler way: use the PSX one.
 
