@@ -105,6 +105,8 @@ main > article {
 	--highlighter-rouge-color: #202020;
 	--text-color: #100921;
 	--legend-color: #333;
+	--code-header-text-color: #888;
+	--code-header-icon-color: #aaa;
 }
 
 @mixin dark-scheme {
@@ -113,6 +115,8 @@ main > article {
 	}
 	--highlighter-rouge-color: #ddd;
 	--legend-color: #999;
+	--inline-code-bg: #28282c;
+	--main-bg: rgb(27, 27, 27);
 }
 
 .content a.popup+em, div.highlighter-rouge + p:has(em) {
