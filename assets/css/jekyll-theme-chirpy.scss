@@ -105,6 +105,23 @@ main > article {
 	.content a.popup+em {
 		color: var(--text-color);
 	}
+.content a.popup+em, div.highlighter-rouge + p:has(em) {
+    text-align: center;
+	font-size: 85%;
+	padding: 0;
+	color: var(--legend-color);
+	font-style: italic;
+}
+
+div.highlighter-rouge {
+	&:not(:last-child) {
+		margin-bottom: 0;
+	}
+
+	// target elements following such a div except p:has(em)
+	&+ *:not(p:has(em)) {
+		margin-top: 1.2em;
+	}
 }
 
 html {
