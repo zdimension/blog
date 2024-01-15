@@ -1,7 +1,10 @@
 ---
 title: PlexDLWeb - for want of a Plex Pass
 tags: [Programming]
+shortname: PlexDLWeb
 category: "Projects"
+image: home.png
+cover_hide: true
 ---
 
 ## I like Plex

@@ -4,6 +4,8 @@ slug: six-handshakes-away
 date_published: 2021-10-03T16:23:42.000Z
 date_updated: 2021-11-13T00:49:01.000Z
 tags: [Programming]
+image: graphtest1.png
+cover_hide: true
 ---
 
 Have you ever heard about "six degrees of separation"? It's about the famous idea that there are always less than about six persons between two individuals chosen at random in a population. Given enough people, you'll always find someone whose uncle's colleague has a friend that knows your nextdoor neighbour.

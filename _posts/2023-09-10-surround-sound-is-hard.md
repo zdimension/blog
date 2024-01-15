@@ -2,6 +2,8 @@
 title: Surround sound is hard
 tags: [Hardware, Programming, Dark magic]
 category: "Long posts"
+image: 81GHq5UPjYL_pixian_ai.png
+cover_hide: true
 ---
 
 I own a **Logitech Z506** 5.1 audio system. I bought it in 2014 and it's been doing its job just fine since then. It looks like this:
