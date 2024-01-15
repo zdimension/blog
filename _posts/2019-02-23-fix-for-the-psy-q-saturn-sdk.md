@@ -32,7 +32,7 @@ int a = 98;
 ```
 _<center>abc.h</center>_
 
-This will crash with the following error: `main.c:1: abc.h: No such file or directory`, which is quite strange given that we explicitely told the compiler to look in that `THING` folder.
+This will crash with the following error: `main.c:1: abc.h: No such file or directory`, which is quite strange given that we explicitly told the compiler to look in that `THING` folder.
 
 What we have:
 
