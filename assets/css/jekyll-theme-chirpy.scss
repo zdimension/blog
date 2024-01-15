@@ -148,6 +148,12 @@ html {
 	}
 }
 
+@media all and (min-width: 1200px) {
+	.content {
+		font-size: min(max(1.9vw, 14px), 17px);
+	}
+}
+
 svg text {
 	font-family: var(--font-family-base) !important;
 	fill: var(--text-color) !important;
