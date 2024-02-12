@@ -62,7 +62,7 @@ There exists a file called HavokBehaviorPostProcess.exe that ships with Skyrim S
 error: success
 ```
 
-_[<center>Task failed successfully.</center>](https://knowyourmeme.com/photos/918810-funny-error-messages)_
+_[Task failed successfully.](https://knowyourmeme.com/photos/918810-funny-error-messages)_
 
 So, CAO uses this tool to allow users to convert their files. Everything is for the best in the best of all possible worlds. 
 
@@ -81,7 +81,7 @@ $ wine hkx32to64.exe LE_INPUT.hkx
 error: success
 ```
 
-_[<center>It just works.</center>](https://www.youtube.com/watch?v=MOuMZWarmxg)_
+_[It just works.](https://www.youtube.com/watch?v=MOuMZWarmxg)_
 
 Except when it doesn't. First, it's a 32-bit EXE file, which means you need 32-bit Wine. There's an [old bug](https://askubuntu.com/questions/449507/nvidia-libopencl1-331-has-to-be-removed-before-installing-wine) on Debian and Ubuntu that sometimes prevents wine32 and CUDA from being installed at the same time. Wine depends on ocl-icd-libopencl1 (which provides libOpenCl.so), but CUDA depends on nvidia-opencl-icd (which... also provides libOpenCl.so). Obviously, apt won't let you install two packages that provide the same file (what would happen if you were to uninstall one of them?), so if you try to install wine32 while CUDA is installed... it will uninstall CUDA. Learned that the hard way.
 
@@ -89,7 +89,7 @@ So, to recap, my friend would have to tell users to uninstall CUDA if they want 
 
 > Or use Nix. But hey, who am I to judge?
 
-Having Wine required is already in itself a pretty big requirement (takes a bit more than one gig of disk space once installed).
+Wine is already in itself a pretty big requirement (takes a bit more than one gig of disk space once installed).
 
 Ideally we'd wanna find another way.
 
@@ -108,7 +108,7 @@ This is actually syntactically correct C code [if you're using GCC](http://gcc.g
 
 The code, however, will not work, because an EXE file doesn't contain *only* code. It's a complex format, that contains multiple segments of data: code, global variables, debug information, among others.
 
-> If the binary file was a flat binary (i.e. a file that contains only code, no segments, no headers), such as DOS's COM files, then, it could work. Some adjustments would have to be made to mark the memory area as executable since most modern OSes prevent executing code from non-text segments, but... it would work. Don't do it, though. Please.
+> If the binary file were a flat binary (i.e. a file that contains only code, no segments, no headers), such as DOS's COM files, then, it could work. Some adjustments would have to be made to mark the memory area as executable since most modern OSes prevent executing code from non-text segments, but... it would work. Don't do it, though. Please.
 {: .prompt-tip }
 
 ### Hello from the Other Side
@@ -130,7 +130,7 @@ mov rdi, 123    ; exit code
 syscall         ; call the kernel
 ```
 
-Note that I specified **Linux** and **amd64**. Each kernel has its own list of syscalls, and each architecture has one (sometimes more) ways for a userland program to call the kernel. On amd64, parameters are put in registers and the `syscall` instruction calls the kernel. On Linux i386, it's `int 0x80`. On DOS, it was usually `int 0x21`.
+Note that I specified **Linux** and **amd64**. Each kernel has its own list of syscalls, and each architecture has a way (sometimes more) for a userland program to call the kernel. On amd64, parameters are put in registers and the `syscall` instruction calls the kernel. On Linux i386, it's `int 0x80`. On DOS, it was usually `int 0x21`.
 
 Most Unix-like kernels keep a stable syscall interface, for a simple reason: historically, they haven't had direct control over their standard library (i.e. libc, usually). On Linux, you're probably using glibc, but that's because Linus settled on the GNU userland a while ago, nowadays you could very well be using musl, or uClibc, or dietlibc, or any other libc, really. How does the libc do things? By calling syscalls.
 
