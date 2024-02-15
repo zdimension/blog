@@ -129,7 +129,7 @@ pre {
 	--main-bg: rgb(27, 27, 27);
 }
 
-.content a.popup+em, div.highlighter-rouge + p:has(em) {
+.content a.popup+em, div.highlighter-rouge + p:has(em:only-child) {
     text-align: center;
 	font-size: 85%;
 	padding: 0;
@@ -144,7 +144,7 @@ div.highlighter-rouge {
 	}
 
 	// target elements following such a div except p:has(em)
-	&+ *:not(p:has(em)) {
+	&+ *:not(p:has(em:only-child)) {
 		margin-top: 1.2em;
 	}
 }
