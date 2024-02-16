@@ -120,22 +120,23 @@ pre {
 }
 
 @mixin dark-scheme {
-	.content a.popup+em {
+	/*.content a.popup+label {
 		color: var(--text-color);
-	}
+	}*/
 	--highlighter-rouge-color: #ddd;
 	--legend-color: #999;
 	--inline-code-bg: #28282c;
 	--main-bg: rgb(27, 27, 27);
 }
 
-.content a.popup+em, div.highlighter-rouge + p:has(em:only-child) {
+.content a.popup+label, div.highlighter-rouge + p:has(label:only-child) {
     text-align: center;
 	font-size: 85%;
 	padding: 0;
 	color: var(--legend-color);
 	font-style: italic;
 	margin-top: 0.6em;
+	cursor: initial;
 }
 
 div.highlighter-rouge {
@@ -143,8 +144,8 @@ div.highlighter-rouge {
 		margin-bottom: 0;
 	}
 
-	// target elements following such a div except p:has(em)
-	&+ *:not(p:has(em:only-child)) {
+	// target elements following such a div except p:has(label)
+	&+ *:not(p:has(label:only-child)) {
 		margin-top: 1.2em;
 	}
 }

@@ -542,7 +542,7 @@ We've seen stacks used to implement function calls in assembly code. But most de
 There's a third use for stacks, that some of the... greyer-haired readers here might remember.
 
 ![](image-6.png){: width="509" height="316"}
-_HP-16C calculator. (public domain image, courtesy of Hpgene on Wikipedia)_
+<label>HP-16C calculator. (public domain image, courtesy of Hpgene on Wikipedia)</label>
 
 Before the TI-84 and its natural input system, there was the HP-16C. Well, it wasn't the first of its kind, but it was the one people remembered.
 

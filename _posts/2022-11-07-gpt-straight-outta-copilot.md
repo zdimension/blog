@@ -150,8 +150,8 @@ There's a question to be asked about the legal aspects of training an ML model o
 Since I don't really know how to end this blog post, here are a few examples taken from my "Copilot best-of" folder:
 
 ![](image-7.png){: width="458" height="278"}
-_Understanding context, using proper type names, etc_
+<label>Understanding context, using proper type names, etc</label>
 
 ![](image-8.png){: width="596" height="225"}
-_Implicitly understanding the syntax of a made-up language using example code, and properly generating a new example_
+<label>Implicitly understanding the syntax of a made-up language using example code, and properly generating a new example</label>
 <video src="/assets/posts/2022-11-07-gpt-straight-outta-copilot/copilot-best-of---Imgur.mp4" poster="https://img.spacergif.org/v1/960x708/0a/spacer.png" width="960" height="708" preload="metadata" style="background: transparent url('/assets/posts/2022-11-07-gpt-straight-outta-copilot/media-thumbnail-ember164.jpg') 50% 50% / cover no-repeat;" controls="" class="embed-video"></video><video src="/assets/posts/2022-11-07-gpt-straight-outta-copilot/copilot-best-of---Imgur--1-.mp4" poster="https://img.spacergif.org/v1/960x650/0a/spacer.png" width="960" height="650" preload="metadata" style="background: transparent url('/assets/posts/2022-11-07-gpt-straight-outta-copilot/media-thumbnail-ember180.jpg') 50% 50% / cover no-repeat;" controls="" class="embed-video"></video>

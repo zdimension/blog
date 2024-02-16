@@ -62,7 +62,7 @@ There exists a file called HavokBehaviorPostProcess.exe that ships with Skyrim S
 error: success
 ```
 
-_[Task failed successfully.](https://knowyourmeme.com/photos/918810-funny-error-messages)_
+<label>[Task failed successfully.](https://knowyourmeme.com/photos/918810-funny-error-messages)</label>
 
 So, CAO uses this tool to allow users to convert their files. Everything is for the best in the best of all possible worlds. 
 
@@ -81,7 +81,7 @@ $ wine hkx32to64.exe LE_INPUT.hkx
 error: success
 ```
 
-_[It just works.](https://www.youtube.com/watch?v=MOuMZWarmxg)_
+<label>[It just works.](https://www.youtube.com/watch?v=MOuMZWarmxg)</label>
 
 Except when it doesn't. First, it's a 32-bit EXE file, which means you need 32-bit Wine. There's an [old bug](https://askubuntu.com/questions/449507/nvidia-libopencl1-331-has-to-be-removed-before-installing-wine) on Debian and Ubuntu that sometimes prevents wine32 and CUDA from being installed at the same time. Wine depends on ocl-icd-libopencl1 (which provides libOpenCl.so), but CUDA depends on nvidia-opencl-icd (which... also provides libOpenCl.so). Obviously, apt won't let you install two packages that provide the same file (what would happen if you were to uninstall one of them?), so if you try to install wine32 while CUDA is installed... it will uninstall CUDA. Learned that the hard way.
 

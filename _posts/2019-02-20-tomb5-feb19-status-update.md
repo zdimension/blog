@@ -20,18 +20,18 @@ To solve that problem, we've started working on what we call the Emulator, which
 Behold, pics.
 
 ![](https://i.imgur.com/rMjEoyX.png)
-_Title screen_
+<label>Title screen</label>
 
 ![](https://i.imgur.com/TRzugzo.png)
-_Secret cutscene menu used for debugging purposes, only reachable through RAM editing_
+<label>Secret cutscene menu used for debugging purposes, only reachable through RAM editing</label>
 
 ![](https://i.imgur.com/KbfYQiD.png)
-_Internal beta title screen_
+<label>Internal beta title screen</label>
 
 ![](https://i.imgur.com/6w8lRpf.png)
-_Game load screen_
+<label>Game load screen</label>
 
 ![](https://i.imgur.com/j7Lgqjk.png)
-_Level loading screen_
+<label>Level loading screen</label>
 
 You can [check the code out on GitHub](https://github.com/TOMB5/TOMB5).

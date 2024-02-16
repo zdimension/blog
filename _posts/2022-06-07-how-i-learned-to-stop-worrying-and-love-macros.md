@@ -18,7 +18,7 @@ for ever {
 	...
 }
 ```
-_<https://stackoverflow.com/a/652802/2196124>_
+<label><https://stackoverflow.com/a/652802/2196124></label>
 
 or even:
 
@@ -36,7 +36,7 @@ public static void main(String[] args) {
 	System.out.println("Hello World!");
 }
 ```
-_<https://stackoverflow.com/a/653028/2196124>_
+<label><https://stackoverflow.com/a/653028/2196124></label>
 
 But these are just silly examples written for fun. Nobody would ever commit such macro abuse in real-world, production code. Nobody...
 
@@ -102,7 +102,7 @@ ADDRESS alloc(nbytes)
     POOL
 }
 ```
-_I'm sorry._
+<label>I'm sorry.</label>
 
 This bit of code is taken directly from the original Bourne shell code, from a BSD Tahoe 4.3 source code archive. Steve Bourne was an Algol 68 fan, so he tried to make C look more like it.
 
@@ -123,7 +123,7 @@ This definition encompasses quite a lot of features you've probably already enco
 I use the past tense here, because this trend wore off quite long ago, around the same time we stopped seeing MDI interfaces.
 
 ![](image.png){: width="677" height="437"}
-_These have pretty much disappeared, replaced by tabs and docking UIs._
+<label>These have pretty much disappeared, replaced by tabs and docking UIs.</label>
 
 Back on topic. This is about programming, so the macros we're talking about are the ones we find in programming languages. Even though the C ones are the most famous (because there's no other language where there are so few built-in constructs that you _have_ to write macros at one point or another), they weren't the first ones.
 
@@ -180,7 +180,7 @@ Here, the "macro" is just performing simple text substitution. When you write `p
 ```c
 #define PRINT(message, length) write(STDOUT_FILENO, message, length)
 ```
-_Don't do this in C._
+<label>Don't do this in C.</label>
 
 ## Too good to be true
 
@@ -448,7 +448,7 @@ Or, linearly:
 ```scheme
 (define (factorial x) (if (zero? x) 1 (* x (factorial (- x 1)))))
 ```
-_That's a list of lists if I've ever seen one_
+<label>That's a list of lists if I've ever seen one</label>
 
 When a compiler or interpreter reads a program, it does something called _parsing_. It reads a sequence of characters (letters, digits, punctuation, ...) and converts it (this is the non-trivial part) into something it can process more easily.
 

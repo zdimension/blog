@@ -60,7 +60,7 @@ Imagine how IP addresses are supposed to map the entire Internet, but in reality
 It's the same here: areas of the (virtual) address space are mapped to physical components. To give you a real-world example, here's the NES's address space:
 
 ![address space diagram, showing WRAM, PPU & APU registers, cartridge RAM and ROM](image.png){: width="671" height="172"}
-_image from https://jarrettbillingsley.github.io/_
+<label>image from https://jarrettbillingsley.github.io/</label>
 
 How to read: addresses from 0 to 800 (hexadecimal) are mapped to WRAM (work RAM), from 2000 to 2008 to the PPU (graphics card) control registers, from 4000 to 4018 to the APU (sound card), I trust you can take it from there. This is called MMIO (memory-mapped input/output).
 
@@ -310,7 +310,7 @@ Trigonometric functions were implemented using Taylor series (I know, CORDIC, bu
 This is a simple BASIC interpreter / REPL, similar to what was found on home computers of the 80s (e.g. C64). You can input programs line by line, display them, and run them. The supported instructions are `PRINT`, `INPUT`, `CLS`, `GOTO` and `LET`. The prompt supports `LIST`, `RUN`, `LOAD`, `ASM` and `ASMRUN`.
 
 ![](image-7.png){: width="289" height="223"}
-_"Hello World" program_
+<label>"Hello World" program</label>
 
 Programs can also be loaded over the network (similar to cassette loading on the C64), with a program such as:
 
@@ -323,7 +323,7 @@ nc -N ::1 4567		# send to port
 Here, `LOAD` starts listening and the received lines are displayed with a `#` prefix and read as if they were being typed by the user:
 
 ![](image-8.png){: width="289" height="425"}
-_Fibonacci sequence, loaded over network_
+<label>Fibonacci sequence, loaded over network</label>
 
 Programs can also be compiled to Thumb assembly for higher performance:
 
@@ -355,15 +355,15 @@ This is an REPL for a small but useable enough subset of R6RS. It supports most 
 Supported datatypes are symbols, integers, booleans, strings, lists (internally stored as vectors), void and procedures (either builtin functions or user-defined closures).
 
 ![](image-10.png){: width="450" height="261"}
-_addition and Fibonacci sequence_
+<label>addition and Fibonacci sequence</label>
 
 As with the BASIC interpreter, programs can be loaded over the network:
 
 ![](image-11.png){: width="438" height="441"}
-_macro creating the named-let form, allowing for easier loop definition_
+<label>macro creating the named-let form, allowing for easier loop definition</label>
 
 ![](image-12.png){: width="356" height="404"}
-_function that creates a mutable accumulator, using closures_
+<label>function that creates a mutable accumulator, using closures</label>
 
 ### [Terminal emulator](https://github.com/zdimension/parm_extended/blob/digital/code_rs/test/src/telnet_video.rs)
 

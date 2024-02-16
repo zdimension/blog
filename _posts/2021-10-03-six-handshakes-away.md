@@ -32,7 +32,7 @@ So I opened up PyCharm and started working on my own scraper, that would simply 
 def query(tab):
     return "//span[text() = '" + tab + "']/ancestor::div[contains(@style, 'border-radius: max(0px, min(8px, ((100vw')]/div[1]/div[3]/div"
 ```
-_Truly horrible._
+<label>Truly horrible.</label>
 
 After 180 lines and some testing, I had something that worked.
 

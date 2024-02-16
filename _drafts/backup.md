@@ -49,7 +49,7 @@ type Natural =
     | Zero
     | NonZero of { n : Natural, odd : Bool }
 ```
-_(in an imaginary language)_
+<label>(in an imaginary language)</label>
 
 Here, we're defining the type `Natural` that is either a value of zero, or a non-zero value that is then made of another natural, and a parity. It gives us a _recursive_ type: it contains a field of its own type. We can encode the number 37 as:
 
@@ -123,7 +123,7 @@ add      ; pop two values from the stack, push their sum
 dup      ; duplicate the value on top of the stack
 add
 ```
-_Note that this is not any real language, it's more like pseudocode._
+<label>Note that this is not any real language, it's more like pseudocode.</label>
 
 Here's how the machine looks like at each step of the execution:
 

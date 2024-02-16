@@ -19,7 +19,7 @@ Most PC audio devices use the evergreen, time-tested **3.5mm jack**. It's used f
 For a 5.1 setup like I have, the connectors that will be used are green (front), orange (center/subwoofer), and black (rear). This is exactly what we find at the back of the Z506's subwoofer/amp: 
 
 ![Image from the Z506 user manual](z506_ports.png)
-*(the image is from the [user manual](https://www.logitech.com/assets/33015/z506620-002649005326gsamr.pdf), and, yes, the "AUDIO IN" text was broken in the original file)*
+<label>(the image is from the [user manual](https://www.logitech.com/assets/33015/z506620-002649005326gsamr.pdf), and, yes, the "AUDIO IN" text was broken in the original file)</label>
 
 However, the TV world does things differently. 
 

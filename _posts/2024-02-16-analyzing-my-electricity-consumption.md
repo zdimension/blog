@@ -154,7 +154,7 @@ Another more recent system is called "**Tempo**", where the day is divided in pe
   .tempo {
     width: 100%;
     table-layout: fixed;
-    font-size: 80% !important;
+    font-size: calc(min(75%, 2cqw)) !important;
   }
 
   .tempo tr > * {
