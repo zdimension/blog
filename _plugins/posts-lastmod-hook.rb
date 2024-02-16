@@ -37,7 +37,7 @@ module Jekyll
           #   source_file: img, 
           #   width: 1200, 
           #   format: PictureTag.formats.first)
-          post.data["image"] = "../../../generated/assets/posts/#{clean_name}/#{basename}-1200#{ext.downcase}"
+          post.data["image"] = "../../../generated/assets/posts/#{clean_name}/#{basename}-800#{ext.downcase}"
           # post.data["image"] = "../../../#{gen_img.uri}"
         end
 
@@ -148,7 +148,7 @@ module PictureTag
         @target_files = target_files_original + [generate_file(source_width)] + (
           gen_cover ? [GeneratedImage.new(
             source_file: @source_image,
-            width: 1200,
+            width: 800,
             format: @input_format,
             shortfn: true
           )] : []
@@ -170,3 +170,27 @@ module PictureTag
     end
   end
 end
+
+module AssignFilter
+  def assign(obj, attr, value)
+    obj.instance_variable_set("@#{attr}", value)
+  end
+end
+
+Liquid::Template.register_filter(AssignFilter)
+
+module JekyllEvalFilter
+  # This Jekyll filter evaluates the input string and returns the result.
+  # Use it as a calculator or one-line Ruby program evaluator.
+  #
+  # @param input_string [String].
+  # @return [String] input string and the evaluation result.
+  # @example Use like this:
+  #   {{ 'TODO: show typical input' | eval }} => "TODO: show output"
+  def evaluate(input_string)
+    input_string.strip!
+    Kernel.eval input_string.strip
+  end
+end
+
+Liquid::Template.register_filter JekyllEvalFilter
