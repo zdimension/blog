@@ -281,5 +281,8 @@ main p>a.popup:not(.normal):not(.left):not(.right) {
 
 .preview-img img {
 	width: 100%;
+}
+
+img {
 	transform: translate3d(0px, 0px, 0px); // fixes pixelated images in Chrome (https://stackoverflow.com/questions/74502978/object-fit-cover-gives-pixelated-images-on-chrome)
 }
