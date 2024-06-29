@@ -117,6 +117,8 @@ pre {
 	--legend-color: #333;
 	--code-header-text-color: #888;
 	--code-header-icon-color: #aaa;
+
+	--chart-bg: rgb(0, 0, 0, 2%);
 }
 
 @mixin dark-scheme {
@@ -127,6 +129,22 @@ pre {
 	--legend-color: #999;
 	--inline-code-bg: #28282c;
 	--main-bg: rgb(27, 27, 27);
+
+	/*canvas.chart {
+		background-color: rgb(255, 255, 255, 7%);
+	}*/
+
+	--chart-bg: rgba(255, 255, 255, 7%);
+}
+
+.chart {
+	border-radius: 20px;
+	background-color: var(--chart-bg);
+}
+
+.content canvas {
+	margin-top: 0;
+	margin-bottom: 1rem;
 }
 
 .content a.popup+label, div.highlighter-rouge + p:has(label:only-child) {

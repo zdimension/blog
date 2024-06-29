@@ -58,16 +58,83 @@ But what does that mean in practice? On this graph, there are people from dozens
 
 More formally, the above graph has a diameter of 7. **That means that there are no two nodes on the graph that are more than 6 "online handshakes" away from each other.**
 
+<canvas class="chart" id="chartId"></canvas>
+
 In the figure above, we can see the cumulative distribution of degrees on the graph. For a given number N, the curve shows us how many individuals have N or more friends. Intuitively, the curve is monotonically decreasing, because as N gets bigger and bigger, there are less and less people having that many friends. On the other hand, almost everyone has at least 1 friend.
 
 You'll maybe notice a steep hill at the end, around N=5000. This is due to the fact that 5000 is the maximum number of friends you can have on Facebook; so you'll get many people with a number of friends very close to it simply because they've "filled up" their friends list.
 
 We can enumerate all pairs of individuals on the graph and compute the length of the shortest path between the two, which gives the following figure:
 
-<canvas id="chartId"></canvas>
+<canvas class="chart" id="chartId2"></canvas>
 
 In this graph, the average distance between individuals is 3.3, which is slightly lower than the one found in the Facebook paper (4.7). This can be explained by the fact that the researchers had access to the entire Facebook database whereas I only have access to the graph I obtained through scraping.
 
 ([The Facebook paper](https://www.researchgate.net/publication/51956889_The_Anatomy_of_the_Facebook_Social_Graph))
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js" integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><script>fetch("https://gist.githubusercontent.com/zdimension/89be61734f4897cca6f974710d98dd51/raw/03a68de62c492dbbc70d5a0ab8849286cfcf57ff/data.json").then(data => data.json()).then(function(data) { var ctx = document.getElementById("chartId"); var myChart = new Chart(ctx, { type: 'scatter', data: { datasets: [{ label: "Proportion of individuals that have N or more friends", data: data, showLine: true, pointRadius: 0, backgroundColor: '#1167b1', borderColor: '#1167b1' }] }, options: { scales: { x: { type: 'logarithmic', title: { text: 'N', display: true } }, y: { type: 'logarithmic', title: { text: 'Percentage', display: true } } } } }); }); { var ctx = document.getElementById("chartId2"); const data = [{x:0,y:0},{x:1,y:0},{x:2,y:0.02164029644133546},{x:3,y:0.33374783537821007},{x:4,y:0.8191718380731313},{x:5,y:0.9967826746040519},{x:6,y:0.999994078542216},{x:7,y:1},{x:8,y:1}]; var myChart = new Chart(ctx, { type: 'scatter', data: { datasets: [{ label: "% of pairs within distance", data: data, showLine: true }] }, options: { backgroundColor: '#1167b1', borderColor: '#1167b1', scales: { x: { title: { text: 'Distance', display: true } }, y: { title: { text: 'Percentage', display: true } } } } }); }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    Number.prototype.round = function(places) {
+        return +(Math.round(this + "e+" + places)  + "e-" + places);
+    }
+    { 
+        var ctx = document.getElementById("chartId2"); 
+        const data = [{x:0,y:0},{x:1,y:0},{x:2,y:0.02164029644133546},{x:3,y:0.33374783537821007},{x:4,y:0.8191718380731313},{x:5,y:0.9967826746040519},{x:6,y:0.999994078542216},{x:7,y:1},{x:8,y:1}]; 
+        const myChart = new Chart(ctx, { 
+            type: 'scatter', 
+            data: { 
+                datasets: [{ 
+                    label: "% of pairs within distance",
+                    data: data,
+                    showLine: true
+                }]
+            },
+            options: { 
+                scales: { 
+                    x: { title: { text: 'Distance', display: true } }, 
+                    y: { 
+                        title: { text: 'Percentage', display: true },
+                        ticks: { callback: function(value, index, values) { return (value*100).round(2) + "%"; } }
+                    }
+                },
+                layout: {
+                    padding: 20
+                } 
+            }
+        });
+    }
+    fetch("https://gist.githubusercontent.com/zdimension/89be61734f4897cca6f974710d98dd51/raw/03a68de62c492dbbc70d5a0ab8849286cfcf57ff/data.json")
+        .then(data => data.json())
+        .then(function(data) { 
+            var ctx = document.getElementById("chartId"); 
+            var myChart = new Chart(ctx, { 
+                type: 'scatter', 
+                data: { 
+                    datasets: [{ 
+                        label: "Proportion of individuals that have N or more friends", 
+                        data: data, 
+                        showLine: true, 
+                        pointRadius: 0, 
+                        backgroundColor: '#1167b1', 
+                        borderColor: '#1167b1' 
+                    }] 
+                },
+                options: { 
+                    scales: { 
+                        x: { type: 'logarithmic', title: { text: 'N', display: true } }, 
+                        y: { 
+                            type: 'logarithmic', title: { text: 'Percentage', display: true },
+                            ticks: { callback: function(value, index, values) { return (value*100).round(4) + "%"; } },
+                        }
+                    },
+                    layout: {
+                        padding: 20
+                    },
+                    interaction: {
+                        intersect: true,
+                        mode: "nearest",
+                    },
+                } 
+            }); 
+        }); 
+</script>
