@@ -693,3 +693,7 @@ One major pain point is that VBScript, like Python, is a dynamic language, where
 Since VBScript is handled through COM APIs, values are transferred using the `VARIANT` COM type, which is pretty much a giant `union` of every COM type under the sun. Luckily, this matches up perfectly with Rust's discriminated unions — I take it as a sign from the universe that Rust and VBScript were made to work together.
 
 That's pretty much it for today.
+
+<a href="https://news.ycombinator.com/item?id=32507659">
+    Discuss on Hacker News
+</a>
