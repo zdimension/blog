@@ -1,7 +1,7 @@
 ---
 title: Analyzing my electricity consumption
 category: "Projects"
-tags: [Programming]
+tags: [Programming, Data Science]
 image: Linky.jpeg
 cover_responsive: true
 cover_hide: true

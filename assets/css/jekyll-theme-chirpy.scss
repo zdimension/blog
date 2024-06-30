@@ -118,7 +118,8 @@ pre {
 	--code-header-text-color: #888;
 	--code-header-icon-color: #aaa;
 
-	--chart-bg: rgb(0, 0, 0, 2%);
+	//--chart-bg: rgb(0, 0, 0, 2%);
+	--chart-bg: var(--highlight-bg-color);
 }
 
 @mixin dark-scheme {
@@ -137,17 +138,20 @@ pre {
 	--chart-bg: rgba(255, 255, 255, 7%);
 }
 
-.chart {
-	border-radius: 20px;
-	background-color: var(--chart-bg);
-}
-
-.content canvas {
+div.chart {
+	height: 25rem;
 	margin-top: 0;
 	margin-bottom: 1rem;
+
+	&> canvas {
+		border-radius: .625rem;
+		background-color: var(--chart-bg);
+		box-shadow: var(--language-border-color) 0 0 0 1px;
+		margin: 0;
+	}
 }
 
-.content a.popup+label, div.highlighter-rouge + p:has(label:only-child) {
+.content a.popup+label, div.highlighter-rouge + p:has(label:only-child), div.chart + p:has(label:only-child) {
     text-align: center;
 	font-size: 85%;
 	padding: 0;
@@ -158,7 +162,7 @@ pre {
 	display: block;
 }
 
-div.highlighter-rouge {
+div.highlighter-rouge, div.chart {
 	&:not(:last-child) {
 		margin-bottom: 0;
 	}
