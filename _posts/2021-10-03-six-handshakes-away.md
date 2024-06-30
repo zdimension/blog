@@ -58,7 +58,7 @@ But what does that mean in practice? On this graph, there are people from dozens
 
 More formally, the above graph has a diameter of 7. **That means that there are no two nodes on the graph that are more than 6 "online handshakes" away from each other.**
 
-<div><canvas class="chart" id="chartId"></canvas></div>
+<div class="chart"><canvas id="chartId"></canvas></div>
 
 In the figure above, we can see the cumulative distribution of degrees on the graph. For a given number N, the curve shows us how many individuals have N or more friends. Intuitively, the curve is monotonically decreasing, because as N gets bigger and bigger, there are less and less people having that many friends. On the other hand, almost everyone has at least 1 friend.
 
@@ -66,7 +66,7 @@ You'll maybe notice a steep hill at the end, around N=5000. This is due to the f
 
 We can enumerate all pairs of individuals on the graph and compute the length of the shortest path between the two, which gives the following figure:
 
-<div><canvas class="chart" id="chartId2"></canvas></div>
+<div class="chart"><canvas id="chartId2"></canvas></div>
 
 In this graph, the average distance between individuals is 3.3, which is slightly lower than the one found in the Facebook paper (4.7). This can be explained by the fact that the researchers had access to the entire Facebook database whereas I only have access to the graph I obtained through scraping.
 
