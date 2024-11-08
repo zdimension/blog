@@ -3,10 +3,8 @@
 const cowsay = require("cowsay");
 const fs = require("fs");
 const raw = fs.readFileSync("assets/data/computers.txt", "ascii").replace(/\r/g, "").split("\n%\n").slice(0, -1);
-const literature = raw.filter(e => !e.includes("NORTH AMERICAN MALES"));
+const literature = raw.filter(e => !e.includes("NORTH AMERICAN MALES")); // those are in bad taste
 const random = literature[Math.floor(Math.random() * literature.length)];
-//const random = literature.find(e => e.includes("programming systems"));
-//const random = literature.find(e => e.includes("The FTC is conc"));
 const wrap = require("word-wrap");
 
 const block = window.fortune;
@@ -23,11 +21,13 @@ while (block.scrollWidth <= block.clientWidth && cw < 70) {
 
 const width = cw - 1 - 4;
 const fakeTab = "\x01".repeat(4);
+// the goal here is to de-wrap the text to wrap it again at the correct width
 const text = wrap(random
                 .replace(/([^.*\n)]|\.\.)\n[ \t]*([\w"])/g, "$1 $2") // don't ask
-                .replace(/    |\t/g, fakeTab)
-                .replace(/ +/g, " "), {indent: "", width}
-            ).replaceAll(fakeTab, "    ");
+                .replace(/    |\t/g, fakeTab) // preserve indents
+                .replace(/ +/g, " "), // remove extra spaces
+                {indent: "", width}
+            ).replaceAll(fakeTab, "    "); // restore indents
 
 block.textContent = cowsay.say(text, {nowrap: true});
 
