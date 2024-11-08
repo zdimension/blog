@@ -36,6 +36,7 @@ social:
   name: zdimension
   links:
     # The first element serves as the copyright owner's link
+    - https://zdimension.fr/about/
     - https://twitter.com/zdimension_ # change to your twitter homepage
     - https://github.com/zdimension # change to your github homepage
     # Uncomment below to add more social links
