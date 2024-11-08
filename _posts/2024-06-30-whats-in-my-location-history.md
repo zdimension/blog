@@ -470,6 +470,14 @@ We can get a bit more granular and look at the monthly distance walked. Here I'v
 <div class="chart" style="height: 32rem"><canvas id="walkMoving"></canvas></div>
 <label>Mobile users: consider landscape mode?</label>
 
+## Other Fun Things
+
+I found [a nice app](https://github.com/huntfx/location-history-visualizer) that generates heat maps (*literal* maps) from Takeout location data. Behold, 10 years of my life as a map:
+
+![A heat map of my location history](POWERPNT_tKizAypCV8.jpg)
+
+There's something really interesting here that emerges from the data. Of course, the places where I spent the more time are red blobs, but if you look closely you can see cloud-like structures between major areas, that extend along long paths. These are places I visited enough times that they show up on the map, but at the same time, are all close to each other... Well, they're simply the major highways I've taken while traveling by car! I've added their names in boxes next to the "clouds".
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js" integrity="sha512-Hn1w6YiiFw6p6S2lXv6yKeqTk0PLVzeCwWY9n32beuPjQ5HLcvz5l2QsP+KilEr1ws37rCTw3bZpvfvVIeTh0Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
@@ -606,7 +614,6 @@ We can get a bit more granular and look at the monthly distance walked. Here I'v
         const monthIds = Object.keys(monthly);
         function toId(date) {
             const [y, m, d] = date.split("-");
-            // find id in monthIds
             const monthId = monthIds.indexOf(`${y}-${m}`);
             const daysInMonth = new Date(y, m, 0).getDate();
             return monthId + parseFloat(d - 1) / daysInMonth - 0.5;
@@ -668,7 +675,6 @@ We can get a bit more granular and look at the monthly distance walked. Here I'v
                 plugins: {
                     legend: { display: true },
                     title: { display: true, text: 'Walking distance per month', font: { size: 16 }, padding: { bottom: 15 } },
-                    // dashed line at each september
                     annotation: {
                         annotations: [
                             {
