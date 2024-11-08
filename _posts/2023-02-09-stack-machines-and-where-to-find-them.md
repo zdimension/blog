@@ -3,7 +3,7 @@ title: Stack Machines and Where To Find Them
 slug: stack-machines-and-where-to-find-them
 date_published: 2023-02-08T23:00:08.000Z
 date_updated: 2023-03-11T23:54:28.000Z
-tags: [Programming, Rust, Macros, Compilers, The Basics, Low-level]
+tags: [Programming, Rust, Macros, Compilers, Low-level]
 excerpt: "A trip down automatic memory lane, crossing paths with assembly basics, Fortran, Rust macros, Forth, and computability theory."
 math: true
 category: "Long posts"
