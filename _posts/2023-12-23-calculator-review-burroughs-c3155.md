@@ -9,9 +9,9 @@ cover_hide: true
 
 This is the Burroughs C3155:
 
-{% picture DSC02668.JPG --alt A dark grey calculator with a dark Nixie tube display on top showing zeroes, and a keyboard of thick plastic keys. --cover true %}
+{% picture DSC02668.JPG --alt A dark grey calculator with a dark VFD (Vacuum Fluorescent) display on top showing zeroes, and a keyboard of thick plastic keys. --cover true %}
 
-It's a charming old 1970s calculator rocking a Nixie tube display and an ostensibly 1970s design. It's also known, maybe more widely, as the Sharp QT-8D, of which it is a clone made by Burroughs for sale in the US. Both devices are pretty much identical, except for the layout of the operation keys.
+It's a charming old 1970s calculator rocking a VFD display and an ostensibly 1970s design. It's also known, maybe more widely, as the Sharp QT-8D, of which it is a clone made by Burroughs for sale in the US. Both devices are pretty much identical, except for the layout of the operation keys.
 
 ## The Outside
 
@@ -27,9 +27,9 @@ I unfortunately am not in possession of the provided silicone cloth, so I'll ski
 
 It's funny to see that such a simple device needs a 7-watt power supply. For a rough back-of-the-envelope comparison, a TI-82 with its three 1.5V AAA batteries [only draws around 0.1 watts](https://www.cemetech.net/forum/viewtopic.php?t=11806&start=0).
 
-Here are the Nixie tubes in all their glory:
+Here are the VFD tubes in all their glory:
 
-{% picture PXL_20231222_184559122.jpg --alt A close-up of the nine Nixie tubes, showing the digits 1 to 8, followed by a decimal point and a minus sign. The environment is dark. The tubes glow a bright green tint. %}
+{% picture PXL_20231222_184559122.jpg --alt A close-up of the nine VFD tubes, showing the digits 1 to 8, followed by a decimal point and a minus sign. The environment is dark. The tubes glow a bright green tint. %}
 
 Another even-closer close-up:
 
@@ -45,9 +45,9 @@ Here are the two halves of the device:
 
 {% picture PXL_20231222_185727353.jpg --alt The lower and upper halves of the calculator; the first one contains the main circuit and the display, the second one contains the keyboard circuitry. %}
 
-Close-up of the (dusty) Nixie tubes:
+Close-up of the (dusty) VFD tubes:
 
-{% picture PXL_20231222_185929021.jpg --alt A close-up of the Nixie tube display, showing the metal front panel, the grid, and a few tubes. %}
+{% picture PXL_20231222_185929021.jpg --alt A close-up of the VFD tube display, showing the metal front panel, the grid, and a few tubes. %}
 
 The display assembly is mounted on the main circuit board using some sort of extension port, so it's easily removable:
 
@@ -79,7 +79,7 @@ The rest are passive components, no need to go into details.
 
 Here's the display block:
 
-{% picture PXL_20231222_191111740.jpg --alt View of the display block removed from the main circuit, with the nine nixie tubes and the covering panel, plus some circuit thingies. %}
+{% picture PXL_20231222_191111740.jpg --alt View of the display block removed from the main circuit, with the nine VFD tubes and the covering panel, plus some circuit thingies. %}
 
 From the back:
 
