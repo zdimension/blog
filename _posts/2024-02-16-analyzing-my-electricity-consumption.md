@@ -260,4 +260,6 @@ SQLite is also ergonomic to use for simple cases such as mine here.
 
 As always, code is [on GitHub](https://github.com/zdimension/elecanalysis).
 
+For French readers who'd like to make the most of their money, there's a neat OSS tool dedicated to comparing all the electricity subscription plans available in France (spoiler: Tempo beats everything, by far), called [comparateur-abonnements-electricite](https://comparateur-abonnements-electricite.fr/) (code [here](https://github.com/JC144/EDF_Simulateur_Prix)). It runs on CSV exports and computes the total price you'd have paid with each plan. It has more plans than my tool, but mine is more focused towards day-to-day consumption analysis, the pricing part is just a bonus.
+
 Thanks for reading.
