@@ -312,7 +312,7 @@ main p>a.popup:not(.normal):not(.left):not(.right) {
 }
 
 img {
-	transform: translate3d(0px, 0px, 0px); // fixes pixelated images in Chrome (https://stackoverflow.com/questions/74502978/object-fit-cover-gives-pixelated-images-on-chrome)
+	transform: translate3d(0px, 0px, 0.1px); // fixes pixelated images in Chrome (https://stackoverflow.com/questions/74502978/object-fit-cover-gives-pixelated-images-on-chrome)
 }
 
 .table-wrapper>table td, .table-wrapper>table th {
