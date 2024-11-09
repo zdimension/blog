@@ -22,8 +22,8 @@ module Jekyll
       site.posts.docs.each do |post|
         clean_name = post.basename_without_ext.gsub(/^\/|\/$/, '')
         post.data['clean_name'] = clean_name
-        if post.data['img_path'].nil?
-          post.data['img_path'] = "/assets/posts/#{clean_name}/"
+        if post.data['media_subpath'].nil?
+          post.data['media_subpath'] = "/assets/posts/#{clean_name}/"
         end
 
         if post.data['cover_responsive']
@@ -71,7 +71,7 @@ module PictureTag
     alias_method :setup_original, :setup
 
     def setup(context)
-      @raw_params = File.join(context.environments.first["page"]["img_path"], @raw_params)
+      @raw_params = File.join(context.environments.first["page"]["media_subpath"], @raw_params)
 
       setup_original(context)
     end
