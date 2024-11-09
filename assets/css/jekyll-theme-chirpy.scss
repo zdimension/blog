@@ -3,7 +3,12 @@
 $font-family-base: 'Source Sans Pro', 'Segoe UI', sans-serif;
 $font-family-heading: Lato, 'Microsoft Yahei', sans-serif !default;
 
-@import 'main';
+
+@import 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
 
 :root {
 	--bs-font-monospace: "Recursive Mono", SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace
