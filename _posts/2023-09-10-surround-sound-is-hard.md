@@ -2,7 +2,7 @@
 title: Surround sound is hard
 tags: [Hardware, Programming, Dark magic]
 category: "Long posts"
-image: 81GHq5UPjYL_pixian_ai.png
+image: 81GHq5UPjYL_pixian_ai.webp
 cover_hide: true
 ---
 

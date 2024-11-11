@@ -6,7 +6,7 @@ date_updated: 2023-01-07T23:30:11.000Z
 tags: [Programming, Hardware, Rust]
 excerpt: "A journey in building an ARM CPU from scratch in a digital circuit simulator, and running Rust on it to interpret Scheme and serve Web pages."
 math: true
-image: javaw_zD3bVnBuYi-2.png
+image: javaw_zD3bVnBuYi-2.webp
 category: "Long posts"
 ---
 
@@ -171,10 +171,10 @@ Hence: addressing modes and memory alignment.
 
 If we look at everyday life programs, we can observe that there are two main use cases for memory: storing local variables (variables in functions, or parameters), and storing global variables (global configuration, memory that will be shared between programs).
 
-| Use case | Allocation size | Maximum lifetime | Time of allocation | Time of free |
-| --- | --- | --- | --- | --- |
-| Local | Generally small | Current function call | When entering function | When leaving function |
-| Global | Any | Static (lifetime of the program) | Any | Any |
+| Use case | Allocation size | Maximum lifetime                 | Time of allocation     | Time of free          |
+| -------- | --------------- | -------------------------------- | ---------------------- | --------------------- |
+| Local    | Generally small | Current function call            | When entering function | When leaving function |
+| Global   | Any             | Static (lifetime of the program) | Any                    | Any                   |
 
 There's a clear difference: on one hand, "local memory", which is used for small, deterministic allocations, and "global memory", which is used for anything, at any time, with very few constraints.
 

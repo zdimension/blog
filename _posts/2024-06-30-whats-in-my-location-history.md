@@ -2,8 +2,12 @@
 title: "What's in my Location History?"
 excerpt: "Getting my location history from Google and analyzing it with Python."
 tags: [Programming, Data Science]
-image: Code_jcUs1TRuum.png
+image: Code_jcUs1TRuum.webp
+cover_responsive: true
 ---
+
+{% picture Code_jcUs1TRuum.png --cover true %}
+{: style="display: none" }
 
 I've been using Google Maps' location history feature for a few years now. It's a bit creepy to think about how much data Google has about me, but it's also a goldmine for data analysis. 
 
