@@ -1,6 +1,6 @@
 presets:
   default: 
-    formats: [webp, original]
+    formats: [webp]
     link_source: true
     #nomarkdown: false
     attributes:

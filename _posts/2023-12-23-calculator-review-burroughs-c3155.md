@@ -306,6 +306,7 @@ You can try the calculator with this simulator I made.
 }
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.slim.min.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj+KsslFkCOt3TvJrX2AV/Gc3wOqA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   let display = $("#calc-display");
