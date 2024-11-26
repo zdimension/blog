@@ -4,7 +4,7 @@ slug: dell-laptops-ruining-audio-drivers-in-2023
 date_published: 2023-01-09T07:42:09.000Z
 date_updated: 2023-01-18T06:37:29.000Z
 tags: [Ramblings, Hardware]
-excerpt: "My Dell laptop's audio drivers hog my CPU (WavesSysSvc.exe) and break my headphone jack. Here's how to fix it by restoring the basic HDA drivers."
+description: "My Dell laptop's audio drivers hog my CPU (WavesSysSvc.exe) and break my headphone jack. Here's how to fix it by restoring the basic HDA drivers."
 image: MN0005896701_1.jpg
 cover_hide: true
 ---

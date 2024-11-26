@@ -1,6 +1,6 @@
 ---
 title: 'Using AWT in C#, and other funky things'
-excerpt: "A story of how Microsoft ported Java to .NET and accidentally created Windows Forms in the process, only to throw it away and pretend it never happened."
+description: "A story of how Microsoft ported Java to .NET and accidentally created Windows Forms in the process, only to throw it away and pretend it never happened."
 category: "Long posts"
 tags: [Programming, History]
 ---

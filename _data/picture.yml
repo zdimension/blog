@@ -5,3 +5,8 @@ presets:
     #nomarkdown: false
     attributes:
       a: 'class="popup img-link shimmer"'
+    format_quality:
+      webp: 95
+    #image_options:
+    #  webp: 
+    #    lossless: true

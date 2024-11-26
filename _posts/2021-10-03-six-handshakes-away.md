@@ -4,7 +4,7 @@ slug: six-handshakes-away
 date_published: 2021-10-03T16:23:42.000Z
 date_updated: 2021-11-13T00:49:01.000Z
 tags: [Programming, Data Science]
-image: graphtest1.webp
+image: graphtest1.png
 cover_hide: true
 ---
 

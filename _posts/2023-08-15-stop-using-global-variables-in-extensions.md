@@ -4,7 +4,7 @@ title: Stop using global variables in extensions
 date_published: 2023-08-15T10:00:48.000Z
 date_updated: 2023-08-15T10:00:48.000Z
 tags: [Ramblings]
-excerpt: "Global state is bad and breaks websites. Kids, don't store things globally."
+description: "Global state is bad and breaks websites. Kids, don't store things globally."
 ---
 
 [Adfly Skipper](https://chrome.google.com/webstore/detail/adfly-skipper/obnfifcganohemahpomajbhocfkdgmjb) defines a property on `window`, called `source`. It's only used for internal purposes.

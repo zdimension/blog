@@ -4,6 +4,7 @@ tags: [Programming]
 shortname: PlexDLWeb
 category: "Projects"
 image: home.webp
+cover_responsive: true
 cover_hide: true
 ---
 
@@ -23,7 +24,7 @@ My users travel. My users take the train, the plane, and go in a number of diffe
 
 **PlexDLWeb**. A simple web app that runs alongside Plex and allows logging in with a Plex account and searching for stuff.
 
-![Screenshot of PlexDLWeb open, with "james" in the search box and various movies and episodes shown in the results.](home.png)
+{% picture home.png --alt Screenshot of PlexDLWeb open, with "james" in the search box and various movies and episodes shown in the results. --cover true %}
 
 Similar tools already exist: (non-exhaustive list)
 - [elklein96/plex-dl](https://github.com/elklein96/plex-dl): CLI, Python, requires token, uses base URL and media ID

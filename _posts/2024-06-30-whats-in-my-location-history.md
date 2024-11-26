@@ -1,6 +1,6 @@
 ---
 title: "What's in my Location History?"
-excerpt: "Getting my location history from Google and analyzing it with Python."
+description: "Getting my location history from Google and analyzing it with Python."
 tags: [Programming, Data Science]
 image: Code_jcUs1TRuum.webp
 cover_responsive: true

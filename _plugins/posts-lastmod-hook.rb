@@ -37,7 +37,7 @@ module Jekyll
           #   source_file: img, 
           #   width: 1200, 
           #   format: PictureTag.formats.first)
-          post.data["image"] = "../../../generated/assets/posts/#{clean_name}/#{basename}-800#{ext.downcase}"
+          post.data["image"] = "../../../generated/assets/posts/#{clean_name}/#{basename}-800.webp"
           # post.data["image"] = "../../../#{gen_img.uri}"
         end
 

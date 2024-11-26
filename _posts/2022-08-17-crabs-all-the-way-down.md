@@ -4,9 +4,9 @@ title: "Crabs All the Way Down: Running Rust on Logic Gates"
 date_published: 2022-08-17T15:47:22.000Z
 date_updated: 2023-01-07T23:30:11.000Z
 tags: [Programming, Hardware, Rust]
-excerpt: "A journey in building an ARM CPU from scratch in a digital circuit simulator, and running Rust on it to interpret Scheme and serve Web pages."
+description: "A journey in building an ARM CPU from scratch in a digital circuit simulator, and running Rust on it to interpret Scheme and serve Web pages."
 math: true
-image: javaw_zD3bVnBuYi-2.webp
+image: javaw_zD3bVnBuYi-2.png
 category: "Long posts"
 ---
 

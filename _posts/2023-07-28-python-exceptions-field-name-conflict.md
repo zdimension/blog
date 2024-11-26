@@ -5,7 +5,7 @@ slug: python-exceptions-field-name-conflict
 date_published: 2023-07-28T13:37:31.000Z
 date_updated: 2023-07-28T13:40:28.000Z
 tags: [Programming, Ramblings]
-excerpt: "tl;dr: Python exceptions reserve the field \"args\" for internal magic. Don't name your field \"args\"."
+description: "tl;dr: Python exceptions reserve the field \"args\" for internal magic. Don't name your field \"args\"."
 ---
 
 ## The Problem

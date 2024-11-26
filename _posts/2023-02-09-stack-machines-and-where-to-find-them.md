@@ -4,7 +4,7 @@ slug: stack-machines-and-where-to-find-them
 date_published: 2023-02-08T23:00:08.000Z
 date_updated: 2023-03-11T23:54:28.000Z
 tags: [Programming, Rust, Macros, Compilers, Low-level]
-excerpt: "A trip down automatic memory lane, crossing paths with assembly basics, Fortran, Rust macros, Forth, and computability theory."
+description: "A trip down automatic memory lane, crossing paths with assembly basics, Fortran, Rust macros, Forth, and computability theory."
 math: true
 category: "Long posts"
 ---
@@ -815,20 +815,20 @@ The token list and the stack are passed as arguments to recursive calls of the m
 
 Here's how the macro is expanded, step-by-step:
 
-| Code | Matched rule |
-| --- | --- |
-| `1 2 3 4 - 5 * - +` | `$($tokens:tt)*` |
-| `@eval [] 1 2 3 4 - 5 * - +` | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*` |
-| `@eval [1,] 2 3 4 - 5 * - +` | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*` |
-| `@eval [1,2,] 3 4 - 5 * - +` | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*` |
-| `@eval [1,2,3,] 4 - 5 * - +` | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*` |
+| Code                         | Matched rule                                             |
+| ---------------------------- | -------------------------------------------------------- |
+| `1 2 3 4 - 5 * - +`          | `$($tokens:tt)*`                                         |
+| `@eval [] 1 2 3 4 - 5 * - +` | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*`        |
+| `@eval [1,] 2 3 4 - 5 * - +` | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*`        |
+| `@eval [1,2,] 3 4 - 5 * - +` | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*`        |
+| `@eval [1,2,3,] 4 - 5 * - +` | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*`        |
 | `@eval [1,2,3,4,] - 5 * - +` | `@eval [$y:expr, $x:expr, $($stack:tt)*] - $($rest:tt)*` |
-| `@eval [1,2,-1,] 5 * - +` | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*` |
-| `@eval [1,2,-1,5,] * - +` | `@eval [$y:expr, $x:expr, $($stack:tt)*] * $($rest:tt)*` |
-| `@eval [1,2,-5,] - +` | `@eval [$y:expr, $x:expr, $($stack:tt)*] - $($rest:tt)*` |
-| `@eval [1,7,] +` | `@eval [$y:expr, $x:expr, $($stack:tt)*] + $($rest:tt)*` |
-| `@eval [8,]` | `@eval [$top:expr, $($stack:tt)*]` |
-| end of recursion, return 8 |  |
+| `@eval [1,2,-1,] 5 * - +`    | `@eval [$($stack:tt)*] $num:literal $($rest:tt)*`        |
+| `@eval [1,2,-1,5,] * - +`    | `@eval [$y:expr, $x:expr, $($stack:tt)*] * $($rest:tt)*` |
+| `@eval [1,2,-5,] - +`        | `@eval [$y:expr, $x:expr, $($stack:tt)*] - $($rest:tt)*` |
+| `@eval [1,7,] +`             | `@eval [$y:expr, $x:expr, $($stack:tt)*] + $($rest:tt)*` |
+| `@eval [8,]`                 | `@eval [$top:expr, $($stack:tt)*]`                       |
+| end of recursion, return 8   |                                                          |
 
 There! We can now evaluate RPN expressions, at compile time. No runtime cost whatsoever. If it's invalid, it won't compile. Ain't that great?
 

@@ -4,7 +4,7 @@ slug: how-i-learned-to-stop-worrying-and-love-macros
 date_published: 2022-06-07T10:52:08.000Z
 date_updated: 2022-11-29T21:39:48.000Z
 tags: [Programming, Rust, Compilers, Macros, Code analysis]
-excerpt: "A Modest Proposal For Preventing The Children of Rust Developers From Being Exposed To Procedural Macros"
+description: "“A Modest Proposal For Preventing The Children of Rust Developers From Being Exposed To Procedural Macros”"
 category: "Long posts"
 ---
 

@@ -4,7 +4,7 @@ math: true
 tags: [Programming]
 image: colors.jpg
 cover_hide: true
-excerpt: "Solving (and bruteforcing) a jigsaw puzzle with Python and Rust."
+description: "Solving (and bruteforcing) a jigsaw puzzle with Python and Rust."
 ---
 
 ## The Tweet

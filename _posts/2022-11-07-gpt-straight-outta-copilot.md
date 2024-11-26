@@ -4,7 +4,7 @@ slug: gpt-straight-outta-copilot
 date_published: 2022-11-07T09:07:53.000Z
 date_updated: 2022-12-11T17:05:00.000Z
 tags: [Ramblings, Programming]
-excerpt: "Ramblings about Copilot, security vulnerabilities, and the originality of ML-generated content."
+description: "Ramblings about Copilot, security vulnerabilities, and the originality of ML-generated content."
 ---
 
 > I'm not a lawyer.

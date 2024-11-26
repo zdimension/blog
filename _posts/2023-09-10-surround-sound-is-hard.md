@@ -3,12 +3,13 @@ title: Surround sound is hard
 tags: [Hardware, Programming, Dark magic]
 category: "Long posts"
 image: 81GHq5UPjYL_pixian_ai.webp
+cover_responsive: true
 cover_hide: true
 ---
 
 I own a **Logitech Z506** 5.1 audio system. I bought it in 2014 and it's been doing its job just fine since then. It looks like this:
 
-![Logitech Z506](81GHq5UPjYL_pixian_ai.png)
+{% picture 81GHq5UPjYL_pixian_ai.png --alt Logitech Z506 5.1 audio system --cover true %}
 
 Audio is easy. It's just an analog signal you transmit over a wire and you get sound. Too simple to mess up. Right?
 

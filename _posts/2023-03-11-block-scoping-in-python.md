@@ -4,7 +4,7 @@ slug: block-scoping-in-python
 date_published: 2023-03-11T16:58:06.000Z
 date_updated: 2023-03-12T12:09:18.000Z
 tags: [Programming, Dark magic]
-excerpt: "Python doesn't have block scoping. Or does it?"
+description: "Python doesn't have block scoping. Or does it?"
 image: 
     path: julia-kadel-YmULswIbc3I-unsplash.jpg
     alt: Photo by <a href="https://unsplash.com/@juliakadel">Julia Kadel</a> on <a href="https://unsplash.com">Unsplash</a> 
