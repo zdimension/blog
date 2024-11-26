@@ -74,7 +74,7 @@ And fast they got it: in October of 2001, the first beta version of Visual J# (c
 
 There they had it: Java, running on the CLR. You wrote [regular-ass](https://xkcd.com/37/) Java code and it would get compiled to CIL code and run on the CLR virtual machine, effortlessly referencing other CLR assemblies written in C# or VB.NET.
 
-This lasted for a few years, until Microsoft deprecated it around 2007-08 and now you'd be hard-pressed to find anything referencing it. There are still bits of documentation laying around on MSDN, but apart from that, your best bet is archive.org.
+This lasted for a few years, until Microsoft deprecated it around 2007-08 and now you'd be hard-pressed to find anything referencing it. There are still bits of documentation lying around on MSDN, but apart from that, your best bet is archive.org.
 
 There is a caveat: J# targets .NET, which includes the .NET standard library. Java has its own standard library -- `System.out.println` has to come from somewhere. Which means... J# includes its own implementation of the Java standard library APIs. As CLR assemblies.
 
