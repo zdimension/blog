@@ -21,8 +21,8 @@ math: true
             }
 
             & > .graph {
-                & > path:first-child {
-                    fill: transparent;
+                & > path {
+                    display: none;
                 }
 
                 & > * {
@@ -160,6 +160,7 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
     .algo-viewer-inner {
         display: flex;
         flex-wrap: wrap;
+        justify-content: center;
 
         & > div {
             @media (min-width: 800px) {
@@ -172,35 +173,14 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
             margin: 10pt auto;
         }
 
-        .algo-title, .algo-queue > span > span {
-            &.algo-title {
-                position: absolute;
-                margin-top: 16pt;
-            }
-
+        .algo-title {
+            position: absolute;
+            margin-top: 16pt;
             color: var(--text-color);
             background-color: rgba(128, 128, 128, 0.3);
             border-radius: 4pt;
             padding: 3pt;
             line-height: normal;
-        }
-
-        .algo-queue > span {
-            display: inline-grid;
-            transition: grid-template-columns 0.4s ease-in-out;
-            grid-template-columns: 1fr;
-            & > span {
-                overflow: hidden;
-                white-space: nowrap;
-            }
-
-            &:not(.queued) {
-                grid-template-columns: 0fr;
-            }
-        }
-
-        .algo-queue {
-            display: none; /* todo: finish this one day */
         }
     }
 
@@ -254,39 +234,53 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
         padding: 4pt 0;
     }
 
-    #traversal-nav {
+    .algo .nav {
         width: 100%;
 
-        li {
+        & > li {
             flex: 1;
             text-align: center;
 
-            a {
+            & > a {
                 color: var(--text-muted-color) !important;
-                border-bottom: 1px solid currentColor;
+                border-bottom: 1px solid currentColor !important;
             }
 
             a:hover {
                 color: var(--toc-highlight) !important;
-                border-bottom-width: 3px;
+                border-bottom-width: 3px !important;
             }
 
             &.active a {
                 color: var(--toc-highlight) !important;
                 font-weight: 600;
-                border-bottom-width: 3px;
+                border-bottom-width: 3px !important;
             }
         }
     }
 </style>
 
-<ul id="traversal-nav" class="nav">
-</ul>
+<template id="algo-viewer">
+    <div class="algo">
+        <ul class="nav">
+        </ul>
 
-<div id="traversal-viewer" class="algo-viewer">
-    <div id="traversal-container" class="algo-viewer-inner">
+        <div class="algo-viewer">
+            <div class="algo-viewer-inner">
+            </div>
+        </div>
+
+        <div class="algo-controls-container">
+            <div class="algo-controls">
+                <button class="btn btn-primary algo-controls-prev">Previous</button>
+                <input class="form-range" type="range" min="0" max="100" value="0">
+                <button class="btn btn-primary algo-controls-next">Next</button>
+            </div>
+        </div>
     </div>
+</template>
 
+<div id="traversal">
     <!--
     digraph G {
     "Legend:" [shape=none];
@@ -295,194 +289,165 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
     "Queued" [class="queued"];
     }
     -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="365pt" height="44pt" viewBox="0 0 365 44"><g class="graph" transform="translate(4 40)"><path fill="#fff" d="M-4 4v-44h365V4H-4z"/><g class="node"><text text-anchor="middle" x="30.93" y="-13.8" font-family="Times,serif" font-size="14">Legend:</text></g><g class="node visited"><ellipse fill="none" stroke="#000" cx="118.93" cy="-18" rx="38.93" ry="18"/><text text-anchor="middle" x="118.93" y="-13.8" font-family="Times,serif" font-size="14">Visited</text></g><g class="node current"><ellipse fill="none" stroke="#000" cx="215.93" cy="-18" rx="40.54" ry="18"/><text text-anchor="middle" x="215.93" y="-13.8" font-family="Times,serif" font-size="14">Current</text></g><g class="node queued"><ellipse fill="none" stroke="#000" cx="315.93" cy="-18" rx="41.07" ry="18"/><text text-anchor="middle" x="315.93" y="-13.8" font-family="Times,serif" font-size="14">Queued</text></g></g></svg>
-</div>
-
-<div id="traversal-controls-container" class="algo-controls-container">
-    <div id="traversal-controls" class="algo-controls">
-        <button id="traversal-prev" class="btn btn-primary">Previous</button>
-        <input id="traversal-slider" class="form-range" type="range" min="0" max="100" value="0">
-        <button id="traversal-next" class="btn btn-primary">Next</button>
-    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" width="365pt" height="44pt" viewBox="0 0 365 44"><g class="graph" transform="translate(4 40)"><path fill="#fff" d="M-4 4v-44h365V4H-4z"/><g class="node"><text text-anchor="middle" x="30.93" y="-13.8" font-family="Times,serif" font-size="14">Legend:</text></g><g class="node visited"><ellipse fill="none" stroke="#000" cx="118.93" cy="-18" rx="38.93" ry="18"/><text text-anchor="middle" x="118.93" y="-13.8" font-family="Times,serif" font-size="14">Visited</text></g><g class="node current"><ellipse fill="none" stroke="#000" cx="215.93" cy="-18" rx="40.54" ry="18"/><text text-anchor="middle" x="215.93" y="-13.8" font-family="Times,serif" font-size="14">Current</text></g><g class="node queued"><ellipse fill="none" stroke="#000" cx="315.93" cy="-18" rx="41.07" ry="18"/><text text-anchor="middle" x="315.93" y="-13.8" font-family="Times,serif" font-size="14">Queued</text></g></g></svg>   
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {   
-        function parseAdjacency(dot) {
-            const lines = dot.split("\n");
-            const adjList = {};
-            function edge(a, b, bidi) {
-                if (a in adjList) {
-                    adjList[a].push(b);
-                } else {
-                    adjList[a] = [b];
-                }
-                if (bidi) {
-                    edge(b, a, false);
-                }
+    /**
+     * Parses a graphviz adjacency list from a string.
+     * @param {string} dot The graphviz dot string.
+     * @returns {Object<string, string[]>} The adjacency list.
+     */
+    function parseAdjacency(dot) {
+        const lines = dot.split("\n");
+        const adjList = {};
+        function edge(a, b, bidi) {
+            if (a in adjList) {
+                adjList[a].push(b);
+            } else {
+                adjList[a] = [b];
             }
-            for (const line of lines) {
-                if (!/(->|--)/.test(line) || !/"/.test(line))
-                    continue;
-                // quick and dirty graphviz tokenization
-                let tokens = JSON.parse("[" + line.trim()
-                    .replace(/->/g, ',false,').replace(/--/g, ',true,')
-                    .replace(/;/g, "")
-                    .replace(/\{/g, "[").replace(/\}/g, "]")
-                    .replace(/ \s+/, " ")
-                    + "]");
-                while (true) {
-                    let [head, op, next, ...rest] = tokens;
-                    if (Array.isArray(next)) {
-                        for (const val of next) {
-                            edge(head, val, op);
-                        }
-                    } else {
-                        edge(head, next, op);
+            if (bidi) {
+                edge(b, a, false);
+            }
+        }
+        for (const line of lines) {
+            if (!/(->|--)/.test(line) || !/"/.test(line))
+                continue;
+            // quick and dirty graphviz tokenization
+            let tokens = JSON.parse("[" + line.trim()
+                .replace(/->/g, ',false,').replace(/--/g, ',true,')
+                .replace(/;/g, "")
+                .replace(/\{/g, "[").replace(/\}/g, "]")
+                .replace(/ \s+/, " ")
+                + "]");
+            while (true) {
+                let [head, op, next, ...rest] = tokens;
+                if (Array.isArray(next)) {
+                    for (const val of next) {
+                        edge(head, val, op);
                     }
-                    if (rest.length === 0)
-                        break;
-                    tokens = [next, ...rest];
+                } else {
+                    edge(head, next, op);
                 }
+                if (rest.length === 0)
+                    break;
+                tokens = [next, ...rest];
             }
-            return adjList;
         }
+        return adjList;
+    }
 
-        const container = document.querySelector("#traversal-container");
-        const slider = document.querySelector("#traversal-slider");
-        
-        document.querySelector("#traversal-prev").addEventListener("click", function() {
+    /**
+     * Enables or disables a class on a node.
+     * @param {Element} node The node to modify.
+     * @param {string} cls The class to add or remove.
+     * @param {boolean} add Whether to add or remove the class.
+     */
+    function setClass(node, cls, add) {
+        if (add) {
+            node.classList.add(cls);
+        } else {
+            node.classList.remove(cls);
+        }
+    }
+
+    function createGraphNode(origSvg, adj, title) {
+        const svg = origSvg.cloneNode(true);
+        const div = document.createElement("div");
+        const label = document.createElement("span");
+        label.classList.add("algo-title");
+        label.textContent = title;
+        div.appendChild(label);
+        div.appendChild(svg);
+        const nodeMap = Object.fromEntries(svg.querySelectorAll(".node").values().map(node => [node.querySelector("text").textContent, {svgNode: node}]));
+
+        return {
+            node: div,
+            nodeMap: nodeMap
+        };
+    }
+
+    function initAlgo(elemId, {algos, customNodeUpdate, customGraphUpdate, postInit}) {
+        const result = document.getElementById(elemId);
+        let templ = document.getElementById("algo-viewer").content.cloneNode(true);
+        const main = templ.querySelector(".algo");
+        const viewer = main.querySelector(".algo-viewer");
+        const svg = result.querySelector("svg");
+        viewer.appendChild(svg);
+
+        const container = main.querySelector(".algo-viewer-inner");
+        const slider = main.querySelector("input[type='range']");
+
+        main.querySelector(".algo-controls-prev").addEventListener("click", function() {
             slider.value = Math.max(0, parseInt(slider.value) - 1);
-            updateTraversalView();
+            updateView();
         });
 
-        document.querySelector("#traversal-next").addEventListener("click", function() {
+        main.querySelector(".algo-controls-next").addEventListener("click", function() {
             slider.value = Math.min(parseInt(slider.value) + 1, slider.max);
-            updateTraversalView();
+            updateView();
         });
 
-        function createGraphNode(origSvg, adj, title) {
-            const svg = origSvg.cloneNode(true);
-            const div = document.createElement("div");
-            const label = document.createElement("span");
-            label.classList.add("algo-title");
-            label.textContent = title;
-            div.appendChild(label);
-            div.appendChild(svg);
-            const nodeMap = Object.fromEntries(svg.querySelectorAll(".node").values().map(node => [node.querySelector("text").textContent, node]));
-
-            const details = document.createElement("div");
-            details.classList.add("algo-queue");
-            details.textContent += "Queue: ";
-            for (const [i, node] of Object.entries(nodeMap)) {
-                const span = document.createElement("span");
-                span.textContent = i;
-                const bigSpan = document.createElement("span");
-                bigSpan.appendChild(span);
-                details.appendChild(bigSpan);
-                nodeMap[i] = {
-                    svgNode: node,
-                    detailsNode: bigSpan
-                };
-            }
-
-
-            div.appendChild(details);
-
-            return {
-                node: div,
-                nodeMap: nodeMap
-            };
-        }
 
         let traversalState = null;
 
-        function initTraversal(svg, adj) {
-            container.innerHTML = "";
-            let dfs = createGraphNode(svg, adj, "DFS");
-            let bfs = createGraphNode(svg, adj, "BFS");
-            container.appendChild(dfs.node);
-            container.appendChild(bfs.node);
-
-            const startNode = Object.keys(adj)[0];
-
-            function runTraversal(succ, neighb) {
-                let state = {
-                    queue: [startNode],
-                    visited: new Set(),
-                    current: null
-                };
-                let states = [{
-                    queue: [startNode],
-                    visited: new Set(),
-                    current: null
-                }];
-                while (state.queue.length > 0) {
-                    let node = succ(state.queue);
-                    if (state.visited.has(node)) {
-                        continue;
-                    }
-                    state.visited.add(node);
-                    state.current = node;
-                    for (const edge of neighb(adj[node] || [])) {
-                        if (!state.visited.has(edge)) {
-                            state.queue.push(edge);
-                        }
-                    }
-                    states.push({
-                        queue: state.queue.slice(),
-                        visited: new Set(state.visited),
-                        current: node
-                    });
-                }
-
-                states.push({
-                    ...state,
-                    current: null
-                });
-
-                return states;
+        function initTraversal(svg, adj, rec=0) {
+            if (rec > 10) {
+                debugger;
+                return;
             }
+            let oldState = traversalState;
 
-            let bfsStates = runTraversal(queue => queue.shift(), nb => nb);
-            let dfsStates = runTraversal(queue => queue.pop(), nb => nb.toReversed());
+            container.innerHTML = "";
+            let nodes = Object.entries(algos).map(([name, {name: algoName, states}]) => {
+                let node = createGraphNode(svg, adj, algoName);
+                container.appendChild(node.node);
+                return [name, [node, states(adj, main)]];
+            });
 
             slider.value = 0;
-            slider.max = bfsStates.length - 1;
+            slider.max = nodes[0][1][1].length - 1;
 
-            traversalState = {
-                dfs: [dfs, dfsStates],
-                bfs: [bfs, bfsStates]
-            };
-        }
+            traversalState = Object.fromEntries(nodes);
 
-        function setClass(node, cls, add) {
-            if (add) {
-                node.classList.add(cls);
-            } else {
-                node.classList.remove(cls);
+            if (customGraphUpdate && JSON.stringify(oldState) !== JSON.stringify(traversalState)) {    
+                customGraphUpdate(main, traversalState, () => initTraversal(svg, adj, rec+1));
             }
+
+            updateView();
         }
         
-        function updateTraversalView() {
+        function updateView() {
             let idx = parseInt(slider.value);
+
+            main.querySelector(".algo-controls-prev").disabled = idx === 0;
+            main.querySelector(".algo-controls-next").disabled = idx == slider.max;
             
-            const {dfs, bfs} = traversalState;
-            for (const [graph, states] of [dfs, bfs]) {
+            for (const [graph, states] of Object.values(traversalState)) {
                 const state = states[idx];
-                for (const [node, {svgNode, detailsNode}] of Object.entries(graph.nodeMap)) {
+                for (const [node, {svgNode}] of Object.entries(graph.nodeMap)) {
                     setClass(svgNode, "visited", state.visited.has(node));
                     setClass(svgNode, "current", node === state.current);
                     setClass(svgNode, "queued", state.queue.includes(node));
-                    setClass(detailsNode, "queued", state.queue.includes(node));
                 }
             }
-        }
 
-        slider.addEventListener("input", updateTraversalView);
+            if (customNodeUpdate) {
+                customNodeUpdate(traversalState, idx);
+            }
+        }
         
-        const nav = document.querySelector("#traversal-nav");
+        slider.addEventListener("input", updateView);
+
+        const nav = main.querySelector(".nav");
         const graphs = document.querySelectorAll("script[type='graphviz']");
+
+        const aboveSvg = result.querySelector(".above-svg");
+
+        if (aboveSvg !== null) {
+            main.insertBefore(aboveSvg, viewer);
+        }
         let first = true;
         for (const graph of graphs) {
             const name = graph.getAttribute("name");
@@ -500,7 +465,6 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
                 }
                 li.classList.add("active");
                 initTraversal(svg, adj);
-                updateTraversalView();
             };
 
             li.addEventListener("click", handler);
@@ -510,6 +474,80 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
                 first = false;
             }
         }
+
+        if (postInit) {
+            postInit(main);
+        }
+
+        result.appendChild(templ);
+    }
+
+    /**
+     * Runs a traversal algorithm on a graph.
+     * @param {Object<string, string[]>} adj The adjacency list.
+     * @param {(queue: string[]) => string} succ The successor function.
+     * @param {(neighb: string[]) => string[]} neighb The neighbor list processing function.
+     * @returns {Object[]} The traversal states.
+     */
+    function runTraversal(adj, startNode, succ, neighb) {
+        let state = {
+            queue: [startNode],
+            visited: new Set(),
+            current: null,
+            pred: {}
+        };
+        let states = [{
+            queue: [startNode],
+            visited: new Set(),
+            current: null,
+            pred: state.pred
+        }];
+        while (state.queue.length > 0) {
+            let node = succ(state.queue);
+            if (state.visited.has(node)) {
+                continue;
+            }
+            state.visited.add(node);
+            state.current = node;
+            const nbs = neighb(adj[node] || [], state, node);
+            if (nbs === null) {
+                break;
+            }
+            for (const edge of nbs) {
+                if (!state.visited.has(edge)) {
+                    state.pred[edge] = node;
+                    state.queue.push(edge);
+                }
+            }
+            states.push({
+                ...state,
+                queue: state.queue.slice(),
+                visited: new Set(state.visited),
+                current: node
+            });
+        }
+
+        states.push({
+            ...state,
+            current: null,
+        });
+
+        return states;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {   
+        initAlgo("traversal", {
+            algos: {
+                bfs: {
+                    name: "BFS",
+                    states(adj) { return runTraversal(adj, Object.keys(adj)[0], queue => queue.shift(), nb => nb); }
+                },
+                dfs: {
+                    name: "DFS",
+                    states(adj) { return runTraversal(adj, Object.keys(adj)[0], queue => queue.pop(), nb => nb.toReversed()); }
+                }
+            }
+        });
     });
 </script>
 
@@ -530,17 +568,153 @@ If the nodes $a$ and $b$ are at a distance $D$ from each other, and we run a BFS
 
 Seen from the other way around, it's impossible to reach $b$ in more than $k$ levels, because if it we're at some level $L>k$, it means we've already visited the entirety of level $k$, which includes $b$.
 
-<div id="bfs-shortest-viewer" class="algo-viewer">
-    <div id="bfs-shortest-container" class="algo-viewer-container">
-    </div>
+<style>
+    #shortestpath {
+        .computed-path path {
+            fill: none;
+            stroke: rgba(255, 0, 0, 0.7);
+            stroke-width: 5;
+        }
+    }
+</style>
 
+<div id="shortestpath">
+    <div class="above-svg row mt-2">
+        <div class="col">
+            <div class="input-group">
+                <label class="input-group-text">Source</label>
+                <select class="form-select">
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="input-group">
+                <label class="input-group-text">Destination</label>
+                <select class="form-select">
+                </select>
+            </div>
+        </div>
+    </div>
         <!--
     digraph G {
     "Legend:" [shape=none];
     "Visited" [class="visited"];
     "Current" [class="current"];
     "Queued" [class="queued"];
+    "Found" [class="found"];
     }
     -->
     <svg xmlns="http://www.w3.org/2000/svg" width="455pt" height="44pt" viewBox="0 0 454.66 44"><g class="graph" transform="translate(4 40)"><path fill="#fff" d="M-4 4v-44h454.66V4H-4z"/><g class="node"><text text-anchor="middle" x="30.93" y="-13.8" font-family="Times,serif" font-size="14">Legend:</text></g><g class="node visited"><ellipse fill="none" stroke="#000" cx="118.93" cy="-18" rx="38.93" ry="18"/><text text-anchor="middle" x="118.93" y="-13.8" font-family="Times,serif" font-size="14">Visited</text></g><g class="node current"><ellipse fill="none" stroke="#000" cx="215.93" cy="-18" rx="40.54" ry="18"/><text text-anchor="middle" x="215.93" y="-13.8" font-family="Times,serif" font-size="14">Current</text></g><g class="node queued"><ellipse fill="none" stroke="#000" cx="315.93" cy="-18" rx="41.07" ry="18"/><text text-anchor="middle" x="315.93" y="-13.8" font-family="Times,serif" font-size="14">Queued</text></g><g class="node found"><ellipse fill="none" stroke="#000" cx="410.93" cy="-18" rx="35.72" ry="18"/><text text-anchor="middle" x="410.93" y="-13.8" font-family="Times,serif" font-size="14">Found</text></g></g></svg>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {   
+        initAlgo("shortestpath", {
+            algos: {
+                bfs: {
+                    name: "BFS",
+                    states(adj, node) { 
+                        const [src, dst] = node.querySelectorAll("select");
+                        return runTraversal(adj, src.value, queue => queue.shift(), (nb, state, node) => {
+                            if (nb.includes(dst.value)) {
+                                state.pred[dst.value] = node;
+                                state.found = dst.value;
+                                return null;
+                            }
+                            return nb;
+                        });
+                    }, 
+                }
+            }, 
+            customNodeUpdate(traversalState, idx) {
+                const [graph, states] = traversalState.bfs;
+                const state = states[idx];
+                for (const [node, {svgNode}] of Object.entries(graph.nodeMap)) {
+                    setClass(svgNode, "found", state.found === node);
+                }
+
+                const svgRoot = graph.node.querySelector("svg > g");
+
+                svgRoot.querySelector(".computed-path")?.remove();
+
+                if (state.found) {
+                    const path = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    path.classList.add("computed-path");
+                    svgRoot.insertBefore(path, svgRoot.firstChild);
+
+                    function getPos(node) {
+                        const nodeTag = graph.nodeMap[node].svgNode.querySelector(":not(text)");
+                        const {x, y, width, height} = nodeTag.getBBox();
+                        return [x + width / 2, y + height / 2];
+                    }
+
+                    let current = state.found;
+                    let next;
+                    while ((next = state.pred[current]) !== undefined) {
+                        const edge = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                        edge.setAttribute("d", `M${getPos(current).join(" ")} ${getPos(next).join(" ")}`);
+                        path.appendChild(edge);
+                        current = next;
+                    }
+                }
+
+            },
+            customGraphUpdate(node, traversalState, refresh) {
+                let [src, dst] = node.querySelectorAll("select");
+                const adj = traversalState.bfs[0].nodeMap;
+
+                let oldSrc = src.value;
+                src.innerHTML = "";
+
+                let srcClone = src.cloneNode(true);
+                src.parentNode.replaceChild(srcClone, src);
+                src = srcClone;
+
+
+                for (const name of Object.keys(adj)) {
+                    const opt = document.createElement("option");
+                    opt.value = name;
+                    opt.textContent = name;
+                    src.appendChild(opt);
+                }
+
+                if (oldSrc in adj) {
+                    src.value = oldSrc;
+                }
+
+                function recalc() {
+                    refresh();      
+                }
+
+                function updateDst() {
+                    const start = src.value;
+                    let oldDst = dst.value;
+                    dst.innerHTML = "";
+                    let dstClone = dst.cloneNode(true);
+                    dst.parentNode.replaceChild(dstClone, dst);
+                    dst = dstClone;
+                    for (const name of Object.keys(adj)) {
+                        if (name === start) {
+                            continue;
+                        }
+                        const opt = document.createElement("option");
+                        opt.value = name;
+                        opt.textContent = name;
+                        dst.appendChild(opt);
+                    }
+                    if (oldDst in adj && oldDst !== start) {
+                        dst.value = oldDst;
+                    } else {
+                        dst.value = dst.lastElementChild.value;
+                    }
+                    dst.addEventListener("change", recalc);
+                    recalc();
+                }
+
+                src.addEventListener("change", updateDst);
+
+                updateDst();
+            }
+        });
+    });
+</script>
