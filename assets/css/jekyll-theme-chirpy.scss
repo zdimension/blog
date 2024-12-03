@@ -125,6 +125,8 @@ pre {
 
 	//--chart-bg: rgb(0, 0, 0, 2%);
 	--chart-bg: var(--highlight-bg-color);
+
+	--theme: "light";
 }
 
 @mixin dark-scheme {
@@ -141,6 +143,8 @@ pre {
 	}*/
 
 	--chart-bg: rgba(255, 255, 255, 7%);
+
+	--theme: "dark";
 }
 
 div.chart {
@@ -156,7 +160,10 @@ div.chart {
 	}
 }
 
-.content a.popup+label, div.highlighter-rouge + p:has(label:only-child), div.chart + p:has(label:only-child) {
+.content a.popup+label, 
+div.highlighter-rouge + p:has(label:only-child), 
+div.chart + p:has(label:only-child),
+svg + p:has(label:only-child)  {
     text-align: center;
 	font-size: 85%;
 	padding: 0;

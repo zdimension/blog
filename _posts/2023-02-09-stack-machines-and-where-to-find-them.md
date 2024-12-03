@@ -9,7 +9,15 @@ math: true
 category: "Long posts"
 ---
 
-<style>.forth td { font-family: var(--font-mono)!important; } html:not([data-mode="light"]) body img[alt*="Charmander"] { filter: invert(100%); } .macro code { font-size: 80%; }</style>
+<style>
+    .forth td { font-family: var(--font-mono)!important; }
+
+    @container style(--theme: "dark") {
+        img[alt*="Charmander"] { filter: invert(100%); }
+    }
+
+    .macro code { font-size: 80%; }
+</style>
 
 Ever tried googling "recursion"?
 
