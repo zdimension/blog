@@ -23,5 +23,26 @@ var sc_security="338cfd8d";
 <noscript><div class="statcounter"><a title="site stats" href="http://statcounter.com/" target="_blank"><img class="statcounter" src="//c.statcounter.com/10597117/0/338cfd8d/1/" alt="site stats"></a></div></noscript>
 <!-- End of Statcounter Code -->
 <script>
-    $.get("https://ipv4.games/claim?name=zdimension");
+    fetch("https://ipv4.games/claim?name=zdimension").then(response => {
+      if (!response.ok) {
+        
+      }
+    });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    function updateBootstrapTheme() {
+      const dark = getComputedStyle(document.documentElement).getPropertyValue('--theme') === '"dark"';
+      document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+    }
+    window.addEventListener("message", e => {
+      if (e.data && e.data.direction === "mode-toggle") {
+        updateBootstrapTheme();
+      }
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      updateBootstrapTheme();
+    });
+    updateBootstrapTheme();
+  });
 </script>
