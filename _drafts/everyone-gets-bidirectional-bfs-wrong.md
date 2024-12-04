@@ -237,8 +237,11 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
     .algo .nav {
         width: 100%;
 
-        & > li {
-            flex: 1;
+        & > li { 
+            @media (min-width: 800px) {
+                flex: 1;
+            }
+            
             text-align: center;
 
             & > a {
@@ -390,14 +393,14 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
         });
 
 
-        let traversalState = null;
+        let algoState = null;
 
-        function initTraversal(svg, adj, rec=0) {
+        function initStates(svg, adj, rec=0) {
             if (rec > 10) {
                 debugger;
                 return;
             }
-            let oldState = traversalState;
+            let oldState = algoState;
 
             container.innerHTML = "";
             let nodes = Object.entries(algos).map(([name, {name: algoName, states}]) => {
@@ -409,10 +412,10 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
             slider.value = 0;
             slider.max = nodes[0][1][1].length - 1;
 
-            traversalState = Object.fromEntries(nodes);
+            algoState = Object.fromEntries(nodes);
 
-            if (customGraphUpdate && JSON.stringify(oldState) !== JSON.stringify(traversalState)) {    
-                customGraphUpdate(main, traversalState, () => initTraversal(svg, adj, rec+1));
+            if (customGraphUpdate && JSON.stringify(oldState) !== JSON.stringify(algoState)) {    
+                customGraphUpdate(main, algoState, () => initStates(svg, adj, rec+1));
             }
 
             updateView();
@@ -424,17 +427,17 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
             main.querySelector(".algo-controls-prev").disabled = idx === 0;
             main.querySelector(".algo-controls-next").disabled = idx == slider.max;
             
-            for (const [graph, states] of Object.values(traversalState)) {
+            for (const [graph, states] of Object.values(algoState)) {
                 const state = states[idx];
                 for (const [node, {svgNode}] of Object.entries(graph.nodeMap)) {
                     setClass(svgNode, "visited", state.visited.has(node));
-                    setClass(svgNode, "current", node === state.current);
+                    setClass(svgNode, "current", state.current.includes(node));
                     setClass(svgNode, "queued", state.queue.includes(node));
                 }
             }
 
             if (customNodeUpdate) {
-                customNodeUpdate(traversalState, idx);
+                customNodeUpdate(algoState, idx);
             }
         }
         
@@ -464,7 +467,7 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
                     item.classList.remove("active");
                 }
                 li.classList.add("active");
-                initTraversal(svg, adj);
+                initStates(svg, adj);
             };
 
             li.addEventListener("click", handler);
@@ -489,49 +492,71 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
      * @param {(neighb: string[]) => string[]} neighb The neighbor list processing function.
      * @returns {Object[]} The traversal states.
      */
-    function runTraversal(adj, startNode, succ, neighb) {
+    function initTraversal(adj, startNode, {succ, neighb}) {
+        neighb ||= nb => nb;
+
         let state = {
             queue: [startNode],
             visited: new Set(),
-            current: null,
+            current: [],
             pred: {}
         };
         let states = [{
             queue: [startNode],
             visited: new Set(),
-            current: null,
+            current: [],
             pred: state.pred
         }];
-        while (state.queue.length > 0) {
-            let node = succ(state.queue);
-            if (state.visited.has(node)) {
-                continue;
+        const step = () => {
+            if (states.length > 1000) {
+                // something happened
+                console.error("Too many states");
+                return false;
             }
-            state.visited.add(node);
-            state.current = node;
-            const nbs = neighb(adj[node] || [], state, node);
-            if (nbs === null) {
-                break;
-            }
-            for (const edge of nbs) {
-                if (!state.visited.has(edge)) {
-                    state.pred[edge] = node;
-                    state.queue.push(edge);
+            while (state.queue.length > 0) {
+                let node = succ(state.queue);
+                if (state.visited.has(node)) {
+                    continue;
                 }
+                state.visited.add(node);
+                state.current = [node];
+                const nbs = neighb(adj[node] || [], state, node);
+                if (nbs === null) {
+                    states.push({
+                        ...state,
+                        current: [],
+                    }); 
+                    return {newState: states[states.length - 1], continue: false};
+                }
+                for (const edge of nbs) {
+                    if (!state.visited.has(edge)) {
+                        state.pred[edge] = node;
+                        state.queue.push(edge);
+                    }
+                }
+                states.push({
+                    ...state,
+                    queue: state.queue.slice(),
+                    visited: new Set(state.visited),
+                    current: [node]
+                });
+                return {newState: states[states.length - 1], continue: true};
             }
             states.push({
                 ...state,
-                queue: state.queue.slice(),
-                visited: new Set(state.visited),
-                current: node
-            });
-        }
+                current: [],
+            }); 
+            return {newState: states[states.length - 1], continue: false};
+        };
+        return {
+            states,
+            step
+        };
+    }
 
-        states.push({
-            ...state,
-            current: null,
-        });
-
+    function runTraversal(adj, startNode, extra) {
+        const {states, step} = initTraversal(adj, startNode, extra);
+        while (step().continue) {}
         return states;
     }
 
@@ -540,11 +565,11 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
             algos: {
                 bfs: {
                     name: "BFS",
-                    states(adj) { return runTraversal(adj, Object.keys(adj)[0], queue => queue.shift(), nb => nb); }
+                    states(adj) { return runTraversal(adj, Object.keys(adj)[0], {succ: queue => queue.shift()}); }
                 },
                 dfs: {
                     name: "DFS",
-                    states(adj) { return runTraversal(adj, Object.keys(adj)[0], queue => queue.pop(), nb => nb.toReversed()); }
+                    states(adj) { return runTraversal(adj, Object.keys(adj)[0], {succ: queue => queue.pop(), neighb: nb => nb.toReversed()}); }
                 }
             }
         });
@@ -558,6 +583,8 @@ possible along each branch, before backtracking ("climbing back up the tree") an
 
 Even for graphs that contain cycles, such as the cities one, all nodes will be visited exactly once, because the algorithms keep a set of visited nodes to avoid visiting the same node multiple times.
 
+Both of these algorithms have their uses, the DFS for example can be used to efficiently detect cycles or solve mazes.
+
 ## Finding Paths
 
 As surprising as it may be, there is actually a quite simple algorithm to find the shortest path between two nodes in a graph: the BFS. 
@@ -568,26 +595,26 @@ If the nodes $a$ and $b$ are at a distance $D$ from each other, and we run a BFS
 
 Seen from the other way around, it's impossible to reach $b$ in more than $k$ levels, because if it we're at some level $L>k$, it means we've already visited the entirety of level $k$, which includes $b$.
 
+Here's another demo:
+
 <style>
-    #shortestpath {
-        .computed-path path {
-            fill: none;
-            stroke: rgba(255, 0, 0, 0.7);
-            stroke-width: 5;
-        }
+    .computed-path path {
+        fill: none;
+        stroke: rgba(255, 0, 0, 0.7);
+        stroke-width: 5;
     }
 </style>
 
-<div id="shortestpath">
-    <div class="above-svg row mt-2">
-        <div class="col">
+<template id="shortestpath-template">
+    <div class="above-svg row">
+        <div class="col-sm-6 col-12 mt-2">
             <div class="input-group">
                 <label class="input-group-text">Source</label>
                 <select class="form-select">
                 </select>
             </div>
         </div>
-        <div class="col">
+        <div class="col-sm-6 col-12 mt-2">
             <div class="input-group">
                 <label class="input-group-text">Destination</label>
                 <select class="form-select">
@@ -605,116 +632,258 @@ Seen from the other way around, it's impossible to reach $b$ in more than $k$ le
     }
     -->
     <svg xmlns="http://www.w3.org/2000/svg" width="455pt" height="44pt" viewBox="0 0 454.66 44"><g class="graph" transform="translate(4 40)"><path fill="#fff" d="M-4 4v-44h454.66V4H-4z"/><g class="node"><text text-anchor="middle" x="30.93" y="-13.8" font-family="Times,serif" font-size="14">Legend:</text></g><g class="node visited"><ellipse fill="none" stroke="#000" cx="118.93" cy="-18" rx="38.93" ry="18"/><text text-anchor="middle" x="118.93" y="-13.8" font-family="Times,serif" font-size="14">Visited</text></g><g class="node current"><ellipse fill="none" stroke="#000" cx="215.93" cy="-18" rx="40.54" ry="18"/><text text-anchor="middle" x="215.93" y="-13.8" font-family="Times,serif" font-size="14">Current</text></g><g class="node queued"><ellipse fill="none" stroke="#000" cx="315.93" cy="-18" rx="41.07" ry="18"/><text text-anchor="middle" x="315.93" y="-13.8" font-family="Times,serif" font-size="14">Queued</text></g><g class="node found"><ellipse fill="none" stroke="#000" cx="410.93" cy="-18" rx="35.72" ry="18"/><text text-anchor="middle" x="410.93" y="-13.8" font-family="Times,serif" font-size="14">Found</text></g></g></svg>
+</template>
+
+<div id="shortestpath">
 </div>
 
 <script>
+    function pathGraphUpdate(node, algoState, refresh) {
+        let [src, dst] = node.querySelectorAll("select");
+        const adj = algoState.bfs[0].nodeMap;
+
+        let oldSrc = src.value;
+        src.innerHTML = "";
+
+        let srcClone = src.cloneNode(true);
+        src.parentNode.replaceChild(srcClone, src);
+        src = srcClone;
+
+
+        for (const name of Object.keys(adj)) {
+            const opt = document.createElement("option");
+            opt.value = name;
+            opt.textContent = name;
+            src.appendChild(opt);
+        }
+
+        if (oldSrc in adj) {
+            src.value = oldSrc;
+        }
+
+        function recalc() {
+            refresh();      
+        }
+
+        function updateDst() {
+            const start = src.value;
+            let oldDst = dst.value;
+            dst.innerHTML = "";
+            let dstClone = dst.cloneNode(true);
+            dst.parentNode.replaceChild(dstClone, dst);
+            dst = dstClone;
+            for (const name of Object.keys(adj)) {
+                if (name === start) {
+                    continue;
+                }
+                const opt = document.createElement("option");
+                opt.value = name;
+                opt.textContent = name;
+                dst.appendChild(opt);
+            }
+            if (oldDst in adj && oldDst !== start) {
+                dst.value = oldDst;
+            } else {
+                dst.value = dst.lastElementChild.value;
+            }
+            dst.addEventListener("change", recalc);
+            recalc();
+        }
+
+        src.addEventListener("change", updateDst);
+
+        updateDst();
+    }
+
+    function pathNodeUpdate(algoState, idx, path) {
+        const [graph, states] = algoState.bfs;
+        const state = states[idx];
+        for (const [node, {svgNode}] of Object.entries(graph.nodeMap)) {
+            setClass(svgNode, "found", state.found === node);
+        }
+
+        const svgRoot = graph.node.querySelector("svg > g");
+
+        svgRoot.querySelector(".computed-path")?.remove();
+
+        if (path?.length > 1) {
+            const pathNode = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            pathNode.classList.add("computed-path");
+            svgRoot.insertBefore(pathNode, svgRoot.firstChild);
+
+            function getPos(node) {
+                const nodeTag = graph.nodeMap[node].svgNode.querySelector(":not(text)");
+                const {x, y, width, height} = nodeTag.getBBox();
+                return [x + width / 2, y + height / 2];
+            }
+
+            for (const [current, next] of path.slice(1).map((val, idx) => [path[idx], val])) {
+                const edge = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                edge.setAttribute("d", `M${getPos(current).join(" ")} ${getPos(next).join(" ")}`);
+                pathNode.appendChild(edge);
+            }
+        }
+    }
+
     document.addEventListener("DOMContentLoaded", function() {   
+        document.getElementById("shortestpath").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
         initAlgo("shortestpath", {
             algos: {
                 bfs: {
                     name: "BFS",
                     states(adj, node) { 
                         const [src, dst] = node.querySelectorAll("select");
-                        return runTraversal(adj, src.value, queue => queue.shift(), (nb, state, node) => {
-                            if (nb.includes(dst.value)) {
-                                state.pred[dst.value] = node;
-                                state.found = dst.value;
-                                return null;
+                        return runTraversal(adj, src.value, {
+                            succ: queue => queue.shift(), 
+                            neighb(nb, state, node) {
+                                if (nb.includes(dst.value)) {
+                                    state.pred[dst.value] = node;
+                                    state.found = dst.value;
+                                    return null;
+                                }
+                                return nb;
                             }
-                            return nb;
                         });
                     }, 
                 }
             }, 
-            customNodeUpdate(traversalState, idx) {
-                const [graph, states] = traversalState.bfs;
+            customNodeUpdate(algoState, idx) {
+                const [graph, states] = algoState.bfs;
                 const state = states[idx];
-                for (const [node, {svgNode}] of Object.entries(graph.nodeMap)) {
-                    setClass(svgNode, "found", state.found === node);
-                }
-
-                const svgRoot = graph.node.querySelector("svg > g");
-
-                svgRoot.querySelector(".computed-path")?.remove();
-
-                if (state.found) {
-                    const path = document.createElementNS("http://www.w3.org/2000/svg", "g");
-                    path.classList.add("computed-path");
-                    svgRoot.insertBefore(path, svgRoot.firstChild);
-
-                    function getPos(node) {
-                        const nodeTag = graph.nodeMap[node].svgNode.querySelector(":not(text)");
-                        const {x, y, width, height} = nodeTag.getBBox();
-                        return [x + width / 2, y + height / 2];
-                    }
-
-                    let current = state.found;
+                let current = state.found;
+                const path = [current];
+                if (current) {
                     let next;
                     while ((next = state.pred[current]) !== undefined) {
-                        const edge = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                        edge.setAttribute("d", `M${getPos(current).join(" ")} ${getPos(next).join(" ")}`);
-                        path.appendChild(edge);
                         current = next;
+                        path.push(next);
                     }
                 }
-
+                pathNodeUpdate(algoState, idx, path);
             },
-            customGraphUpdate(node, traversalState, refresh) {
-                let [src, dst] = node.querySelectorAll("select");
-                const adj = traversalState.bfs[0].nodeMap;
+            customGraphUpdate: pathGraphUpdate
+        });
+    });
+</script>
 
-                let oldSrc = src.value;
-                src.innerHTML = "";
+## Finding Paths, Faster
 
-                let srcClone = src.cloneNode(true);
-                src.parentNode.replaceChild(srcClone, src);
-                src = srcClone;
+The BFS is a great algorithm to find the shortest path between two nodes. So great, in fact, that it's the **optimal algorithm** for the general case. That's right. "But what about all those fast algorithms I've heard about, like Dijkstra's or A*?" you might ask. Well, two things:
 
+- Dijkstra's algorithm is a BFS. It's a generalized BFS, that handles giving different costs/weights to edges. 
+- The A* algorithm relies on the programmer providing a **heuristic** function that estimates the cost of reaching the destination from a given node. If the heuristic is well-chosen, A* will be faster than BFS, sure, but for a lot of cases, that's a big if. This is why I specifically said "general case": for a given graph $G$ that you know nothing about, BFS is the best you can do. A* is for when you know more about the graph, and can exploit that knowledge to make the search faster.
 
-                for (const name of Object.keys(adj)) {
-                    const opt = document.createElement("option");
-                    opt.value = name;
-                    opt.textContent = name;
-                    src.appendChild(opt);
-                }
+My use case (large social graphs) doesn't have good, fast to compute cost functions that can be used as heuristics for algorithms such as A*, so I'm sticking with BFS. So, is BFS the fastest we can do? There is actually a slight variation of BFS that can be a lot faster in some cases: the **bidirectional BFS**. 
 
-                if (oldSrc in adj) {
-                    src.value = oldSrc;
-                }
+A bidirectional search, as the name suggests, is simply a search that is performed from both the source and the destination nodes at the same time. The idea is that the two searches will meet somewhere in the middle, and the path between the two meeting points will be the shortest path between the two nodes.
 
-                function recalc() {
-                    refresh();      
-                }
+Formally, when we study graphs, we can introduce a measure called the **branching factor**, which is the average outgoing number of nodes from a given node in the graph. In a binary tree, the branching factor is 2, because each node has at most 2 children. In a graph where each node has, on average, 10 neighbors, the branching factor is 10.
 
-                function updateDst() {
-                    const start = src.value;
-                    let oldDst = dst.value;
-                    dst.innerHTML = "";
-                    let dstClone = dst.cloneNode(true);
-                    dst.parentNode.replaceChild(dstClone, dst);
-                    dst = dstClone;
-                    for (const name of Object.keys(adj)) {
-                        if (name === start) {
-                            continue;
+When a standard BFS goes through a graph with branching factor $b$, it recursively visits all the neighbors of all the nodes, level by level. At level 0, it visits 1 node (the source). At level 1, it visits all the neighbors of the source, that is, $b$ (on average). At level 2, all the neighbors' neighbors, that is, $b^2$. At level $L$, it visits $b^L$ nodes. In total, if you're trying to find the path between two nodes that are, say, 10 edges apart, the BFS will visit $1 + b + b^2 + \ldots + b^{10}$ nodes, which is in the order of $b^{10}$. For a binary tree, that would be $2^{10} = 1024$ nodes.
+
+Let's say, now, that we're starting one BFS from the source, and one from the destination, and at each step we advance one step in each. The two BFS will meet at some point, and they must meet exactly in the middle, because they advance at the same speed (and the shortest path between two points is the sum of the path from the source to the middle, and the path from the middle to the destination). If the source and destination are $D$ edges apart, the two BFS will meet after $D/2$ steps, and the total number of nodes visited will be $1 + b + b^2 + \ldots + b^{D/2}$, which is in the order of $b^{D/2}$. For a binary tree, that would be $2^5 = 32$ nodes (by each BFS, so, $64$ visited nodes in total).
+
+We got from $1024$ to $64$ visited nodes, that's something! Specifically, from $O(b^{D})$ to $O(b^{D/2})$, which is an exponential speedup.
+
+As a reference, finding the path between two nodes ~10 edges apart in my 2M nodes graph previously took about 2 seconds with a standard BFS, and only takes 8ms with a bidirectional BFS. That's a 250x speedup.
+
+Here, play with it:
+
+<div id="bidi1">
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {   
+        document.getElementById("bidi1").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+        initAlgo("bidi1", {
+            algos: {
+                bfs: {
+                    name: "BFS",
+                    states(adj, node) { 
+                        const [src, dst] = node.querySelectorAll("select");
+                        const backAdj = {};
+                        for (const [src, dsts] of Object.entries(adj)) {
+                            for (const dst of dsts) {
+                                if (dst in backAdj) {
+                                    backAdj[dst].push(src);
+                                } else {
+                                    backAdj[dst] = [src];
+                                }
+                            }
                         }
-                        const opt = document.createElement("option");
-                        opt.value = name;
-                        opt.textContent = name;
-                        dst.appendChild(opt);
+                        const {states: statesSrc, step: stepSrc} = initTraversal(adj, src.value, {succ: queue => queue.shift()});
+                        const {states: statesDst, step: stepDst} = initTraversal(backAdj, dst.value, {succ: queue => queue.shift()});
+                        const states = [{
+                            queue: statesSrc[0].queue.concat(statesDst[0].queue),
+                            visited: new Set(),
+                            current: statesSrc[0].current.concat(statesDst[0].current),
+                        }];
+                        let bothStates = [statesSrc[0], statesDst[0]];
+                        let found = null;
+
+                    outer: 
+                        while (true) {
+                            for (const [i, step] of [stepSrc, stepDst].entries()) {
+                                const curState = step();
+                                bothStates[i] = curState.newState;
+
+                                const [stateSrc, stateDst] = bothStates;
+
+                                let inter = Object.keys(adj).find(node => 
+                                    (stateSrc.visited.has(node) || stateSrc.queue.includes(node)) &&
+                                    (stateDst.visited.has(node) || stateDst.queue.includes(node)));
+                                if (inter) {
+                                    found = inter;
+                                    break outer;
+                                }
+
+                                states.push({
+                                    queue: stateSrc.queue.concat(stateDst.queue),
+                                    visited: new Set([...stateSrc.visited, ...stateDst.visited]),
+                                    current: stateSrc.current.concat(stateDst.current)
+                                });
+
+                                if (!curState.continue) {
+                                    break outer;
+                                }
+                            }
+                        }
+                        const [lastSrc, lastDst] = [statesSrc[statesSrc.length - 1], statesDst[statesDst.length - 1]];
+                        const last = {
+                            queue: lastSrc.queue.concat(lastDst.queue),
+                            visited: new Set([...lastSrc.visited, ...lastDst.visited]),
+                            current: lastSrc.current.concat(lastDst.current),
+                            predSrc: lastSrc.pred,
+                            predDst: lastDst.pred,
+                            found
+                        };
+                        states.push(last);
+                        return states;
+                    }, 
+                }
+            }, 
+            customNodeUpdate(algoState, idx) {
+                const [graph, states] = algoState.bfs;
+                const state = states[idx];
+                let current = state.found;
+                const path = [current];
+                if (current) {
+                    let next;
+                    while ((next = state.predSrc[current]) !== undefined) {
+                        current = next;
+                        path.push(next);
                     }
-                    if (oldDst in adj && oldDst !== start) {
-                        dst.value = oldDst;
-                    } else {
-                        dst.value = dst.lastElementChild.value;
+                    path.reverse();
+                    current = state.found;
+                    while ((next = state.predDst[current]) !== undefined) {
+                        current = next;
+                        path.push(next);
                     }
-                    dst.addEventListener("change", recalc);
-                    recalc();
                 }
 
-                src.addEventListener("change", updateDst);
-
-                updateDst();
-            }
+                pathNodeUpdate(algoState, idx, path);
+            },
+            customGraphUpdate: pathGraphUpdate
         });
     });
 </script>
