@@ -276,7 +276,9 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
         <div class="algo-controls-container">
             <div class="algo-controls">
                 <button class="btn btn-primary algo-controls-prev">Previous</button>
+                <span class="slider-bound">0</span>
                 <input class="form-range" type="range" min="0" max="100" value="0">
+                <span class="slider-bound"></span>
                 <button class="btn btn-primary algo-controls-next">Next</button>
             </div>
         </div>
@@ -411,6 +413,7 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
 
             slider.value = 0;
             slider.max = nodes[0][1][1].length - 1;
+            slider.nextSibling.textContent = slider.max;
 
             algoState = Object.fromEntries(nodes);
 
@@ -595,12 +598,12 @@ If the nodes $a$ and $b$ are at a distance $D$ from each other, and we run a BFS
 
 Seen from the other way around, it's impossible to reach $b$ in more than $k$ levels, because if it we're at some level $L>k$, it means we've already visited the entirety of level $k$, which includes $b$.
 
-Here's another demo:
+Here's a demo. If no node is highlighted and no path is displayed at the end, then it means no path exists between the two nodes. 
 
 <style>
     .computed-path path {
         fill: none;
-        stroke: rgba(255, 0, 0, 0.7);
+        stroke: rgba(255, 0, 255, 0.7);
         stroke-width: 5;
     }
 </style>
