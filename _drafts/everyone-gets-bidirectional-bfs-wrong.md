@@ -430,6 +430,8 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
 
             main.querySelector(".algo-controls-prev").disabled = idx === 0;
             main.querySelector(".algo-controls-next").disabled = idx == slider.max;
+
+            main.querySelectorAll(".queue-index").forEach(el => el.remove());
             
             for (const [graph, states] of Object.values(algoState)) {
                 const state = states[idx];
@@ -437,6 +439,20 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
                     setClass(svgNode, "visited", state.visited.has(node));
                     setClass(svgNode, "current", state.current.includes(node));
                     setClass(svgNode, "queued", state.queue.includes(node));
+
+                    const queueIndex = state.queue.indexOf(node);
+                    if (queueIndex !== -1) {
+                        const {x, y, width, height} = svgNode.getBBox();
+                        const origText = svgNode.querySelector("text");
+                        const newText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        newText.textContent = queueIndex + 1;
+                        newText.setAttribute("x", x + width);
+                        newText.setAttribute("y", y + height / 2 + origText.getBBox().height / 2);
+                        newText.setAttribute("text-anchor", "end");
+                        newText.setAttribute("font-size", origText.getAttribute("font-size"));
+                        newText.classList.add("queue-index");
+                        svgNode.appendChild(newText);
+                    }
                 }
             }
 
