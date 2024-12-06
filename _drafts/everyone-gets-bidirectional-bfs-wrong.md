@@ -471,7 +471,6 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
         if (aboveSvg !== null) {
             main.insertBefore(aboveSvg, viewer);
         }
-        let first = true;
         for (const graph of graphs) {
             const name = graph.getAttribute("name");
             const svg = graph.nextElementSibling;
@@ -491,11 +490,6 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
             };
 
             li.addEventListener("click", handler);
-
-            if (first) {
-                handler();
-                first = false;
-            }
         }
 
         if (postInit) {
@@ -503,6 +497,8 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
         }
 
         result.appendChild(templ);
+
+        main.querySelector(".nav li:first-child a").click();
     }
 
     /**
