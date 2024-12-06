@@ -669,8 +669,10 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
         src.parentNode.replaceChild(srcClone, src);
         src = srcClone;
 
+        const nodeList = Object.keys(adj);
+        nodeList.sort();
 
-        for (const name of Object.keys(adj)) {
+        for (const name of nodeList) {
             const opt = document.createElement("option");
             opt.value = name;
             opt.textContent = name;
@@ -679,6 +681,8 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
 
         if (oldSrc in adj) {
             src.value = oldSrc;
+        } else {
+            src.value = Object.keys(adj)[0];
         }
 
         function recalc() {
@@ -692,7 +696,7 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
             let dstClone = dst.cloneNode(true);
             dst.parentNode.replaceChild(dstClone, dst);
             dst = dstClone;
-            for (const name of Object.keys(adj)) {
+            for (const name of nodeList) {
                 if (name === start) {
                     continue;
                 }
@@ -704,7 +708,7 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
             if (oldDst in adj && oldDst !== start) {
                 dst.value = oldDst;
             } else {
-                dst.value = dst.lastElementChild.value;
+                dst.value = Object.keys(adj)[nodeList.length - 1];
             }
             dst.addEventListener("change", recalc);
             recalc();
