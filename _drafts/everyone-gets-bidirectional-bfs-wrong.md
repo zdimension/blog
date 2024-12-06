@@ -377,6 +377,7 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
         const result = document.getElementById(elemId);
         let templ = document.getElementById("algo-viewer").content.cloneNode(true);
         const main = templ.querySelector(".algo");
+        main.setAttribute("aria-hidden", "true");
         const viewer = main.querySelector(".algo-viewer");
         const svg = result.querySelector("svg");
         viewer.appendChild(svg);
