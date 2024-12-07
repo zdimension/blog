@@ -63,12 +63,19 @@ math: true
         }
     }
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll("svg").forEach(function(svg) {
+            svg.setAttribute("aria-hidden", "true");
+        });
+    });
+</script>
 
 This post is about graphs and graph algorithms. Specifically, it's about a common, simple algorithm that's somehow so hard to get right that the first few pages of Google results are filled with wrong implementations.
 
 ## Graphs 101
 
-A **graph** is a bunch of things (called **vertices**) that are connected by links (called **edges**). Here are a few graphs, free of charge:
+A **graph** is a bunch of things (called **nodes** or **vertices**) that are connected by links (called **edges**). Here are a few graphs, free of charge:
 
 <script type="graphviz" name="Directory tree">
 digraph G {
@@ -377,7 +384,6 @@ There are two common ways to traverse a graph, which are kind of the dual of eac
         const result = document.getElementById(elemId);
         let templ = document.getElementById("algo-viewer").content.cloneNode(true);
         const main = templ.querySelector(".algo");
-        main.setAttribute("aria-hidden", "true");
         const viewer = main.querySelector(".algo-viewer");
         const svg = result.querySelector("svg");
         viewer.appendChild(svg);
