@@ -137,8 +137,8 @@ graph G {
 
 <label>A fictional rail network between European cities.</label>
 
-If we look closely, these three graphs can be classified with two important properties: 
-- the first two are directed, meaning the edges have an intrinsic direction (e.g. "Eat breakfast" comes before "Wake up"), while the third is undirected, meaning the edges don't have a direction (e.g. "Paris" is connected to "Berlin" and vice-versa).
+If we look closely, these three graphs can be characterized by two important properties: 
+- the first two are directed, meaning the edges have an intrinsic direction (e.g. "Eat breakfast" comes after "Wake up"), while the third is undirected, meaning the edges don't have a direction (e.g. "Paris" is connected to "Berlin" and vice-versa).
 - the last two contain cycles, meaning you can start at a node and follow the edges to come back to the same node, while the first doesn't. 
 
 Additionally, the first one is a tree, or more pedantically a directed tree. In a tree, there exists at most one path between any two nodes.
@@ -153,15 +153,15 @@ Finding a path in the second graph is not really interesting since it's just a c
 
 In the third graph, finding a path would be like finding a **train route** between two cities. For example, to go from Paris to Milan, you could take the train from Paris to Rome, then from Rome to Milan. The path would be <code>Paris → Rome → Milan</code>. This path has a length of 2. Of course, you could also go through Brussels and Berlin, that would be a valid path, but it would not be the shortest.
 
-In real life, graphs can contain a multitude of additional information, like the cost of going from one node to another (which, here, would be the time it takes to travel between two cities), in which case the graph is said to be **weighted**, and the shortest path ends up not simply being the path that has the fewest edges, but the one that has the smallest sum of costs.
+In real life, graphs can contain a multitude of additional information, like the cost of going from one node to another (which, here, could be the time it takes to travel between two cities, or the amount of fuel needed, or the cost of a train ticket, etc), in which case the graph is said to be **weighted**, and the shortest path ends up not simply being the path that has the fewest edges, but the one that has the smallest sum of costs.
 
 In any case, here, we'll mostly be interested in undirected, unweighted graphs, such as the third one here (so, assume this is what "graph" means from now on). TODO ??
 
 ## Searches & Traversals
 
-An interesting (to me, maybe to you) question we can ask ourselves about a given graph is: what are the possible ways to visit all the nodes in the graph? This is called a **traversal**.
+An interesting (to me, hopefully to you) question we can ask ourselves about a given graph is: what are the possible ways to visit all the nodes in the graph? This is called a **traversal**.
 
-There are two common ways to traverse a graph, which are kind of the dual of each other: **depth-first search** (DFS) and **breadth-first search** (BFS).
+There are two common ways to traverse a graph, which are kind of each other's dual: **depth-first search** (DFS) and **breadth-first search** (BFS).
 
 <style>
     .algo-viewer-inner {
@@ -613,9 +613,9 @@ As surprising as it may be, there is actually a quite simple algorithm to find t
 
 Think about it, the BFS visits the source node, then its neighbors, then its neighbors' neighbors, and so on: one level of depth at a time. This means that to find the shortest path from the source to a destination, we just have to run a BFS starting from the source, and stop as soon as we reach the destination. The path we followed to reach the destination is necessarily the shortest.
 
-If the nodes $a$ and $b$ are at a distance $D$ from each other, and we run a BFS from $a$, we'll visit nodes at depth 0 (that's just $a$), then nodes at depth 1 ($a$'s neighbors), and so on, and when we reach $b$, the depth we are currently visiting is the distance between $a$ and $b$, that is: $k$.
+If the nodes $a$ and $b$ are at a distance $D$ from each other, and we run a BFS from $a$, we'll visit nodes at depth 0 (that's just $a$), then nodes at depth 1 ($a$'s neighbors), and so on, and when we reach $b$, the depth we are currently visiting is the distance between $a$ and $b$, that is: $D$.
 
-Seen from the other way around, it's impossible to reach $b$ in more than $k$ levels, because if it we're at some level $L>k$, it means we've already visited the entirety of level $k$, which includes $b$.
+Seen from the other way around, it's impossible to reach $b$ in more than $D$ levels, because if it we're at some level $L>D$, it means we've already visited the entirety of level $D$, which includes $b$.
 
 Here's a demo. If no node is highlighted and no path is displayed at the end, then it means no path exists between the two nodes. 
 
@@ -807,7 +807,7 @@ Formally, when we study graphs, we can introduce a measure called the **branchin
 
 When a standard BFS goes through a graph with branching factor $b$, it recursively visits all the neighbors of all the nodes, level by level. At level 0, it visits 1 node (the source). At level 1, it visits all the neighbors of the source, that is, $b$ (on average). At level 2, all the neighbors' neighbors, that is, $b^2$. At level $L$, it visits $b^L$ nodes. In total, if you're trying to find the path between two nodes that are, say, 10 edges apart, the BFS will visit $1 + b + b^2 + \ldots + b^{10}$ nodes, which is in the order of $b^{10}$. For a binary tree, that would be $2^{10} = 1024$ nodes.
 
-Let's say, now, that we're starting one BFS from the source, and one from the destination, and at each step we advance one step in each. The two BFS will meet at some point, and they must meet exactly in the middle, because they advance at the same speed (and the shortest path between two points is the sum of the path from the source to the middle, and the path from the middle to the destination). If the source and destination are $D$ edges apart, the two BFS will meet after $D/2$ steps, and the total number of nodes visited will be $1 + b + b^2 + \ldots + b^{D/2}$, which is in the order of $b^{D/2}$. For a binary tree, that would be $2^5 = 32$ nodes (by each BFS, so, $64$ visited nodes in total).
+Let's say, now, that we're starting one BFS from the source, and one from the destination, and at each level we advance one step in each. The two BFS will meet at some point, and they must meet exactly in the middle, because they advance at the same speed (and the shortest path between two points is the sum of the path from the source to the middle, and the path from the middle to the destination). If the source and destination are $D$ edges apart, the two BFS will meet after $D/2$ steps, and the total number of nodes visited by each BFS will be $1 + b + b^2 + \ldots + b^{D/2}$, which is in the order of $b^{D/2}$. For a binary tree, that would be $2^5 = 32$ nodes (by each BFS, so, $64$ visited nodes in total).
 
 We got from $1024$ to $64$ visited nodes, that's something! Specifically, from $O(b^{D})$ to $O(b^{D/2})$, which is an exponential speedup.
 
