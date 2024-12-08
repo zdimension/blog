@@ -73,6 +73,8 @@ math: true
 
 This post is about graphs and graph algorithms. Specifically, it's about a common, simple algorithm that's somehow so hard to get right that the first few pages of Google results are filled with wrong implementations.
 
+Most of the post is about what graphs are and how some pathfinding algorithms work. If you don't care about this, you can skip to the [namedropping section](#someone-is-wrong-on-the-internet) (but you'll miss out on some cool interactive visualizations).
+
 ## Graphs 101
 
 A **graph** is a bunch of things (called **nodes** or **vertices**) that are connected by links (called **edges**). Here are a few graphs, free of charge:
@@ -267,6 +269,10 @@ There are two common ways to traverse a graph, which are kind of each other's du
                 border-bottom-width: 3px !important;
             }
         }
+
+        &:has(li:only-child) {
+            display: none;
+        }
     }
 </style>
 
@@ -347,6 +353,9 @@ There are two common ways to traverse a graph, which are kind of each other's du
                 tokens = [next, ...rest];
             }
         }
+        if (Object.keys(adjList).length === 0) {
+            throw new Error("No edges found in graph.");
+        }
         return adjList;
     }
 
@@ -367,10 +376,12 @@ There are two common ways to traverse a graph, which are kind of each other's du
     function createGraphNode(origSvg, adj, title) {
         const svg = origSvg.cloneNode(true);
         const div = document.createElement("div");
-        const label = document.createElement("span");
-        label.classList.add("algo-title");
-        label.textContent = title;
-        div.appendChild(label);
+        if (title) {
+            const label = document.createElement("span");
+            label.classList.add("algo-title");
+            label.textContent = title;
+            div.appendChild(label);
+        }
         div.appendChild(svg);
         const nodeMap = Object.fromEntries(svg.querySelectorAll(".node").values().map(node => [node.querySelector("text").textContent, {svgNode: node}]));
 
@@ -380,13 +391,21 @@ There are two common ways to traverse a graph, which are kind of each other's du
         };
     }
 
-    function initAlgo(elemId, {algos, customNodeUpdate, customGraphUpdate, postInit}) {
+    function getState(states, idx) {
+        return states[Math.min(states.length - 1, idx)];
+    }
+
+    function initAlgo(elemId, {algos, postInit, fixedStep}, graphs=null) {
         const result = document.getElementById(elemId);
         let templ = document.getElementById("algo-viewer").content.cloneNode(true);
         const main = templ.querySelector(".algo");
         const viewer = main.querySelector(".algo-viewer");
         const svg = result.querySelector("svg");
         viewer.appendChild(svg);
+
+        if (fixedStep !== undefined) {
+            main.querySelector(".algo-controls").style.display = "none";
+        }
 
         const container = main.querySelector(".algo-viewer-inner");
         const slider = main.querySelector("input[type='range']");
@@ -402,14 +421,14 @@ There are two common ways to traverse a graph, which are kind of each other's du
         });
 
 
-        let algoState = null;
+        let algoStates = null;
 
         function initStates(svg, adj, rec=0) {
-            if (rec > 10) {
+            if (rec > 10000) {
                 debugger;
                 return;
             }
-            let oldState = algoState;
+            let oldState = algoStates;
 
             container.innerHTML = "";
             let nodes = Object.entries(algos).map(([name, {name: algoName, states}]) => {
@@ -419,13 +438,19 @@ There are two common ways to traverse a graph, which are kind of each other's du
             });
 
             slider.value = 0;
-            slider.max = nodes[0][1][1].length - 1;
+            slider.max = Math.max(...nodes.map(([name, [node, states]]) => states.length - 1));
             slider.nextSibling.textContent = slider.max;
 
-            algoState = Object.fromEntries(nodes);
+            if (fixedStep !== undefined) {
+                slider.value = fixedStep;
+            }
 
-            if (customGraphUpdate && JSON.stringify(oldState) !== JSON.stringify(algoState)) {    
-                customGraphUpdate(main, algoState, () => initStates(svg, adj, rec+1));
+            algoStates = Object.fromEntries(nodes);
+
+            if (JSON.stringify(oldState) !== JSON.stringify(algoStates)) {   
+                for (const [key, state] of Object.entries(algoStates)) {
+                    algos[key].customGraphUpdate?.(main, state, () => initStates(svg, adj, rec+1));
+                } 
             }
 
             updateView();
@@ -439,8 +464,9 @@ There are two common ways to traverse a graph, which are kind of each other's du
 
             main.querySelectorAll(".queue-index").forEach(el => el.remove());
             
-            for (const [graph, states] of Object.values(algoState)) {
-                const state = states[idx];
+            for (const [key, algoState] of Object.entries(algoStates)) {
+                const [graph, states] = algoState;
+                const state = getState(states, idx);
                 for (const [node, {svgNode}] of Object.entries(graph.nodeMap)) {
                     setClass(svgNode, "visited", state.visited.has(node));
                     setClass(svgNode, "current", state.current.includes(node));
@@ -460,17 +486,14 @@ There are two common ways to traverse a graph, which are kind of each other's du
                         svgNode.appendChild(newText);
                     }
                 }
-            }
-
-            if (customNodeUpdate) {
-                customNodeUpdate(algoState, idx);
+                algos[key].customNodeUpdate?.(algoState, idx);
             }
         }
         
         slider.addEventListener("input", updateView);
 
         const nav = main.querySelector(".nav");
-        const graphs = document.querySelectorAll("script[type='graphviz']");
+        graphs ||= document.querySelectorAll("script[type='graphviz']:not(.skip)");
 
         const aboveSvg = result.querySelector(".above-svg");
 
@@ -660,9 +683,9 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
 </div>
 
 <script>
-    function pathGraphUpdate(node, algoState, refresh) {
+    function pathGraphUpdate(node, algoState, refresh, defSrc=null, defDst = null) {
         let [src, dst] = node.querySelectorAll("select");
-        const adj = algoState.bfs[0].nodeMap;
+        const adj = algoState[0].nodeMap;
 
         let oldSrc = src.value;
         src.innerHTML = "";
@@ -684,7 +707,7 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
         if (oldSrc in adj) {
             src.value = oldSrc;
         } else {
-            src.value = Object.keys(adj)[0];
+            src.value = defSrc || Object.keys(adj)[0];
         }
 
         function recalc() {
@@ -710,7 +733,7 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
             if (oldDst in adj && oldDst !== start) {
                 dst.value = oldDst;
             } else {
-                dst.value = Object.keys(adj)[nodeList.length - 1];
+                dst.value = defDst || Object.keys(adj)[nodeList.length - 1];
             }
             dst.addEventListener("change", recalc);
             recalc();
@@ -722,8 +745,8 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
     }
 
     function pathNodeUpdate(algoState, idx, path) {
-        const [graph, states] = algoState.bfs;
-        const state = states[idx];
+        const [graph, states] = algoState;
+        const state = getState(states, idx);
         for (const [node, {svgNode}] of Object.entries(graph.nodeMap)) {
             setClass(svgNode, "found", state.found === node);
         }
@@ -751,43 +774,48 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
         }
     }
 
+    function bfsNodeUpdate(algoState, idx) {
+        const [graph, states] = algoState;
+        const state = getState(states, idx);
+        let current = state.found;
+        const path = [current];
+        if (current) {
+            let next;
+            while ((next = state.pred[current]) !== undefined) {
+                current = next;
+                path.push(next);
+            }
+        }
+        pathNodeUpdate(algoState, idx, path);
+    }
+
+    function bfsPathStates(adj, node) { 
+        const [src, dst] = node.querySelectorAll("select");
+        return runTraversal(adj, src.value, {
+            succ: queue => queue.shift(), 
+            neighb(nb, state, node) {
+                if (nb.includes(dst.value)) {
+                    state.pred[dst.value] = node;
+                    state.found = dst.value;
+                    return null;
+                }
+                return nb;
+            }
+        });
+    }
+
     document.addEventListener("DOMContentLoaded", function() {   
         document.getElementById("shortestpath").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
         initAlgo("shortestpath", {
             algos: {
                 bfs: {
                     name: "BFS",
-                    states(adj, node) { 
-                        const [src, dst] = node.querySelectorAll("select");
-                        return runTraversal(adj, src.value, {
-                            succ: queue => queue.shift(), 
-                            neighb(nb, state, node) {
-                                if (nb.includes(dst.value)) {
-                                    state.pred[dst.value] = node;
-                                    state.found = dst.value;
-                                    return null;
-                                }
-                                return nb;
-                            }
-                        });
-                    }, 
+                    states: bfsPathStates,
+                    customNodeUpdate: bfsNodeUpdate,
+                    customGraphUpdate: pathGraphUpdate
                 }
             }, 
-            customNodeUpdate(algoState, idx) {
-                const [graph, states] = algoState.bfs;
-                const state = states[idx];
-                let current = state.found;
-                const path = [current];
-                if (current) {
-                    let next;
-                    while ((next = state.pred[current]) !== undefined) {
-                        current = next;
-                        path.push(next);
-                    }
-                }
-                pathNodeUpdate(algoState, idx, path);
-            },
-            customGraphUpdate: pathGraphUpdate
+            
         });
     });
 </script>
@@ -803,7 +831,7 @@ My use case (large social graphs) doesn't have good, fast to compute cost functi
 
 A bidirectional search, as the name suggests, is simply a search that is performed from both the source and the destination nodes at the same time. The idea is that the two searches will meet somewhere in the middle, and the path between the two meeting points will be the shortest path between the two nodes.
 
-Formally, when we study graphs, we can introduce a measure called the **branching factor**, which is the average outgoing number of nodes from a given node in the graph. In a binary tree, the branching factor is 2, because each node has at most 2 children. The total number of nodes in such a graph is approximated by $b^d$, where $b$ is the branching factor and $d$ is the depth of the tree.
+Formally, when we study graphs, we can introduce a measure called the **branching factor**, which is the average outgoing number of nodes from a given node in the graph. In a binary tree, the branching factor is 2, because each node has at most 2 children. 
 
 <style>
     svg {
@@ -820,7 +848,35 @@ Formally, when we study graphs, we can introduce a measure called the **branchin
     }
 </style>
 
+<!--
+digraph G {
+  rankdir=LR;
+  A -> {B1, B2};
+  B1 -> {C1, C2};
+  B2 -> {C3, C4};
+  {C1,C2,C3,C4} -> D [style=invis];
+  subgraph cluster_0 {
+      A;
+      label = "0"
+  }
+  subgraph cluster_1 {
+      B1, B2;
+      label = "1";
+  }
+  
+  subgraph cluster_2 {
+      C1, C2, C3, C4;
+      label = "2"
+  }
+  subgraph cluster_3 {
+      D [shape=none,label=<2<sup>N</sup> nodes>];
+      label = "N";
+  }
+}
+-->
 <svg xmlns="http://www.w3.org/2000/svg" width="379pt" height="263pt" viewBox="0 0 379.27 263"><g class="graph" transform="translate(4 259)"><path fill="#fff" d="M-4 4v-263h379.27V4H-4z"/><g class="cluster"><path fill="none" stroke="#000" d="M8-89v-77h70v77H8z"/><text text-anchor="middle" x="43" y="-149.4" font-family="Times,serif" font-size="14">0</text></g><g class="cluster"><path fill="none" stroke="#000" d="M98-62v-131h70v131H98z"/><text text-anchor="middle" x="133" y="-176.4" font-family="Times,serif" font-size="14">1</text></g><g class="cluster"><path fill="none" stroke="#000" d="M188-8v-239h70V-8h-70z"/><text text-anchor="middle" x="223" y="-230.4" font-family="Times,serif" font-size="14">2</text></g><g class="cluster"><path fill="none" stroke="#000" d="M278-89v-77h85.27v77H278z"/><text text-anchor="middle" x="320.64" y="-149.4" font-family="Times,serif" font-size="14">N</text></g><g class="node"><ellipse fill="none" stroke="#000" cx="43" cy="-115" rx="27" ry="18"/><text text-anchor="middle" x="43" y="-110.8" font-family="Times,serif" font-size="14">A</text></g><g class="node"><ellipse fill="none" stroke="#000" cx="133" cy="-88" rx="27" ry="18"/><text text-anchor="middle" x="133" y="-83.8" font-family="Times,serif" font-size="14">B1</text></g><g class="edge"><path fill="none" stroke="#000" d="M68.05-107.62c8.92 2.74 19.24 5.9 28.94 8.88"/><path stroke="#000" d="m98-102.09 8.54 6.28-10.59.41 2.05-6.69z"/></g><g class="node"><ellipse fill="none" stroke="#000" cx="133" cy="-142" rx="27" ry="18"/><text text-anchor="middle" x="133" y="-137.8" font-family="Times,serif" font-size="14">B2</text></g><g class="edge"><path fill="none" stroke="#000" d="M68.05-122.38c8.92-2.74 19.24-5.9 28.94-8.88"/><path stroke="#000" d="m95.95-134.6 10.59.41-8.54 6.28-2.05-6.69z"/></g><g class="node"><ellipse fill="none" stroke="#000" cx="223" cy="-34" rx="27" ry="18"/><text text-anchor="middle" x="223" y="-29.8" font-family="Times,serif" font-size="14">C1</text></g><g class="edge"><path fill="none" stroke="#000" d="M153.53-76.02c11.62 7.14 26.58 16.32 39.55 24.27"/><path stroke="#000" d="m194.54-54.96 6.69 8.22-10.35-2.25 3.66-5.97z"/></g><g class="node"><ellipse fill="none" stroke="#000" cx="223" cy="-88" rx="27" ry="18"/><text text-anchor="middle" x="223" y="-83.8" font-family="Times,serif" font-size="14">C2</text></g><g class="edge"><path fill="none" stroke="#000" d="M160.4-88h23.8"/><path stroke="#000" d="m184.1-91.5 10 3.5-10 3.5v-7z"/></g><g class="node"><ellipse fill="none" stroke="#000" cx="223" cy="-142" rx="27" ry="18"/><text text-anchor="middle" x="223" y="-137.8" font-family="Times,serif" font-size="14">C3</text></g><g class="edge"><path fill="none" stroke="#000" d="M160.4-142h23.8"/><path stroke="#000" d="m184.1-145.5 10 3.5-10 3.5v-7z"/></g><g class="node"><ellipse fill="none" stroke="#000" cx="223" cy="-196" rx="27" ry="18"/><text text-anchor="middle" x="223" y="-191.8" font-family="Times,serif" font-size="14">C4</text></g><g class="edge"><path fill="none" stroke="#000" d="M153.53-153.98c11.62-7.14 26.58-16.32 39.55-24.27"/><path stroke="#000" d="m190.88-181.01 10.35-2.25-6.69 8.22-3.66-5.97z"/></g><g class="node"><text x="294" y="-111.8" font-family="Times,serif" font-size="14">2</text><text x="301" y="-111.8" font-family="Times,serif" baseline-shift="super" font-size="14">N</text><text x="311.11" y="-111.8" font-family="Times,serif" font-size="14"> nodes</text></g></g></svg>
+
+The total number of nodes in such a graph is approximated by $b^d$, where $b$ is the branching factor and $d$ is the depth of the tree.
 
 When a standard BFS goes through a graph with branching factor $b$, it recursively visits all the neighbors of all the nodes, level by level. At level 0, it visits 1 node (the source). At level 1, it visits all the neighbors of the source, that is, $b$ (on average). At level 2, all the neighbors' neighbors, that is, $b^2$. At level $L$, it visits $b^L$ nodes. In total, if you're trying to find the path between two nodes that are, say, 10 edges apart, the BFS will visit $1 + b + b^2 + \ldots + b^{10}$ nodes, which is in the order of $b^{10}$. For a binary tree, that would be $2^{10} = 1024$ nodes.
 
@@ -836,97 +892,437 @@ Here, play with it:
 </div>
 
 <script>
+    function interleave(q1, q2, swap) {
+        const newQueue = [];
+        let [a, b] = [q1.slice(), q2.slice()];
+        if (swap) {
+            [a, b] = [b, a];
+        }
+        while (a.length > 0 || b.length > 0) {
+            if (a.length > 0) newQueue.push(a.shift());
+            if (b.length > 0) newQueue.push(b.shift());
+        }
+        return newQueue;
+    }
+
+    function bidiStates(adj, node, corrected=false) { 
+        const [src, dst] = node.querySelectorAll("select");
+        const backAdj = {};
+        for (const [src, dsts] of Object.entries(adj)) {
+            for (const dst of dsts) {
+                if (dst in backAdj) {
+                    backAdj[dst].push(src);
+                } else {
+                    backAdj[dst] = [src];
+                }
+            }
+        }
+        const {states: statesSrc, step: stepSrc} = initTraversal(adj, src.value, {succ: queue => queue.shift()});
+        const {states: statesDst, step: stepDst} = initTraversal(backAdj, dst.value, {succ: queue => queue.shift()});
+        const states = [{
+            queue: statesSrc[0].queue.concat(statesDst[0].queue),
+            visited: new Set(),
+            current: statesSrc[0].current.concat(statesDst[0].current),
+        }];
+        let bothStates = [statesSrc[0], statesDst[0]];
+        let found = null;
+
+        const processQueues = corrected ? (q1, q2) => q1.concat(q2) : interleave;
+
+        let curId = 0;
+        let untilToggle = [bothStates[0].queue[0], bothStates[1].queue[0]];
+        while (true) {
+            const step = [stepSrc, stepDst][curId];
+            const curState = step();
+            bothStates[curId] = curState.newState;
+            if (corrected) {
+                let newState = curState.newState;
+                let newQueueLen = newState.queue.length;
+                if (newState.current[0] === untilToggle[curId]) {
+                    untilToggle[curId] = newState.queue[newQueueLen - 1];
+                    curId = 1 - curId;
+                }
+            } else {
+                curId = 1 - curId;
+            }
+
+            const [stateSrc, stateDst] = bothStates;
+
+            let inter = Object.keys(adj).find(node => 
+                (stateSrc.visited.has(node) || stateSrc.queue.includes(node)) &&
+                (stateDst.visited.has(node) || stateDst.queue.includes(node)));
+            if (inter) {
+                found = inter;
+                break;
+            }
+
+            const newQueue = processQueues(stateSrc.queue, stateDst.queue, states.length % 2 === 1);
+
+            states.push({
+                queue: newQueue,
+                visited: new Set([...stateSrc.visited, ...stateDst.visited]),
+                current: stateSrc.current.concat(stateDst.current)
+            });
+
+            if (!curState.continue) {
+                break;
+            }
+
+
+        }
+        const [lastSrc, lastDst] = [statesSrc[statesSrc.length - 1], statesDst[statesDst.length - 1]];
+        const last = {
+            queue: processQueues(lastSrc.queue, lastDst.queue, states.length % 2 === 1),
+            visited: new Set([...lastSrc.visited, ...lastDst.visited]),
+            current: lastSrc.current.concat(lastDst.current),
+            predSrc: lastSrc.pred,
+            predDst: lastDst.pred,
+            found
+        };
+        states.push(last);
+        return states;
+    }
+
+    function bidiUpdate(algoState, idx) {
+        const [graph, states] = algoState;
+        const state = getState(states, idx);
+        let current = state.found;
+        const path = [current];
+        if (current) {
+            let next;
+            while ((next = state.predSrc[current]) !== undefined) {
+                current = next;
+                path.push(next);
+            }
+            path.reverse();
+            current = state.found;
+            while ((next = state.predDst[current]) !== undefined) {
+                current = next;
+                path.push(next);
+            }
+        }
+
+        pathNodeUpdate(algoState, idx, path);
+    }
+
     document.addEventListener("DOMContentLoaded", function() {   
         document.getElementById("bidi1").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
         initAlgo("bidi1", {
             algos: {
-                bfs: {
-                    name: "BFS",
-                    states(adj, node) { 
-                        const [src, dst] = node.querySelectorAll("select");
-                        const backAdj = {};
-                        for (const [src, dsts] of Object.entries(adj)) {
-                            for (const dst of dsts) {
-                                if (dst in backAdj) {
-                                    backAdj[dst].push(src);
-                                } else {
-                                    backAdj[dst] = [src];
-                                }
-                            }
-                        }
-                        const {states: statesSrc, step: stepSrc} = initTraversal(adj, src.value, {succ: queue => queue.shift()});
-                        const {states: statesDst, step: stepDst} = initTraversal(backAdj, dst.value, {succ: queue => queue.shift()});
-                        const states = [{
-                            queue: statesSrc[0].queue.concat(statesDst[0].queue),
-                            visited: new Set(),
-                            current: statesSrc[0].current.concat(statesDst[0].current),
-                        }];
-                        let bothStates = [statesSrc[0], statesDst[0]];
-                        let found = null;
-
-                    outer: 
-                        while (true) {
-                            for (const [i, step] of [stepSrc, stepDst].entries()) {
-                                const curState = step();
-                                bothStates[i] = curState.newState;
-
-                                const [stateSrc, stateDst] = bothStates;
-
-                                let inter = Object.keys(adj).find(node => 
-                                    (stateSrc.visited.has(node) || stateSrc.queue.includes(node)) &&
-                                    (stateDst.visited.has(node) || stateDst.queue.includes(node)));
-                                if (inter) {
-                                    found = inter;
-                                    break outer;
-                                }
-
-                                states.push({
-                                    queue: stateSrc.queue.concat(stateDst.queue),
-                                    visited: new Set([...stateSrc.visited, ...stateDst.visited]),
-                                    current: stateSrc.current.concat(stateDst.current)
-                                });
-
-                                if (!curState.continue) {
-                                    break outer;
-                                }
-                            }
-                        }
-                        const [lastSrc, lastDst] = [statesSrc[statesSrc.length - 1], statesDst[statesDst.length - 1]];
-                        const last = {
-                            queue: lastSrc.queue.concat(lastDst.queue),
-                            visited: new Set([...lastSrc.visited, ...lastDst.visited]),
-                            current: lastSrc.current.concat(lastDst.current),
-                            predSrc: lastSrc.pred,
-                            predDst: lastDst.pred,
-                            found
-                        };
-                        states.push(last);
-                        return states;
-                    }, 
+                bidiBfs: {
+                    name: "BidiBFS",
+                    states: bidiStates,
+                    customNodeUpdate: bidiUpdate,
+                    customGraphUpdate: pathGraphUpdate
                 }
             }, 
-            customNodeUpdate(algoState, idx) {
-                const [graph, states] = algoState.bfs;
-                const state = states[idx];
-                let current = state.found;
-                const path = [current];
-                if (current) {
-                    let next;
-                    while ((next = state.predSrc[current]) !== undefined) {
-                        current = next;
-                        path.push(next);
-                    }
-                    path.reverse();
-                    current = state.found;
-                    while ((next = state.predDst[current]) !== undefined) {
-                        current = next;
-                        path.push(next);
-                    }
-                }
-
-                pathNodeUpdate(algoState, idx, path);
-            },
-            customGraphUpdate: pathGraphUpdate
         });
     });
 </script>
+
+## Finding the Wrong Path
+
+My explanation of the bidirectional BFS might sound like it's correct, and the demo might look like it's working, but there's actually a small, minuscule, tiny mistake that makes it all wrong. Well, not all wrong, it works for the demo! But it can give the wrong answer, *sometimes*. Here, try it with this pathological case:
+
+<style>
+    script.bidi2 + svg {
+        display: none;
+    }
+
+    #bidi2 div.above-svg {
+        display: none;
+    }
+</style>
+<script type="graphviz" name="Pathological case" class="bidi2 skip">
+digraph G {
+  rankdir=LR;
+  node[ shape=circle];
+  "S" -> "a1" -> "a2" -> "a3" -> "T";
+  "S" -> "b1" -> "b2" -> "T";
+  subgraph cluster_x {
+      b1, a2;
+      style=invis
+  }
+}
+</script>
+<svg xmlns="http://www.w3.org/2000/svg" width="347pt" height="140pt" viewBox="0 0 347.08 140"><g class="graph" transform="translate(4 136)"><path fill="#fff" d="M-4 4v-140h347.08V4H-4z"/><g class="node"><circle fill="none" stroke="#000" cx="18" cy="-66" r="18"/><text text-anchor="middle" x="18" y="-61.8" font-family="Times,serif" font-size="14">S</text></g><g class="node"><circle fill="none" stroke="#000" cx="92.15" cy="-93" r="20.15"/><text text-anchor="middle" x="92.15" y="-88.8" font-family="Times,serif" font-size="14">a1</text></g><g class="edge"><path fill="none" stroke="#000" d="M35.37-72.13c7.92-2.96 17.67-6.61 26.8-10.02"/><path stroke="#000" d="m60.8-85.38 10.6-.23-8.14 6.79-2.46-6.56z"/></g><g class="node"><circle fill="none" stroke="#000" cx="169" cy="-37" r="20.69"/><text text-anchor="middle" x="169" y="-32.8" font-family="Times,serif" font-size="14">b1</text></g><g class="edge"><path fill="none" stroke="#000" d="M36.09-62.67c24.67 4.8 70.66 13.75 101.28 19.71"/><path stroke="#000" d="m137.64-46.47 9.15 5.34-10.48 1.53 1.33-6.87z"/></g><g class="node"><circle fill="none" stroke="#000" cx="169" cy="-96" r="20.15"/><text text-anchor="middle" x="169" y="-91.8" font-family="Times,serif" font-size="14">a2</text></g><g class="edge"><path fill="none" stroke="#000" d="M112.43-93.77c7.53-.3 16.36-.66 24.74-.99"/><path stroke="#000" d="m136.88-98.26 10.13 3.1-9.85 3.9-.28-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="246.38" cy="-96" r="20.15"/><text text-anchor="middle" x="246.38" y="-91.8" font-family="Times,serif" font-size="14">a3</text></g><g class="edge"><path fill="none" stroke="#000" d="M189.41-96h24.92"/><path stroke="#000" d="m214.26-99.5 10 3.5-10 3.5v-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="321.08" cy="-66" r="18"/><text text-anchor="middle" x="321.08" y="-61.8" font-family="Times,serif" font-size="14">T</text></g><g class="edge"><path fill="none" stroke="#000" d="M265.35-88.58c8.58 3.54 19.02 7.84 28.47 11.74"/><path stroke="#000" d="m294.98-80.14 7.91 7.05-10.58-.58 2.67-6.47z"/></g><g class="node"><circle fill="none" stroke="#000" cx="246.38" cy="-37" r="20.69"/><text text-anchor="middle" x="246.38" y="-32.8" font-family="Times,serif" font-size="14">b2</text></g><g class="edge"><path fill="none" stroke="#000" d="M189.8-37h24.14"/><path stroke="#000" d="m213.93-40.5 10 3.5-10 3.5v-7z"/></g><g class="edge"><path fill="none" stroke="#000" d="M266.1-44.47c8.38-3.34 18.4-7.34 27.52-10.98"/><path stroke="#000" d="m292.14-58.62 10.58-.46-7.99 6.96-2.59-6.5z"/></g></g></svg>
+
+<div id="bidi2">
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {   
+        document.getElementById("bidi2").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+
+        initAlgo("bidi2", {
+            algos: {
+                bidiBfs: {
+                    name: "BidiBFS",
+                    states: bidiStates, 
+                    customNodeUpdate: bidiUpdate,
+                    customGraphUpdate(node, algoState, refresh) {
+                        pathGraphUpdate(node, algoState, refresh, "S", "T");
+                    }
+                },
+                bfs: {
+                    name: "BFS",
+                    states: bfsPathStates,
+                    customNodeUpdate: bfsNodeUpdate
+                },
+            }
+        }, document.querySelectorAll("script.bidi2[type='graphviz']"));
+    });
+</script>
+
+For this graph, the bidirectional BFS finds a correct path... but not a minimal one; it's one edge longer than the shortest path. 
+
+The problem, specifically, is at this step:
+
+<style>
+    #bidi3 {
+        div.above-svg, .algo-viewer > svg:last-child {
+            display: none;
+        }
+    }
+</style>
+
+<div id="bidi3">
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {   
+        document.getElementById("bidi3").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+
+        initAlgo("bidi3", {
+            algos: {
+                bidiBfs: {
+                    name: null,
+                    states: bidiStates, 
+                    customNodeUpdate: bidiUpdate,
+                    customGraphUpdate(node, algoState, refresh) {
+                        pathGraphUpdate(node, algoState, refresh, "S", "T");
+                    }
+                }
+            },
+            fixedStep: 2
+        }, document.querySelectorAll("script.bidi2[type='graphviz']"));
+    });
+</script>
+
+At the next step, the node <kbd>a1</kbd> will be visited. This will add <kbd>a2</kbd> to the queue, and then <kbd>a3</kbd> will be visited, which will stop the algorithm since <kbd>a2</kbd> will be found to already have been seen (since it'll already be in the queue at that point). The resulting path will be one node too long.
+
+What happened here?
+
+Well, to find the shortest path, it would have had to visit either <kbd>b1</kbd> or <kbd>b2</kbd> before visiting <kbd>a2</kbd>. At first glance, this may look like an ordering problem: should we visit a nodes' neighbors in a certain order? How would we sort them? 
+
+No, the problem is deeper. The two keys to understanding the issue are:
+- "[...] one level of depth at a time. This means that to find the shortest path from the source to a destination, we just have to run a BFS starting from the source, and stop as soon as we reach the destination. The path we followed to reach the destination is necessarily the shortest."
+- "The two BFS will meet at some point, and they must meet exactly in the middle, because they advance at the same speed."
+
+The BFS works because it visits all the nodes at a given depth before moving on to the next depth. This isn't what our bidirectional BFS is doing! It's stopping right after seeing <kbd>a2</kbd> without having had the chance to see the edge between <kbd>b1</kbd> and <kbd>b2</kbd>. We're getting a wrong result because our algorithm is wrong.
+
+I wrote this in the previous section, while describing the bidirectional BFS:
+
+> Let's say, now, that we're starting one BFS from the source, and one from the destination, and at each level we advance one step in each. 
+
+This sounds sensible, but I didn't define what a "step" means. In the regular BFS, a step is just visiting the next node in the queue. But here, we need to consider a higher-level step: each BFS shouldn't advance one node at a time, but one level of nodes/depth at a time:
+
+<!--
+digraph G {
+  rankdir=LR;
+  node[ shape=circle];
+  S -> a1 -> a2 -> a3 -> T;
+  S -> b1 -> b2 -> T;
+  subgraph cluster_0 {
+      S
+      label="0"
+  }
+  subgraph cluster_2 {
+      a2
+      label="2"
+  }
+  subgraph cluster_1 {
+      b1, a1;
+      #style=invis
+      label="1"
+  }
+  subgraph cluster_3 {
+      a3, b2;
+      label = "1"
+  }
+  subgraph cluster_4 {
+      T
+      label = "0"
+  }
+}
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="379pt" height="220" viewBox="0 0 379.08 165"><g class="graph" transform="translate(4 161)"><path fill="#fff" d="M-4 4v-165h379.08V4H-4z"/><g class="cluster"><path fill="none" stroke="#000" d="M8-40v-77h52v77H8z"/><text text-anchor="middle" x="34" y="-100.4" font-family="Times,serif" font-size="14">0</text></g><g class="cluster"><path fill="none" stroke="#000" d="M157.39-68v-81h56.3v81h-56.3z"/><text text-anchor="middle" x="185.54" y="-132.4" font-family="Times,serif" font-size="14">2</text></g><g class="cluster"><path fill="none" stroke="#000" d="M80-8v-141h57.39V-8H80z"/><text text-anchor="middle" x="108.69" y="-132.4" font-family="Times,serif" font-size="14">1</text></g><g class="cluster"><path fill="none" stroke="#000" d="M233.69-8v-141h57.39V-8h-57.39z"/><text text-anchor="middle" x="262.38" y="-132.4" font-family="Times,serif" font-size="14">1</text></g><g class="cluster"><path fill="none" stroke="#000" d="M311.08-40v-77h52v77h-52z"/><text text-anchor="middle" x="337.08" y="-100.4" font-family="Times,serif" font-size="14">0</text></g><g class="node"><circle fill="none" stroke="#000" cx="34" cy="-66" r="18"/><text text-anchor="middle" x="34" y="-61.8" font-family="Times,serif" font-size="14">S</text></g><g class="node"><circle fill="none" stroke="#000" cx="108.69" cy="-96" r="20.15"/><text text-anchor="middle" x="108.69" y="-91.8" font-family="Times,serif" font-size="14">a1</text></g><g class="edge"><path fill="none" stroke="#000" d="M51.13-72.66c8.18-3.37 18.36-7.57 27.82-11.48"/><path stroke="#000" d="m77.58-87.36 10.58-.58-7.91 7.05-2.67-6.47z"/></g><g class="node"><circle fill="none" stroke="#000" cx="108.69" cy="-37" r="20.69"/><text text-anchor="middle" x="108.69" y="-32.8" font-family="Times,serif" font-size="14">b1</text></g><g class="edge"><path fill="none" stroke="#000" d="M51.13-59.56c8.06 3.21 18.06 7.2 27.4 10.93"/><path stroke="#000" d="M79.64-51.96 87.63-45l-10.58-.46 2.59-6.5z"/></g><g class="node"><circle fill="none" stroke="#000" cx="185.54" cy="-96" r="20.15"/><text text-anchor="middle" x="185.54" y="-91.8" font-family="Times,serif" font-size="14">a2</text></g><g class="edge"><path fill="none" stroke="#000" d="M128.97-96h24.74"/><path stroke="#000" d="m153.56-99.5 10 3.5-10 3.5v-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="262.38" cy="-96" r="20.15"/><text text-anchor="middle" x="262.38" y="-91.8" font-family="Times,serif" font-size="14">a3</text></g><g class="edge"><path fill="none" stroke="#000" d="M205.81-96h24.75"/><path stroke="#000" d="m230.4-99.5 10 3.5-10 3.5v-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="337.08" cy="-66" r="18"/><text text-anchor="middle" x="337.08" y="-61.8" font-family="Times,serif" font-size="14">T</text></g><g class="edge"><path fill="none" stroke="#000" d="M281.35-88.58c8.58 3.54 19.02 7.84 28.47 11.74"/><path stroke="#000" d="m310.98-80.14 7.91 7.05-10.58-.58 2.67-6.47z"/></g><g class="node"><circle fill="none" stroke="#000" cx="262.38" cy="-37" r="20.69"/><text text-anchor="middle" x="262.38" y="-32.8" font-family="Times,serif" font-size="14">b2</text></g><g class="edge"><path fill="none" stroke="#000" d="M129.84-37h100.68"/><path stroke="#000" d="m230.12-40.5 10 3.5-10 3.5v-7z"/></g><g class="edge"><path fill="none" stroke="#000" d="M282.1-44.47c8.38-3.34 18.4-7.34 27.52-10.98"/><path stroke="#000" d="m308.14-58.62 10.58-.46-7.99 6.96-2.59-6.5z"/></g></g></svg>
+
+Here's the same graph as above with a corrected algorithm:
+
+<style>
+    script.bidi4 + svg {
+        display: none;
+    }
+
+    #bidi4 div.above-svg {
+        display: none;
+    }
+</style>
+<script type="graphviz" name="Pathological case" class="bidi4 skip">
+digraph G {
+  rankdir=LR;
+  node[ shape=circle];
+  "S" -> "a1" -> "a2" -> "a3" -> "T";
+  "S" -> "b1" -> "b2" -> "T";
+  subgraph cluster_0 {
+      S
+      style=invis
+  }
+  subgraph cluster_2 {
+      a2
+      style=invis
+  }
+  subgraph cluster_1 {
+      b1, a1;
+      style=invis
+  }
+  subgraph cluster_3 {
+      a3, b2;
+      style=invis
+  }
+  subgraph cluster_4 {
+      T
+      style=invis
+  }
+}
+</script>
+<svg xmlns="http://www.w3.org/2000/svg" width="379pt" height="140pt" viewBox="0 0 379.08 140"><g class="graph" transform="translate(4 136)"><path fill="#fff" d="M-4 4v-140h379.08V4H-4z"/><g class="node"><circle fill="none" stroke="#000" cx="34" cy="-66" r="18"/><text text-anchor="middle" x="34" y="-61.8" font-family="Times,serif" font-size="14">S</text></g><g class="node"><circle fill="none" stroke="#000" cx="108.69" cy="-96" r="20.15"/><text text-anchor="middle" x="108.69" y="-91.8" font-family="Times,serif" font-size="14">a1</text></g><g class="edge"><path fill="none" stroke="#000" d="M51.13-72.66c8.18-3.37 18.36-7.57 27.82-11.48"/><path stroke="#000" d="m77.58-87.36 10.58-.58-7.91 7.05-2.67-6.47z"/></g><g class="node"><circle fill="none" stroke="#000" cx="108.69" cy="-37" r="20.69"/><text text-anchor="middle" x="108.69" y="-32.8" font-family="Times,serif" font-size="14">b1</text></g><g class="edge"><path fill="none" stroke="#000" d="M51.13-59.56c8.06 3.21 18.06 7.2 27.4 10.93"/><path stroke="#000" d="M79.64-51.96 87.63-45l-10.58-.46 2.59-6.5z"/></g><g class="node"><circle fill="none" stroke="#000" cx="185.54" cy="-96" r="20.15"/><text text-anchor="middle" x="185.54" y="-91.8" font-family="Times,serif" font-size="14">a2</text></g><g class="edge"><path fill="none" stroke="#000" d="M128.97-96h24.74"/><path stroke="#000" d="m153.56-99.5 10 3.5-10 3.5v-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="262.38" cy="-96" r="20.15"/><text text-anchor="middle" x="262.38" y="-91.8" font-family="Times,serif" font-size="14">a3</text></g><g class="edge"><path fill="none" stroke="#000" d="M205.81-96h24.75"/><path stroke="#000" d="m230.4-99.5 10 3.5-10 3.5v-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="337.08" cy="-66" r="18"/><text text-anchor="middle" x="337.08" y="-61.8" font-family="Times,serif" font-size="14">T</text></g><g class="edge"><path fill="none" stroke="#000" d="M281.35-88.58c8.58 3.54 19.02 7.84 28.47 11.74"/><path stroke="#000" d="m310.98-80.14 7.91 7.05-10.58-.58 2.67-6.47z"/></g><g class="node"><circle fill="none" stroke="#000" cx="262.38" cy="-37" r="20.69"/><text text-anchor="middle" x="262.38" y="-32.8" font-family="Times,serif" font-size="14">b2</text></g><g class="edge"><path fill="none" stroke="#000" d="M129.84-37h100.68"/><path stroke="#000" d="m230.12-40.5 10 3.5-10 3.5v-7z"/></g><g class="edge"><path fill="none" stroke="#000" d="M282.1-44.47c8.38-3.34 18.4-7.34 27.52-10.98"/><path stroke="#000" d="m308.14-58.62 10.58-.46-7.99 6.96-2.59-6.5z"/></g></g></svg>
+
+<div id="bidi4">
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {   
+        document.getElementById("bidi4").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+
+        initAlgo("bidi4", {
+            algos: {
+                bidiBfs: {
+                    name: "Good BidiBFS",
+                    states(bidiAdj, node) {
+                        return bidiStates(bidiAdj, node, true);
+                    },
+                    customNodeUpdate: bidiUpdate,
+                    customGraphUpdate(node, algoState, refresh) {
+                        pathGraphUpdate(node, algoState, refresh, "S", "T");
+                    }
+                },
+                bidiBfsWrong: {
+                    name: "Bad BidiBFS",
+                    states(bidiAdj, node) {
+                        return bidiStates(bidiAdj, node, false);
+                    },
+                    customNodeUpdate: bidiUpdate,
+                    customGraphUpdate(node, algoState, refresh) {
+                        pathGraphUpdate(node, algoState, refresh, "S", "T");
+                    }
+                },
+                bfs: {
+                    name: "BFS",
+                    states: bfsPathStates,
+                    customNodeUpdate: bfsNodeUpdate
+                },
+            }
+        }, document.querySelectorAll("script.bidi4[type='graphviz']"));
+    });
+</script>
+
+And with the example graphs (though for these, there are no cases I could find where the bad algorithm breaks):
+
+<div id="bidi5">
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {   
+        document.getElementById("bidi5").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+        initAlgo("bidi5", {
+            algos: {
+                bidiBfs: {
+                    name: "Good BidiBFS",
+                    states(bidiAdj, node) {
+                        return bidiStates(bidiAdj, node, true);
+                    },
+                    customNodeUpdate: bidiUpdate,
+                    customGraphUpdate: pathGraphUpdate
+                },
+                bidiBfsWrong: {
+                    name: "Bad BidiBFS",
+                    states(bidiAdj, node) {
+                        return bidiStates(bidiAdj, node, false);
+                    },
+                    customNodeUpdate: bidiUpdate,
+                    customGraphUpdate: pathGraphUpdate
+                },
+            }, 
+        });
+    });
+</script>
+
+## Someone is Wrong on the Internet
+
+![XKCD 386: guy at computer won't go to bed because "Someone is WRONG on the Internet"](https://imgs.xkcd.com/comics/duty_calls.png)
+<label><https://xkcd.com/386/></label>
+
+While working on [a project of mine](https://github.com/zdimension/graphrust) where I needed to implement some sort of pathfinding feature, I ended up wanting to implement the bidirectional BFS algorithm to replace the regular BFS I was using. A BFS is simple enough to implement, but I went the lazy route and just googled ["bidirectional bfs implementation"](https://www.google.com/search?q=bidirectional%20bfs%20implementation). I clicked on a random legit-sounding link, translated the implementation to Rust, and it worked! And it was **a lot** faster, like I said earlier, so I was happy. 
+
+Days passed, but then, while fiddling with my project, I ended up stumbling upon a case where the path was *wrong*. Like, *one node* wrong — exactly the bug we just studied. I compared my code with the site I copied from, and I couldn't see any mistake. Well, then, I googled again, and copied from another site. Different code structure, but same bug. So I googled again, and again. Same bug, everywhere. I started to suspect that reality was playing a prank on me. *How could everyone be wrong?*
+
+I started methodically testing every bidirectional BFS implementation I could find. Most were wrong, a few were right. Among the wrong ones, quite a few were actually just copying code from a well-known CS website (and removing comments, and renaming variables, to make it look like their own... which is nothing more than plain old **plagiarism**), while some others were original-looking code, but with the same bug.
+
+Here are the **wrong** results I found, along with date of the earliest archive.org crawl (which is a good enough approximation of when the code was first published). All of these were found on the first or second page of Google results. **All of the links below contain wrong code**:
+
+- (C++, Java, Python, C#, JS) [GeeksforGeeks](https://www.geeksforgeeks.org/bidirectional-search/) (~2016)
+    - (C++) [The Algorists](https://www.thealgorists.com/Algo/TwoEndBFS) (plagiarizing, 2020), also hosted on their [old WordPress blog](https://efficientcodeblog.wordpress.com/2017/12/13/bidirectional-search-two-end-bfs/)
+    - (Python) [AskPython](https://www.askpython.com/python/examples/bidirectional-search-in-python) (plagiarizing, 2022)
+    - (Python) [Educative](https://www.educative.io/answers/how-to-use-bidirectional-search-implementation-in-python) (plagiarizing, 2022)
+    - (Java) [Naukri Code 360](https://www.naukri.com/code360/library/bidirectional-search-in-graph) (plagiarizing, 2024)
+    - (C++) [Educba](https://www.educba.com/bidirectional-search/) (plagiarizing, 2020)
+    - (C++) An [undergrad paper](https://informatika.stei.itb.ac.id/~rinaldi.munir/Stmik/2019-2020/Makalah/Makalah-Stima-2020-022.pdf) that unfortunately ended up using GeeksforGeeks' implementation (with credits, 2020)
+    - (C++) [At least 17 GitHub repositories](https://github.com/search?q=BFS%28%26s_queue%2C+s_visited&type=code) (including some advertising themselves as CS/DSA lesson material, most with no credits)
+    - (Python) [At least 31 GitHub repositories](https://github.com/search?q=.bfs%28direction+%3D&type=code) (same as above)
+- (JS) [Zachary Freeman](https://medium.com/@zdf2424/discovering-the-power-of-bidirectional-bfs-a-more-efficient-pathfinding-algorithm-72566f07d1bd) on Medium (2023)
+- (Java) [OpenGenus](https://iq.opengenus.org/bidirectional-search/) (similar to GeeksforGeeks, 2020)
+
+For fun, I also tested a few easily available LLMs with simple prompts. All of those I tested generated wrong (albeit original) code:
+- (Python) [ChatGPT 4o](https://chatgpt.com/share/67550123-0afc-8010-9981-dd7223315c38) (has our bug)
+- (C++) [ChatGPT 4o](https://chatgpt.com/share/67550276-27e0-8010-a0cb-e3c6475c8dc7) (has our bug)
+- (Python) [Claude Haiku](https://claude.site/artifacts/b9dbb721-e274-47f8-8ce9-fe31146d3393) (has our bug, but also returns a completely wrong path sometimes)
+- [GitHub Copilot (Codex) guessed the wrong path](Code_FMO0G8FpsJ.png) [twice](Code_tRU7i0IK7k.png) while trying to help me write this blogpost
+
+If you want to run tests yourself, here is the pathological graph (both the one in the post and a symmetrical version) and the correct path:
+- `[(0, 1), (0, 2), (1, 3), (3, 4), (4, 6), (2, 5), (5, 6)]`: correct path is `0, 2, 5, 6`, wrong path is `0, 1, 3, 4, 6`
+  - or, in adjacency list form: `{ 0: [1, 2], 1: [0, 3], 2: [0, 5], 3: [1, 4], 4: [3, 6], 5: [2, 6], 6: [4, 5] }`
+- `[(0, 1), (0, 2), (1, 4), (2, 3), (3, 5), (4, 6), (5, 6)]`: correct path is `0, 1, 4, 6`, wrong path is `0, 2, 3, 5, 6`
+  - or, in adjacency list form: `{ 0: [1, 2], 1: [0, 4], 2: [0, 3], 3: [2, 5], 4: [1, 6], 5: [3, 6], 6: [4, 5] }`
+
+And here are those I could find who implemented it correctly (at least, as far as I know):
+- (Python) [shawnlyu](https://shawnlyu-official.medium.com/bfs-and-bi-directional-bfs-98cd4e6ad080) on Medium (2020)
+- (Python) [Andrew McDowell](https://stackoverflow.com/questions/54437905/bidirectional-search/54440577#54440577) on StackOverflow (2019)
+- (C++) [Rafael Glikis](https://github.com/rafaelglikis/bdbfs-leda/blob/master/src/bdbfs.cpp) on GitHub (2018)
+- (Pseudocode) [Baeldung CS](https://www.baeldung.com/cs/bidirectional-search) (2022)
+
+I only went up to page 5 of Google results, but other implementations may appear with different search keywords.
+
+## Finding the Right Path, Faster
+
+There's an additional easy optimization we can add on top of bidirectional BFS. Right now, each side is advancing one level at a time. But instead of alternating between sides, it appears that advancing on whichever side has visited the fewest nodes yet accelerates the algorithm in a lot of cases. The intuition behind is that:
+- if a path exists, both sides will end up meeting at a midpoint that is on the shortest path
+- advancing one level, no matter how many nodes we visit, will always get us closer to the midpoint by exactly one level
+- if we're getting one level closer, we might as well advance on the side that has visited the fewest nodes, since that means we'll have less nodes to visit in the future (while still getting closer to the midpoint as fast as possible, but with less work)
+
+On my test graph, this sped up some long paths by about 100 times: without the optimization, most paths take about 3-4ms but very long paths (>10 edges) can take up to 400ms. With the optimization, all queries take about 3-4ms.
+
+## I Like Drawing Graphs
+
+All the graphs in this post were pre-rendered to SVG using Graphviz, and then animated and made interactive using vanilla JS code you can inspect by viewing the source code of this post here
