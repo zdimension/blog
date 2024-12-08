@@ -1,12 +1,16 @@
 ---
 title: "Everyone gets bidirectional BFS wrong"
-description: "People really need to stop blindly copying code from algorithms websites."
+description: "People really need to stop blindly copying code from the Internet."
 tags: [Programming]
 image: cover.svg
 math: true
 ---
 
 <style>
+    div.algo-container {
+        margin-bottom: 1rem;
+    }
+
     div.content {
         svg {
             width: 100%;
@@ -157,7 +161,7 @@ In the third graph, finding a path would be like finding a **train route** betwe
 
 In real life, graphs can contain a multitude of additional information, like the cost of going from one node to another (which, here, could be the time it takes to travel between two cities, or the amount of fuel needed, or the cost of a train ticket, etc), in which case the graph is said to be **weighted**, and the shortest path ends up not simply being the path that has the fewest edges, but the one that has the smallest sum of costs.
 
-In any case, here, we'll mostly be interested in undirected, unweighted graphs, such as the third one here (so, assume this is what "graph" means from now on). TODO ??
+In any case, here, we'll mostly be interested in undirected, unweighted graphs, such as the third one here (so, assume this is what "graph" means from now on).
 
 ## Searches & Traversals
 
@@ -397,6 +401,7 @@ There are two common ways to traverse a graph, which are kind of each other's du
 
     function initAlgo(elemId, {algos, postInit, fixedStep}, graphs=null) {
         const result = document.getElementById(elemId);
+        result.classList.add("algo-container");
         let templ = document.getElementById("algo-viewer").content.cloneNode(true);
         const main = templ.querySelector(".algo");
         const viewer = main.querySelector(".algo-viewer");
@@ -642,6 +647,8 @@ Seen from the other way around, it's impossible to reach $b$ in more than $D$ le
 
 Here's a demo. If no node is highlighted and no path is displayed at the end, then it means no path exists between the two nodes. 
 
+**Note:** the algorithm stops as soon as the target is reached; i.e. **as soon as it is added to the queue**.
+
 <style>
     .computed-path path {
         fill: none;
@@ -882,7 +889,7 @@ When a standard BFS goes through a graph with branching factor $b$, it recursive
 
 Let's say, now, that we're starting one BFS from the source, and one from the destination, and at each level we advance one step in each. The two BFS will meet at some point, and they must meet exactly in the middle, because they advance at the same speed (and the shortest path between two points is the sum of the path from the source to the middle, and the path from the middle to the destination). If the source and destination are $D$ edges apart, the two BFS will meet after $D/2$ steps, and the total number of nodes visited by each BFS will be $1 + b + b^2 + \ldots + b^{D/2}$, which is in the order of $b^{D/2}$. For a binary tree, that would be $2^5 = 32$ nodes (by each BFS, so, $64$ visited nodes in total).
 
-We got from $1024$ to $64$ visited nodes, that's something! Specifically, from $O(b^{D})$ to $O(b^{D/2})$, which is an exponential speedup.
+We got from $1024$ to $64$ visited nodes, that's something! Specifically, from $O(b^{D})$ to $O(b^{D/2})$, which is an **exponential speedup**.
 
 As a reference, finding the path between two nodes ~10 edges apart in my 2M nodes graph previously took about 2 seconds with a standard BFS, and only takes 8ms with a bidirectional BFS. That's a 250x speedup.
 
@@ -1022,7 +1029,7 @@ Here, play with it:
 
 ## Finding the Wrong Path
 
-My explanation of the bidirectional BFS might sound like it's correct, and the demo might look like it's working, but there's actually a small, minuscule, tiny mistake that makes it all wrong. Well, not all wrong, it works for the demo! But it can give the wrong answer, *sometimes*. Here, try it with this pathological case:
+My explanation of the bidirectional BFS might sound like it's correct, and the demo might look like it's working, but there's actually a small, minuscule, tiny mistake that makes it **all wrong**. Well, ***not all wrong***, it works for the demo! But it can give the wrong answer, *sometimes*. Here, try it with this pathological case:
 
 <style>
     script.bidi2 + svg {
@@ -1123,9 +1130,9 @@ The BFS works because it visits all the nodes at a given depth before moving on 
 
 I wrote this in the previous section, while describing the bidirectional BFS:
 
-> Let's say, now, that we're starting one BFS from the source, and one from the destination, and at each level we advance one step in each. 
+- "Let's say, now, that we're starting one BFS from the source, and one from the destination, and at each level we advance one step in each."
 
-This sounds sensible, but I didn't define what a "step" means. In the regular BFS, a step is just visiting the next node in the queue. But here, we need to consider a higher-level step: each BFS shouldn't advance one node at a time, but one level of nodes/depth at a time:
+This *sounds* sensible, but I didn't define what a "step" means. In the regular BFS, a step is just visiting the next node in the queue. But here, we need to consider a *higher-level* step: each BFS shouldn't advance one node at a time, but **one level of nodes** (depth) at a time:
 
 <!--
 digraph G {
@@ -1298,9 +1305,9 @@ For fun, I also tested a few easily available LLMs with simple prompts. All of t
 - (Python) [ChatGPT 4o](https://chatgpt.com/share/67550123-0afc-8010-9981-dd7223315c38) (has our bug)
 - (C++) [ChatGPT 4o](https://chatgpt.com/share/67550276-27e0-8010-a0cb-e3c6475c8dc7) (has our bug)
 - (Python) [Claude Haiku](https://claude.site/artifacts/b9dbb721-e274-47f8-8ce9-fe31146d3393) (has our bug, but also returns a completely wrong path sometimes)
-- [GitHub Copilot (Codex) guessed the wrong path](Code_FMO0G8FpsJ.png) [twice](Code_tRU7i0IK7k.png) while trying to help me write this blogpost
+- [GitHub Copilot (Codex) guessed the wrong path]({% asset_path Code_FMO0G8FpsJ.png %}) not once but [twice]({% asset_path Code_tRU7i0IK7k.png %}) while trying to help me write this blogpost
 
-If you want to run tests yourself, here is the pathological graph (both the one in the post and a symmetrical version) and the correct path:
+If you want to run tests yourself, here is the pathological graph (both the one in the post and a symmetrical version):
 - `[(0, 1), (0, 2), (1, 3), (3, 4), (4, 6), (2, 5), (5, 6)]`: correct path is `0, 2, 5, 6`, wrong path is `0, 1, 3, 4, 6`
   - or, in adjacency list form: `{ 0: [1, 2], 1: [0, 3], 2: [0, 5], 3: [1, 4], 4: [3, 6], 5: [2, 6], 6: [4, 5] }`
 - `[(0, 1), (0, 2), (1, 4), (2, 3), (3, 5), (4, 6), (5, 6)]`: correct path is `0, 1, 4, 6`, wrong path is `0, 2, 3, 5, 6`
@@ -1316,13 +1323,25 @@ I only went up to page 5 of Google results, but other implementations may appear
 
 ## Finding the Right Path, Faster
 
-There's an additional easy optimization we can add on top of bidirectional BFS. Right now, each side is advancing one level at a time. But instead of alternating between sides, it appears that advancing on whichever side has visited the fewest nodes yet accelerates the algorithm in a lot of cases. The intuition behind is that:
+There's an additional easy optimization we can add on top of bidirectional BFS. Right now, we're alternating sides, with each advancing one level at a time. But instead of alternating between sides, it appears that advancing on whichever side has visited the fewest nodes yet accelerates the algorithm in a lot of cases. The intuition behind is that:
 - if a path exists, both sides will end up meeting at a midpoint that is on the shortest path
-- advancing one level, no matter how many nodes we visit, will always get us closer to the midpoint by exactly one level
+- advancing one level, no matter how many nodes we visit, will **always** get us **closer** to the midpoint by **exactly one level**
 - if we're getting one level closer, we might as well advance on the side that has visited the fewest nodes, since that means we'll have less nodes to visit in the future (while still getting closer to the midpoint as fast as possible, but with less work)
 
 On my test graph, this sped up some long paths by about 100 times: without the optimization, most paths take about 3-4ms but very long paths (>10 edges) can take up to 400ms. With the optimization, all queries take about 3-4ms.
 
-## I Like Drawing Graphs
+## Takeaways
 
-All the graphs in this post were pre-rendered to SVG using Graphviz, and then animated and made interactive using vanilla JS code you can inspect by viewing the source code of this post here
+Don't blindly copy algorithms from the Internet, even from reputable websites. Study them, and implement them. <sup>[Except crypto](https://security.stackexchange.com/questions/18197/why-shouldnt-we-roll-our-own).</sup>
+
+<!-- created using https://youwouldntsteala.website/editor.html -->
+{% picture download_algo.jpg --alt Famous meme you wouldn't steal a car, but text is you wouldn't download an algorithm. %}
+
+All the graphs in this post were pre-rendered to SVG using Graphviz, and then animated and made interactive using vanilla JS code that you can inspect by viewing the source code of this post [on GitHub](https://github.com/zdimension/blog/blob/main/_posts/2024-12-08-everyone-gets-bidirectional-bfs-wrong.md?plain=1).
+
+While writing this post, I discovered:
+- that CSS nesting works even better than I thought it did (CSS has come a long way)
+- [`@container` queries](https://github.com/zdimension/blog/blob/e92fdc64ac6a9e7578b9b8269a30f9c10e29ec8d/_posts/2024-12-08-everyone-gets-bidirectional-bfs-wrong.md?plain=1#L196C1-L231C6) that made my life easier for handling light/dark-mode
+- that .dot files [can be parsed quite easily](https://github.com/zdimension/blog/blob/e92fdc64ac6a9e7578b9b8269a30f9c10e29ec8d/_posts/2024-12-08-everyone-gets-bidirectional-bfs-wrong.md?plain=1#L319C5-L360C6) if you don't care about doing things the Right Way
+
+Thanks for reading.
