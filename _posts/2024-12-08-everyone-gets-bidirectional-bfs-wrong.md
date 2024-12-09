@@ -405,8 +405,10 @@ There are two common ways to traverse a graph, which are kind of each other's du
         let templ = document.getElementById("algo-viewer").content.cloneNode(true);
         const main = templ.querySelector(".algo");
         const viewer = main.querySelector(".algo-viewer");
-        const svg = result.querySelector("svg");
-        viewer.appendChild(svg);
+        const svgLegend = result.querySelector("svg");
+        if (svgLegend) {
+            viewer.appendChild(svgLegend);
+        }
 
         if (fixedStep !== undefined) {
             main.querySelector(".algo-controls").style.display = "none";
@@ -436,10 +438,10 @@ There are two common ways to traverse a graph, which are kind of each other's du
             let oldState = algoStates;
 
             container.innerHTML = "";
-            let nodes = Object.entries(algos).map(([name, {name: algoName, states}]) => {
-                let node = createGraphNode(svg, adj, algoName);
+            let nodes = Object.entries(algos).map(([name, algo]) => {
+                let node = createGraphNode(svg, adj, algo.name);
                 container.appendChild(node.node);
-                return [name, [node, states(adj, main)]];
+                return [name, [node, algo.states(adj, main)]];
             });
 
             slider.value = 0;
@@ -478,7 +480,7 @@ There are two common ways to traverse a graph, which are kind of each other's du
                     setClass(svgNode, "current", state.current.includes(node));
                     setClass(svgNode, "queued", state.queue.includes(node));
 
-                    const queueIndex = indexer(state.queue, node);
+                    const queueIndex = indexer.call(algos[key], state.queue, node);
                     if (queueIndex !== -1) {
                         const {x, y, width, height} = svgNode.getBBox();
                         const origText = svgNode.querySelector("text");
@@ -490,7 +492,7 @@ There are two common ways to traverse a graph, which are kind of each other's du
                         nodeDupl.classList.add("queue-index");
                         const newText = document.createElementNS("http://www.w3.org/2000/svg", "text");
                         newText.textContent = queueIndex + 1;
-                        newText.setAttribute("x", x + width + 2);
+                        newText.setAttribute("x", x + width + 1);
                         newText.setAttribute("y", y + height / 2 + origText.getBBox().height / 2 + 7);
                         newText.setAttribute("text-anchor", "end");
                         newText.setAttribute("font-size", origText.getAttribute("font-size"));
@@ -498,13 +500,10 @@ There are two common ways to traverse a graph, which are kind of each other's du
                         svgNode.parentNode.appendChild(nodeDupl);
                         const textBounds = newText.getBBox();
                         const back = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                        back.setAttribute("x", textBounds.x - 2);
+                        back.setAttribute("x", textBounds.x - 1);
                         back.setAttribute("y", textBounds.y);
-                        back.setAttribute("width", textBounds.width + 4);
+                        back.setAttribute("width", textBounds.width + 2);
                         back.setAttribute("height", textBounds.height);
-                        back.setAttribute("fill", "white");
-                        back.setAttribute("stroke", "black");
-                        back.setAttribute("stroke-width", "1");
                         back.setAttribute("rx", "2");
                         nodeDupl.insertBefore(back, newText);
                     }
@@ -643,7 +642,7 @@ There are two common ways to traverse a graph, which are kind of each other's du
                         return index === -1 ? -1 : queue.length - index - 1;
                     }
                 }
-            }
+            },
         });
     });
 </script>
@@ -655,7 +654,50 @@ For readability, enqueued nodes are annotated with their order in the queue: a n
 
 Even for graphs that contain cycles, such as the cities one, all nodes will be visited exactly once, because the algorithms keep a set of visited nodes to avoid visiting the same node multiple times.
 
-Both of these algorithms have their uses, the DFS for example can be used to efficiently detect cycles or solve mazes.
+It it makes it easier for you to visualize, here are the graphs with the nodes annotated with the order in which they'll be visited:
+
+<style>
+    #traversalOrders {
+        div.above-svg, .algo-viewer > svg:last-child {
+            display: none;
+        }
+    }
+</style>
+
+<div id="traversalOrders">
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {   
+        //document.getElementById("traversalOrders").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+        function orderIndex(queue, node) {
+            const index = this.allStates?.findIndex(state => state.current.includes(node)) ?? -1;
+            return index === -1 ? -1 : index - 1;
+        }
+        const emptyState = [{queue: [], visited: new Set(), current: []}];
+        initAlgo("traversalOrders", {
+            algos: {
+                bfs: {
+                    name: "BFS",
+                    states(adj) { 
+                        this.allStates = runTraversal(adj, Object.keys(adj)[0], {succ: queue => queue.shift()}); 
+                        return emptyState;
+                    },
+                    nodeIndex: orderIndex
+                },
+                dfs: {
+                    name: "DFS",
+                    states(adj) { 
+                        this.allStates = runTraversal(adj, Object.keys(adj)[0], {succ: queue => queue.pop(), neighb: nb => nb.toReversed()}); 
+                        return emptyState;
+                    },
+                    nodeIndex: orderIndex
+                }
+            },
+            fixedStep: 0
+        });
+    });
+</script>
 
 ## Finding Paths
 
