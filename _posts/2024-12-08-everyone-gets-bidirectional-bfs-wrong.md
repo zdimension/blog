@@ -472,23 +472,41 @@ There are two common ways to traverse a graph, which are kind of each other's du
             for (const [key, algoState] of Object.entries(algoStates)) {
                 const [graph, states] = algoState;
                 const state = getState(states, idx);
+                const indexer = algos[key].nodeIndex || ((queue, node) => queue.indexOf(node));
                 for (const [node, {svgNode}] of Object.entries(graph.nodeMap)) {
                     setClass(svgNode, "visited", state.visited.has(node));
                     setClass(svgNode, "current", state.current.includes(node));
                     setClass(svgNode, "queued", state.queue.includes(node));
 
-                    const queueIndex = state.queue.indexOf(node);
+                    const queueIndex = indexer(state.queue, node);
                     if (queueIndex !== -1) {
                         const {x, y, width, height} = svgNode.getBBox();
                         const origText = svgNode.querySelector("text");
+                        const nodeDupl = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                        // copy class list from svgNode
+                        for (const cls of svgNode.classList) {
+                            nodeDupl.classList.add(cls);
+                        }
+                        nodeDupl.classList.add("queue-index");
                         const newText = document.createElementNS("http://www.w3.org/2000/svg", "text");
                         newText.textContent = queueIndex + 1;
-                        newText.setAttribute("x", x + width);
-                        newText.setAttribute("y", y + height / 2 + origText.getBBox().height / 2);
+                        newText.setAttribute("x", x + width + 2);
+                        newText.setAttribute("y", y + height / 2 + origText.getBBox().height / 2 + 7);
                         newText.setAttribute("text-anchor", "end");
                         newText.setAttribute("font-size", origText.getAttribute("font-size"));
-                        newText.classList.add("queue-index");
-                        svgNode.appendChild(newText);
+                        nodeDupl.appendChild(newText);
+                        svgNode.parentNode.appendChild(nodeDupl);
+                        const textBounds = newText.getBBox();
+                        const back = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        back.setAttribute("x", textBounds.x - 2);
+                        back.setAttribute("y", textBounds.y);
+                        back.setAttribute("width", textBounds.width + 4);
+                        back.setAttribute("height", textBounds.height);
+                        back.setAttribute("fill", "white");
+                        back.setAttribute("stroke", "black");
+                        back.setAttribute("stroke-width", "1");
+                        back.setAttribute("rx", "2");
+                        nodeDupl.insertBefore(back, newText);
                     }
                 }
                 algos[key].customNodeUpdate?.(algoState, idx);
@@ -619,17 +637,21 @@ There are two common ways to traverse a graph, which are kind of each other's du
                 },
                 dfs: {
                     name: "DFS",
-                    states(adj) { return runTraversal(adj, Object.keys(adj)[0], {succ: queue => queue.pop(), neighb: nb => nb.toReversed()}); }
+                    states(adj) { return runTraversal(adj, Object.keys(adj)[0], {succ: queue => queue.pop(), neighb: nb => nb.toReversed()}); },
+                    nodeIndex(queue, node) {
+                        const index = queue.lastIndexOf(node);
+                        return index === -1 ? -1 : queue.length - index - 1;
+                    }
                 }
             }
         });
     });
 </script>
 
-<!--Say you're looking for any node that matches a condition. The first file with a name starting with "X". The first city with sunny weather. You could just pick a node randomly, check if it matches the condition, and if it doesn't, just pick another node at random again. With infinite time, you would eventually find a node that matches the condition, if such a node exists, but you would agree that this is probably not the most efficient way to do it. The most obvious pain point is that you would most likely visit the same nodes multiple times, which is a waste of time.-->
-
 Try playing with the above demo to get a feel for how these two algorithms work. You can see that DFS explores the graph by going as deep as 
 possible along each branch, before backtracking ("climbing back up the tree") and exploring another branch. BFS, on the other hand, explores the graph by visiting all the nodes at a given depth before moving on to the next depth.
+
+For readability, enqueued nodes are annotated with their order in the queue: a node annotated with "1" will be visited at the next step.
 
 Even for graphs that contain cycles, such as the cities one, all nodes will be visited exactly once, because the algorithms keep a set of visited nodes to avoid visiting the same node multiple times.
 
