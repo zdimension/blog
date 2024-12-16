@@ -7,10 +7,6 @@ math: true
 ---
 
 <style>
-    div.algo-container {
-        margin-bottom: 1rem;
-    }
-
     div.content {
         svg {
             width: 100%;
@@ -85,13 +81,13 @@ A **graph** is a bunch of things (called **nodes** or **vertices**) that are con
 
 <script type="graphviz" name="Directory tree">
 digraph G {
-  "C:\\" -> {"Program Files", "Users", "Windows"};
+  "C:" -> {"Program Files", "Users", "Windows"};
   "Program Files" -> {"Google", "Mozilla"};
   "Users" -> {"Alice", "Bob"};
   "Alice" -> "Documents"
 }
 </script>
-<svg width="404pt" height="260pt" viewBox="0 0 403.51 260" xmlns="http://www.w3.org/2000/svg"><g class="graph" transform="translate(4 256)"><path fill="#fff" stroke="transparent" d="M-4 4v-260h403.51V4z"/><g class="node"><ellipse cx="248.46" cy="-234" rx="27" ry="18" fill="none" stroke="#000"/><text x="248.464" y="-229.8" font-family="Times,serif" font-size="14" text-anchor="middle">C:\</text></g><g class="node"><ellipse cx="131.46" cy="-162" rx="65.465" ry="18" fill="none" stroke="#000"/><text x="131.464" y="-157.8" font-family="Times,serif" font-size="14" text-anchor="middle">Program Files</text></g><g class="edge"><path d="m228.62-221.79-61.528 37.863" fill="none" stroke="#000"/><path stroke="#000" d="m168.79-180.86-10.35 2.26 6.69-8.22z"/></g><g class="node"><ellipse cx="248.46" cy="-162" rx="33.041" ry="18" fill="none" stroke="#000"/><text x="248.464" y="-157.8" font-family="Times,serif" font-size="14" text-anchor="middle">Users</text></g><g class="edge"><path d="M248.46-215.83v25.415" fill="none" stroke="#000"/><path stroke="#000" d="m251.96-190.41-3.5 10-3.5-10z"/></g><g class="node"><ellipse cx="347.46" cy="-162" rx="48.096" ry="18" fill="none" stroke="#000"/><text x="347.464" y="-157.8" font-family="Times,serif" font-size="14" text-anchor="middle">Windows</text></g><g class="edge"><path d="m267.08-220.46 49.847 36.252" fill="none" stroke="#000"/><path stroke="#000" d="m319.08-186.97 6.03 8.71-10.14-3.05z"/></g><g class="node"><ellipse cx="39.464" cy="-90" rx="39.427" ry="18" fill="none" stroke="#000"/><text x="39.464" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">Google</text></g><g class="edge"><path d="m109.66-144.94-42.07 32.925" fill="none" stroke="#000"/><path stroke="#000" d="m69.57-109.12-10.032 3.41 5.718-8.92z"/></g><g class="node"><ellipse cx="138.46" cy="-90" rx="41.147" ry="18" fill="none" stroke="#000"/><text x="138.464" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">Mozilla</text></g><g class="edge"><path d="m133.23-143.83 2.47 25.415" fill="none" stroke="#000"/><path stroke="#000" d="m139.19-118.71-2.52 10.3-4.45-9.62z"/></g><g class="node"><ellipse cx="242.46" cy="-90" rx="31.897" ry="18" fill="none" stroke="#000"/><text x="242.464" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">Alice</text></g><g class="edge"><path d="m246.95-143.83-2.118 25.415" fill="none" stroke="#000"/><path stroke="#000" d="m248.32-118.09-4.32 9.68-2.66-10.26z"/></g><g class="node"><ellipse cx="319.46" cy="-90" rx="27.268" ry="18" fill="none" stroke="#000"/><text x="319.464" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">Bob</text></g><g class="edge"><path d="m264.22-146.02 32.966 33.43" fill="none" stroke="#000"/><path stroke="#000" d="m299.71-115.02 4.53 9.58-9.52-4.66z"/></g><g class="node"><ellipse cx="242.46" cy="-18" rx="55.036" ry="18" fill="none" stroke="#000"/><text x="242.464" y="-13.8" font-family="Times,serif" font-size="14" text-anchor="middle">Documents</text></g><g class="edge"><path d="M242.46-71.831v25.415" fill="none" stroke="#000"/><path stroke="#000" d="m245.96-46.413-3.5 10-3.5-10z"/></g></g></svg>
+<svg width="404pt" height="260pt" viewBox="0 0 403.51 260" xmlns="http://www.w3.org/2000/svg"><g class="graph" transform="translate(4 256)"><path fill="#fff" stroke="transparent" d="M-4 4v-260h403.51V4z"/><g class="node"><ellipse cx="248.46" cy="-234" rx="27" ry="18" fill="none" stroke="#000"/><text x="248.464" y="-229.8" font-family="Times,serif" font-size="14" text-anchor="middle">C:</text></g><g class="node"><ellipse cx="131.46" cy="-162" rx="65.465" ry="18" fill="none" stroke="#000"/><text x="131.464" y="-157.8" font-family="Times,serif" font-size="14" text-anchor="middle">Program Files</text></g><g class="edge"><path d="m228.62-221.79-61.528 37.863" fill="none" stroke="#000"/><path stroke="#000" d="m168.79-180.86-10.35 2.26 6.69-8.22z"/></g><g class="node"><ellipse cx="248.46" cy="-162" rx="33.041" ry="18" fill="none" stroke="#000"/><text x="248.464" y="-157.8" font-family="Times,serif" font-size="14" text-anchor="middle">Users</text></g><g class="edge"><path d="M248.46-215.83v25.415" fill="none" stroke="#000"/><path stroke="#000" d="m251.96-190.41-3.5 10-3.5-10z"/></g><g class="node"><ellipse cx="347.46" cy="-162" rx="48.096" ry="18" fill="none" stroke="#000"/><text x="347.464" y="-157.8" font-family="Times,serif" font-size="14" text-anchor="middle">Windows</text></g><g class="edge"><path d="m267.08-220.46 49.847 36.252" fill="none" stroke="#000"/><path stroke="#000" d="m319.08-186.97 6.03 8.71-10.14-3.05z"/></g><g class="node"><ellipse cx="39.464" cy="-90" rx="39.427" ry="18" fill="none" stroke="#000"/><text x="39.464" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">Google</text></g><g class="edge"><path d="m109.66-144.94-42.07 32.925" fill="none" stroke="#000"/><path stroke="#000" d="m69.57-109.12-10.032 3.41 5.718-8.92z"/></g><g class="node"><ellipse cx="138.46" cy="-90" rx="41.147" ry="18" fill="none" stroke="#000"/><text x="138.464" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">Mozilla</text></g><g class="edge"><path d="m133.23-143.83 2.47 25.415" fill="none" stroke="#000"/><path stroke="#000" d="m139.19-118.71-2.52 10.3-4.45-9.62z"/></g><g class="node"><ellipse cx="242.46" cy="-90" rx="31.897" ry="18" fill="none" stroke="#000"/><text x="242.464" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">Alice</text></g><g class="edge"><path d="m246.95-143.83-2.118 25.415" fill="none" stroke="#000"/><path stroke="#000" d="m248.32-118.09-4.32 9.68-2.66-10.26z"/></g><g class="node"><ellipse cx="319.46" cy="-90" rx="27.268" ry="18" fill="none" stroke="#000"/><text x="319.464" y="-85.8" font-family="Times,serif" font-size="14" text-anchor="middle">Bob</text></g><g class="edge"><path d="m264.22-146.02 32.966 33.43" fill="none" stroke="#000"/><path stroke="#000" d="m299.71-115.02 4.53 9.58-9.52-4.66z"/></g><g class="node"><ellipse cx="242.46" cy="-18" rx="55.036" ry="18" fill="none" stroke="#000"/><text x="242.464" y="-13.8" font-family="Times,serif" font-size="14" text-anchor="middle">Documents</text></g><g class="edge"><path d="M242.46-71.831v25.415" fill="none" stroke="#000"/><path stroke="#000" d="m245.96-46.413-3.5 10-3.5-10z"/></g></g></svg>
 
 <label>A directory tree.</label>
 
@@ -129,7 +125,7 @@ graph G {
     overlap = false;
     start=6
     node[shape=box, style=rounded];
-    "Paris" -- {"Berlin", "Rome", "Madrid", "Brussels"};
+    "Paris" -- {"Madrid", "Rome", "Berlin", "Brussels"};
     "Berlin" -- {"Warsaw", "Prague", "Rome", "Brussels"};
     "Rome" -- {"Milan", "Naples"};
     "Madrid" -- {"Barcelona", "Lisbon"};
@@ -153,7 +149,7 @@ Additionally, the first one is a tree, or more pedantically a directed tree. In 
 
 A useful thing to do with graphs of things is to find **paths** between things, or more usefully, the **shortest path** between two things. 
 
-For example, in the first graph, this would be somewhat equivalent to trying to find a folder named "Documents" that is located somewhere on the disk (but whose exact location we do not know). The path would be the sequence of folders you need to go through to reach "Documents", here <kbd>C:\</kbd> → <kbd>Users</kbd> → <kbd>Alice</kbd> → <kbd>Documents</kbd>, or written as an (aptly-named) path, <code>C:\Users\Alice\Documents</code>. We would say that path has a **length** of 3, since we had to go down three levels to find our target. It's easy to see, for this small graph, that this is the shortest path, and that it is unique.
+For example, in the first graph, this would be somewhat equivalent to trying to find a folder named "Documents" that is located somewhere on the disk (but whose exact location we do not know). The path would be the sequence of folders you need to go through to reach "Documents", here <kbd>C:</kbd> → <kbd>Users</kbd> → <kbd>Alice</kbd> → <kbd>Documents</kbd>, or written as an (aptly-named) path, <code>C:\Users\Alice\Documents</code>. We would say that path has a **length** of 3, since we had to go down three levels to find our target. It's easy to see, for this small graph, that this is the shortest path, and that it is unique.
 
 Finding a path in the second graph is not really interesting since it's just a circle. The shortest path between two nodes always consists of simply going around the circle from the first node to the second.
 
@@ -278,6 +274,19 @@ There are two common ways to traverse a graph, which are kind of each other's du
             display: none;
         }
     }
+
+    #traversalOrders {.node[style*="--queue-index"], .node.queue-index {
+        --grad: color-mix(in hsl, green, white calc(100% * var(--queue-index)));
+        & > :not(text) {
+            --fill: var(--grad);
+        }
+        & > text {
+            --text-color: var(--grad);
+            filter: invert(1) grayscale(1) brightness(1.3) contrast(9000);
+            mix-blend-mode: luminosity;
+            opacity: 0.95;
+        }
+    }}
 </style>
 
 <template id="algo-viewer">
@@ -292,17 +301,17 @@ There are two common ways to traverse a graph, which are kind of each other's du
 
         <div class="algo-controls-container">
             <div class="algo-controls">
-                <button class="btn btn-primary algo-controls-prev">Previous</button>
+                <button class="btn btn-primary algo-controls-prev" tabindex="-1">Previous</button>
                 <span class="slider-bound">0</span>
-                <input class="form-range" type="range" min="0" max="100" value="0">
+                <input class="form-range" type="range" min="0" max="100" value="0" tabindex="-1">
                 <span class="slider-bound"></span>
-                <button class="btn btn-primary algo-controls-next">Next</button>
+                <button class="btn btn-primary algo-controls-next" tabindex="-1">Next</button>
             </div>
         </div>
     </div>
 </template>
 
-<div id="traversal">
+<figure id="traversal">
     <!--
     digraph G {
     "Legend:" [shape=none];
@@ -312,7 +321,7 @@ There are two common ways to traverse a graph, which are kind of each other's du
     }
     -->
     <svg xmlns="http://www.w3.org/2000/svg" width="365pt" height="44pt" viewBox="0 0 365 44"><g class="graph" transform="translate(4 40)"><path fill="#fff" d="M-4 4v-44h365V4H-4z"/><g class="node"><text text-anchor="middle" x="30.93" y="-13.8" font-family="Times,serif" font-size="14">Legend:</text></g><g class="node visited"><ellipse fill="none" stroke="#000" cx="118.93" cy="-18" rx="38.93" ry="18"/><text text-anchor="middle" x="118.93" y="-13.8" font-family="Times,serif" font-size="14">Visited</text></g><g class="node current"><ellipse fill="none" stroke="#000" cx="215.93" cy="-18" rx="40.54" ry="18"/><text text-anchor="middle" x="215.93" y="-13.8" font-family="Times,serif" font-size="14">Current</text></g><g class="node queued"><ellipse fill="none" stroke="#000" cx="315.93" cy="-18" rx="41.07" ry="18"/><text text-anchor="middle" x="315.93" y="-13.8" font-family="Times,serif" font-size="14">Queued</text></g></g></svg>   
-</div>
+</figure>
 
 <script>
     /**
@@ -336,7 +345,7 @@ There are two common ways to traverse a graph, which are kind of each other's du
         for (const line of lines) {
             if (!/(->|--)/.test(line) || !/"/.test(line))
                 continue;
-            // quick and dirty graphviz tokenization
+            /* quick and dirty graphviz tokenization */
             let tokens = JSON.parse("[" + line.trim()
                 .replace(/->/g, ',false,').replace(/--/g, ',true,')
                 .replace(/;/g, "")
@@ -402,8 +411,14 @@ There are two common ways to traverse a graph, which are kind of each other's du
     function initAlgo(elemId, {algos, postInit, fixedStep}, graphs=null) {
         const result = document.getElementById(elemId);
         result.classList.add("algo-container");
+        const caption = document.createElement("figcaption");
+        caption.textContent = "Interactive graph demo";
+        caption.classList.add("sr-only");
+        result.appendChild(caption);
+        result.setAttribute("role", "figure");
         let templ = document.getElementById("algo-viewer").content.cloneNode(true);
         const main = templ.querySelector(".algo");
+        main.setAttribute("aria-hidden", "true");
         const viewer = main.querySelector(".algo-viewer");
         const svgLegend = result.querySelector("svg");
         if (svgLegend) {
@@ -485,13 +500,15 @@ There are two common ways to traverse a graph, which are kind of each other's du
                         const {x, y, width, height} = svgNode.getBBox();
                         const origText = svgNode.querySelector("text");
                         const nodeDupl = document.createElementNS("http://www.w3.org/2000/svg", "g");
-                        // copy class list from svgNode
+                        /* copy class list from svgNode */
                         for (const cls of svgNode.classList) {
                             nodeDupl.classList.add(cls);
                         }
                         nodeDupl.classList.add("queue-index");
                         const newText = document.createElementNS("http://www.w3.org/2000/svg", "text");
                         newText.textContent = queueIndex + 1;
+                        nodeDupl.style.setProperty("--queue-index", (queueIndex + 1) / Object.keys(graph.nodeMap).length);
+                        svgNode.style.setProperty("--queue-index", (queueIndex + 1) / Object.keys(graph.nodeMap).length);
                         newText.setAttribute("x", x + width + 1);
                         newText.setAttribute("y", y + height / 2 + origText.getBBox().height / 2 + 7);
                         newText.setAttribute("text-anchor", "end");
@@ -576,7 +593,7 @@ There are two common ways to traverse a graph, which are kind of each other's du
         }];
         const step = () => {
             if (states.length > 1000) {
-                // something happened
+                /* something happened */
                 console.error("Too many states");
                 return false;
             }
@@ -596,7 +613,7 @@ There are two common ways to traverse a graph, which are kind of each other's du
                     return {newState: states[states.length - 1], continue: false};
                 }
                 for (const edge of nbs) {
-                    if (!state.visited.has(edge)) {
+                    if (!state.visited.has(edge) && !(edge in state.pred)) {
                         state.pred[edge] = node;
                         state.queue.push(edge);
                     }
@@ -664,8 +681,8 @@ It it makes it easier for you to visualize, here are the graphs with the nodes a
     }
 </style>
 
-<div id="traversalOrders">
-</div>
+<figure id="traversalOrders">
+</figure>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {   
@@ -750,8 +767,8 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
     <svg xmlns="http://www.w3.org/2000/svg" width="455pt" height="44pt" viewBox="0 0 454.66 44"><g class="graph" transform="translate(4 40)"><path fill="#fff" d="M-4 4v-44h454.66V4H-4z"/><g class="node"><text text-anchor="middle" x="30.93" y="-13.8" font-family="Times,serif" font-size="14">Legend:</text></g><g class="node visited"><ellipse fill="none" stroke="#000" cx="118.93" cy="-18" rx="38.93" ry="18"/><text text-anchor="middle" x="118.93" y="-13.8" font-family="Times,serif" font-size="14">Visited</text></g><g class="node current"><ellipse fill="none" stroke="#000" cx="215.93" cy="-18" rx="40.54" ry="18"/><text text-anchor="middle" x="215.93" y="-13.8" font-family="Times,serif" font-size="14">Current</text></g><g class="node queued"><ellipse fill="none" stroke="#000" cx="315.93" cy="-18" rx="41.07" ry="18"/><text text-anchor="middle" x="315.93" y="-13.8" font-family="Times,serif" font-size="14">Queued</text></g><g class="node found"><ellipse fill="none" stroke="#000" cx="410.93" cy="-18" rx="35.72" ry="18"/><text text-anchor="middle" x="410.93" y="-13.8" font-family="Times,serif" font-size="14">Found</text></g></g></svg>
 </template>
 
-<div id="shortestpath">
-</div>
+<figure id="shortestpath">
+</figure>
 
 <script>
     function pathGraphUpdate(node, algoState, refresh, defSrc=null, defDst = null) {
@@ -855,6 +872,10 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
             while ((next = state.pred[current]) !== undefined) {
                 current = next;
                 path.push(next);
+                if (path.length > 100) {
+                    console.error("Too many nodes in path");
+                    break;
+                }
             }
         }
         pathNodeUpdate(algoState, idx, path);
@@ -959,8 +980,8 @@ As a reference, finding the path between two nodes ~10 edges apart in my 2M node
 
 Here, play with it:
 
-<div id="bidi1">
-</div>
+<figure id="bidi1">
+</figure>
 
 <script>
     function interleave(q1, q2, swap) {
@@ -1064,12 +1085,20 @@ Here, play with it:
             while ((next = state.predSrc[current]) !== undefined) {
                 current = next;
                 path.push(next);
+                if (path.length > 100) {
+                    console.error("Too many nodes in path");
+                    break;
+                }
             }
             path.reverse();
             current = state.found;
             while ((next = state.predDst[current]) !== undefined) {
                 current = next;
                 path.push(next);
+                if (path.length > 100) {
+                    console.error("Too many nodes in path");
+                    break;
+                }
             }
         }
 
@@ -1118,8 +1147,8 @@ digraph G {
 </script>
 <svg xmlns="http://www.w3.org/2000/svg" width="347pt" height="140pt" viewBox="0 0 347.08 140"><g class="graph" transform="translate(4 136)"><path fill="#fff" d="M-4 4v-140h347.08V4H-4z"/><g class="node"><circle fill="none" stroke="#000" cx="18" cy="-66" r="18"/><text text-anchor="middle" x="18" y="-61.8" font-family="Times,serif" font-size="14">S</text></g><g class="node"><circle fill="none" stroke="#000" cx="92.15" cy="-93" r="20.15"/><text text-anchor="middle" x="92.15" y="-88.8" font-family="Times,serif" font-size="14">a1</text></g><g class="edge"><path fill="none" stroke="#000" d="M35.37-72.13c7.92-2.96 17.67-6.61 26.8-10.02"/><path stroke="#000" d="m60.8-85.38 10.6-.23-8.14 6.79-2.46-6.56z"/></g><g class="node"><circle fill="none" stroke="#000" cx="169" cy="-37" r="20.69"/><text text-anchor="middle" x="169" y="-32.8" font-family="Times,serif" font-size="14">b1</text></g><g class="edge"><path fill="none" stroke="#000" d="M36.09-62.67c24.67 4.8 70.66 13.75 101.28 19.71"/><path stroke="#000" d="m137.64-46.47 9.15 5.34-10.48 1.53 1.33-6.87z"/></g><g class="node"><circle fill="none" stroke="#000" cx="169" cy="-96" r="20.15"/><text text-anchor="middle" x="169" y="-91.8" font-family="Times,serif" font-size="14">a2</text></g><g class="edge"><path fill="none" stroke="#000" d="M112.43-93.77c7.53-.3 16.36-.66 24.74-.99"/><path stroke="#000" d="m136.88-98.26 10.13 3.1-9.85 3.9-.28-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="246.38" cy="-96" r="20.15"/><text text-anchor="middle" x="246.38" y="-91.8" font-family="Times,serif" font-size="14">a3</text></g><g class="edge"><path fill="none" stroke="#000" d="M189.41-96h24.92"/><path stroke="#000" d="m214.26-99.5 10 3.5-10 3.5v-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="321.08" cy="-66" r="18"/><text text-anchor="middle" x="321.08" y="-61.8" font-family="Times,serif" font-size="14">T</text></g><g class="edge"><path fill="none" stroke="#000" d="M265.35-88.58c8.58 3.54 19.02 7.84 28.47 11.74"/><path stroke="#000" d="m294.98-80.14 7.91 7.05-10.58-.58 2.67-6.47z"/></g><g class="node"><circle fill="none" stroke="#000" cx="246.38" cy="-37" r="20.69"/><text text-anchor="middle" x="246.38" y="-32.8" font-family="Times,serif" font-size="14">b2</text></g><g class="edge"><path fill="none" stroke="#000" d="M189.8-37h24.14"/><path stroke="#000" d="m213.93-40.5 10 3.5-10 3.5v-7z"/></g><g class="edge"><path fill="none" stroke="#000" d="M266.1-44.47c8.38-3.34 18.4-7.34 27.52-10.98"/><path stroke="#000" d="m292.14-58.62 10.58-.46-7.99 6.96-2.59-6.5z"/></g></g></svg>
 
-<div id="bidi2">
-</div>
+<figure id="bidi2">
+</figure>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {   
@@ -1157,8 +1186,8 @@ The problem, specifically, is at this step:
     }
 </style>
 
-<div id="bidi3">
-</div>
+<figure id="bidi3">
+</figure>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {   
@@ -1270,8 +1299,8 @@ digraph G {
 </script>
 <svg xmlns="http://www.w3.org/2000/svg" width="379pt" height="140pt" viewBox="0 0 379.08 140"><g class="graph" transform="translate(4 136)"><path fill="#fff" d="M-4 4v-140h379.08V4H-4z"/><g class="node"><circle fill="none" stroke="#000" cx="34" cy="-66" r="18"/><text text-anchor="middle" x="34" y="-61.8" font-family="Times,serif" font-size="14">S</text></g><g class="node"><circle fill="none" stroke="#000" cx="108.69" cy="-96" r="20.15"/><text text-anchor="middle" x="108.69" y="-91.8" font-family="Times,serif" font-size="14">a1</text></g><g class="edge"><path fill="none" stroke="#000" d="M51.13-72.66c8.18-3.37 18.36-7.57 27.82-11.48"/><path stroke="#000" d="m77.58-87.36 10.58-.58-7.91 7.05-2.67-6.47z"/></g><g class="node"><circle fill="none" stroke="#000" cx="108.69" cy="-37" r="20.69"/><text text-anchor="middle" x="108.69" y="-32.8" font-family="Times,serif" font-size="14">b1</text></g><g class="edge"><path fill="none" stroke="#000" d="M51.13-59.56c8.06 3.21 18.06 7.2 27.4 10.93"/><path stroke="#000" d="M79.64-51.96 87.63-45l-10.58-.46 2.59-6.5z"/></g><g class="node"><circle fill="none" stroke="#000" cx="185.54" cy="-96" r="20.15"/><text text-anchor="middle" x="185.54" y="-91.8" font-family="Times,serif" font-size="14">a2</text></g><g class="edge"><path fill="none" stroke="#000" d="M128.97-96h24.74"/><path stroke="#000" d="m153.56-99.5 10 3.5-10 3.5v-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="262.38" cy="-96" r="20.15"/><text text-anchor="middle" x="262.38" y="-91.8" font-family="Times,serif" font-size="14">a3</text></g><g class="edge"><path fill="none" stroke="#000" d="M205.81-96h24.75"/><path stroke="#000" d="m230.4-99.5 10 3.5-10 3.5v-7z"/></g><g class="node"><circle fill="none" stroke="#000" cx="337.08" cy="-66" r="18"/><text text-anchor="middle" x="337.08" y="-61.8" font-family="Times,serif" font-size="14">T</text></g><g class="edge"><path fill="none" stroke="#000" d="M281.35-88.58c8.58 3.54 19.02 7.84 28.47 11.74"/><path stroke="#000" d="m310.98-80.14 7.91 7.05-10.58-.58 2.67-6.47z"/></g><g class="node"><circle fill="none" stroke="#000" cx="262.38" cy="-37" r="20.69"/><text text-anchor="middle" x="262.38" y="-32.8" font-family="Times,serif" font-size="14">b2</text></g><g class="edge"><path fill="none" stroke="#000" d="M129.84-37h100.68"/><path stroke="#000" d="m230.12-40.5 10 3.5-10 3.5v-7z"/></g><g class="edge"><path fill="none" stroke="#000" d="M282.1-44.47c8.38-3.34 18.4-7.34 27.52-10.98"/><path stroke="#000" d="m308.14-58.62 10.58-.46-7.99 6.96-2.59-6.5z"/></g></g></svg>
 
-<div id="bidi4">
-</div>
+<figure id="bidi4">
+</figure>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {   
@@ -1309,10 +1338,12 @@ digraph G {
     });
 </script>
 
-And with the example graphs (though for these, there are no cases I could find where the bad algorithm breaks):
+We can also try the new algorithm on the example graphs. Two important points, though:
+- for these, there are no cases I could find where the bad algorithm gives a path that is not the shortest, so you'll get the same result with both versions (but the steps will differ)
+- the incorrect version *sometimes* gets the result *a bit faster* than the correct one. That's neat, but it'll still give you incorrect results sometimes. A calculator that gives you the good answer really fast 99% of the time, but the wrong answer 1% of the time, *is not a good calculator*
 
-<div id="bidi5">
-</div>
+<figure id="bidi5">
+</figure>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {   
@@ -1339,6 +1370,10 @@ And with the example graphs (though for these, there are no cases I could find w
         });
     });
 </script>
+
+Also, keep in mind that this is not a new insight: [this SO answer](https://stackoverflow.com/a/14285986/2196124) details the exact same example as I did (though I found it after having written the better part of this post), and it's responding to a question that cites an excerpt from the 2004 book "Artificial Intelligence: A Modern Approach" by Stuart Russell and Peter Norvig:
+
+> Bidirectional search is implemented by replacing the goal test with a check to see whether the frontiers of the two searches intersect; if they do, a solution has been found. It is important to realize that the first solution found may not be optimal, even if the two searches are both breadth-first; **some additional search is required to make sure there isn't a shortcut across the gap.**
 
 ## Someone is Wrong on the Internet
 
