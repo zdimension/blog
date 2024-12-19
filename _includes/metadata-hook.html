@@ -1,3 +1,7 @@
+{% if page.keywords %}
+  <meta name="keywords" content="{{ page.keywords | join: ', ' }}">
+{% endif %}
+
 <!--
   The GA snippet
 -->
@@ -44,5 +48,13 @@ var sc_security="338cfd8d";
       updateBootstrapTheme();
     });
     updateBootstrapTheme();
+
+    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    if (isFirefox || true) {
+      const allCssBlocks = document.querySelectorAll('style');
+      allCssBlocks.forEach(cssBlock => {
+        cssBlock.innerHTML = cssBlock.innerHTML.replace(/@container style\(--theme: "dark"\)/g, 'html[data-bs-theme="dark"], html[data-bs-theme="dark"] &');
+      });
+    }
   });
 </script>
