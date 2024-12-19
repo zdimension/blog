@@ -3,6 +3,7 @@ title: "Everyone gets bidirectional BFS wrong"
 description: "People really need to stop blindly copying code from the Internet."
 tags: [Programming]
 image: cover.svg
+image_seo: cover.png
 math: true
 ---
 

@@ -37,7 +37,12 @@ module Jekyll
           #   source_file: img, 
           #   width: 1200, 
           #   format: PictureTag.formats.first)
-          post.data["image"] = "../../../generated/assets/posts/#{clean_name}/#{basename}-800.webp"
+          new_url = "../../../generated/assets/posts/#{clean_name}/#{basename}-800.webp"
+          if ext == ".svg"
+            post.data["image_seo"] = new_url
+          else
+            post.data["image"] = new_url
+          end
           # post.data["image"] = "../../../#{gen_img.uri}"
         end
 
@@ -61,6 +66,29 @@ module Jekyll
     class ImageDrop
       def alt
         @alt ||= filters.strip_html(image_hash['alt']) if image_hash['alt']
+      end
+
+      def image_hash
+        @image_hash ||= begin
+          if page["image_seo"]
+            if page["cover_responsive"]
+              image_meta = page["image_seo"]
+            else
+              image_meta = page['media_subpath'] + page["image_seo"]
+            end
+          else
+            image_meta = page["image"]
+          end
+
+          case image_meta
+          when Hash
+            { "path" => nil }.merge!(image_meta)
+          when String
+            { "path" => image_meta }
+          else
+            { "path" => nil }
+          end
+        end
       end
     end
   end
@@ -101,6 +129,17 @@ module PictureTag
     end
   end
 
+  class SourceImage
+    def image
+      full_name = name
+      # if ext is svg, add [dpi=144]
+      #if ext == "svg"
+      #  full_name += "[dpi=18,scale=4]"
+      #end
+      @image ||= Vips::Image.new_from_file(full_name)
+    end
+  end
+
   module OutputFormats
     class Basic
       alias_method :build_base_img_original, :build_base_img
@@ -129,7 +168,37 @@ module PictureTag
           markup += legend.to_s
         end
 
-        markup
+        if PictureTag.html_attributes['hide']
+          ""
+        else
+          markup
+        end
+      end
+
+      def build_fallback_image
+        return fallback_candidate if fallback_candidate.exists?
+
+        image = GeneratedImage.new(
+          source_file: PictureTag.source_images.first,
+          format: PictureTag.source_images.first.ext == "svg" ? "webp" : PictureTag.fallback_format,
+          width: checked_fallback_width
+        )
+
+        image.generate
+
+        image
+      end
+
+      alias_method :checked_fallback_width_original, :checked_fallback_width
+
+      def checked_fallback_width
+        target = PictureTag.fallback_width
+
+        if PictureTag.source_images.first.ext
+          target
+        else
+          checked_fallback_width_original
+        end
       end
     end
   end
@@ -144,15 +213,34 @@ module PictureTag
         end
 
         gen_cover = PictureTag.html_attributes['cover']
-
-        @target_files = target_files_original + [generate_file(source_width)] + (
+        @target_files = target_files_original + [
+          GeneratedImage.new(
+            source_file: @source_image,
+            width: source_width,
+            format: @input_format
+          )
+        ] + (
           gen_cover ? [GeneratedImage.new(
             source_file: @source_image,
             width: 800,
-            format: @input_format,
+            format: @input_format == "svg" ? "webp" : @input_format,
             shortfn: true
           )] : []
         )
+      end
+
+      def checked_targets
+        if PictureTag.source_images.first.ext != "svg"
+          if target_files.any? { |f| f.width > source_width }
+
+            small_source_warn
+
+            files = target_files.reject { |f| f.width >= source_width }
+            files.push(generate_file(source_width))
+          end
+        end
+
+        files || target_files
       end
     end
   end
