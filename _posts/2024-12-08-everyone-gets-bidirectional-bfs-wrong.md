@@ -5,6 +5,7 @@ tags: [Programming]
 image: cover.svg
 image_seo: cover.png
 math: true
+keywords: [graph, algorithm, BFS, bidirectional, pathfinding, search]
 ---
 
 <style>
@@ -76,6 +77,9 @@ This post is about graphs and graph algorithms. Specifically, it's about a commo
 
 Most of the post is about what graphs are and how some pathfinding algorithms work. If you don't care about this, you can skip to the [namedropping section](#someone-is-wrong-on-the-internet) (but you'll miss out on some cool interactive visualizations).
 
+> The interactive figures in this post use HTML and CSS features that are still not supported by Safari. I'm working on fixing that, but in the meantime, please use a different browser.
+{: .prompt-warning }
+
 ## Graphs 101
 
 A **graph** is a bunch of things (called **nodes** or **vertices**) that are connected by links (called **edges**). Here are a few graphs, free of charge:
@@ -132,11 +136,11 @@ graph G {
     "Madrid" -- {"Barcelona", "Lisbon"};
     "Warsaw" -- {"Prague", "Vienna", "Minsk", "Kiev"};
     "Milan" -- {"Naples"};
-    "Bucarest" -- {"Vienna"};
-    "Kiev" -- {"Bucarest"};
+    "Bucharest" -- {"Vienna"};
+    "Kiev" -- {"Bucharest"};
 }
 </script>
-<svg width="494pt" height="420" viewBox="0 0 493.98 315.2" xmlns="http://www.w3.org/2000/svg"><g class="graph" transform="translate(4 311.204)"><path fill="#fff" stroke="transparent" d="M-4 4v-315.204h493.983V4H-4z"/><g class="node"><path fill="none" stroke="#000" d="M213.838-193.428h-54v36h54v-36z"/><text text-anchor="middle" x="186.838" y="-171.228" font-family="Times,serif" font-size="14">Paris</text></g><g class="node"><path fill="none" stroke="#000" d="M291.864-185.277h-54v36h54v-36z"/><text text-anchor="middle" x="264.864" y="-163.077" font-family="Times,serif" font-size="14">Berlin</text></g><g class="edge"><path fill="none" stroke="#000" d="m214.128-172.577 23.594 2.464"/></g><g class="node"><path fill="none" stroke="#000" d="M236.356-119.589h-54v36h54v-36z"/><text text-anchor="middle" x="209.356" y="-97.389" font-family="Times,serif" font-size="14">Rome</text></g><g class="edge"><path fill="none" stroke="#000" d="m192.404-157.176 11.45 37.545"/></g><g class="node"><path fill="none" stroke="#000" d="M141.697-232.246H84.276v36h57.421v-36z"/><text text-anchor="middle" x="112.987" y="-210.046" font-family="Times,serif" font-size="14">Madrid</text></g><g class="edge"><path fill="none" stroke="#000" d="m159.758-189.662-17.956-9.438"/></g><g class="node"><path fill="none" stroke="#000" d="M261.509-251.346h-63.875v36h63.875v-36z"/><text text-anchor="middle" x="229.571" y="-229.146" font-family="Times,serif" font-size="14">Brussels</text></g><g class="edge"><path fill="none" stroke="#000" d="m200.125-193.436 16.02-21.714"/></g><g class="edge"><path fill="none" stroke="#000" d="m249.402-148.98-24.667 29.191"/></g><g class="edge"><path fill="none" stroke="#000" d="m255.22-185.33-16.016-29.984"/></g><g class="node"><path fill="none" stroke="#000" d="M379.512-199.489H317.8v36h61.712v-36z"/><text text-anchor="middle" x="348.656" y="-177.289" font-family="Times,serif" font-size="14">Warsaw</text></g><g class="edge"><path fill="none" stroke="#000" d="m292.3-171.93 25.375-4.304"/></g><g class="node"><path fill="none" stroke="#000" d="M346.563-108.127h-54.745v36h54.745v-36z"/><text text-anchor="middle" x="319.19" y="-85.927" font-family="Times,serif" font-size="14">Prague</text></g><g class="edge"><path fill="none" stroke="#000" d="m277.739-148.994 28.669 40.715"/></g><g class="node"><path fill="none" stroke="#000" d="M280.749-36h-54V0h54v-36z"/><text text-anchor="middle" x="253.749" y="-13.8" font-family="Times,serif" font-size="14">Milan</text></g><g class="edge"><path fill="none" stroke="#000" d="m218.988-83.451 25.147 47.349"/></g><g class="node"><path fill="none" stroke="#000" d="M121.063-55.546H66.321v36h54.742v-36z"/><text text-anchor="middle" x="93.692" y="-33.346" font-family="Times,serif" font-size="14">Naples</text></g><g class="edge"><path fill="none" stroke="#000" d="m182.238-86.574-60.794 33.662"/></g><g class="node"><path fill="none" stroke="#000" d="M72.62-210.029H.127v36H72.62v-36z"/><text text-anchor="middle" x="36.373" y="-187.829" font-family="Times,serif" font-size="14">Barcelona</text></g><g class="edge"><path fill="none" stroke="#000" d="m84.022-205.847-11.15 3.233"/></g><g class="node"><path fill="none" stroke="#000" d="M109.128-307.204H54.352v36h54.776v-36z"/><text text-anchor="middle" x="81.74" y="-285.005" font-family="Times,serif" font-size="14">Lisbon</text></g><g class="edge"><path fill="none" stroke="#000" d="m105.423-232.391-16.08-38.576"/></g><g class="edge"><path fill="none" stroke="#000" d="M342.834-163.44 325-108.14"/></g><g class="node"><path fill="none" stroke="#000" d="M452.708-222.746h-56.856v36h56.856v-36z"/><text text-anchor="middle" x="424.28" y="-200.546" font-family="Times,serif" font-size="14">Vienna</text></g><g class="edge"><path fill="none" stroke="#000" d="m379.852-191.083 16.211-4.986"/></g><g class="node"><path fill="none" stroke="#000" d="M434.242-131.724h-54v36h54v-36z"/><text text-anchor="middle" x="407.242" y="-109.524" font-family="Times,serif" font-size="14">Minsk</text></g><g class="edge"><path fill="none" stroke="#000" d="m364.356-163.33 27.143 31.396"/></g><g class="node"><path fill="none" stroke="#000" d="M403.766-278.671h-54v36h54v-36z"/><text text-anchor="middle" x="376.766" y="-256.471" font-family="Times,serif" font-size="14">Kiev</text></g><g class="edge"><path fill="none" stroke="#000" d="M355.176-199.854c4.54-12.792 10.572-29.782 15.106-42.552"/></g><g class="edge"><path fill="none" stroke="#000" d="M226.597-21.316 121.245-34.18"/></g><g class="node"><path fill="none" stroke="#000" d="M485.971-294.276h-64.953v36h64.953v-36z"/><text text-anchor="middle" x="453.495" y="-272.076" font-family="Times,serif" font-size="14">Bucarest</text></g><g class="edge"><path fill="none" stroke="#000" d="m404.034-266.217 16.766-3.41"/></g><g class="edge"><path fill="none" stroke="#000" d="M446.123-258.226c-4.395 10.76-9.96 24.384-14.371 35.187"/></g></g></svg>
+<svg width="494pt" height="420" viewBox="0 0 493.98 315.2" xmlns="http://www.w3.org/2000/svg"><g class="graph" transform="translate(4 311.204)"><path fill="#fff" stroke="transparent" d="M-4 4v-315.204h493.983V4H-4z"/><g class="node"><path fill="none" stroke="#000" d="M213.838-193.428h-54v36h54v-36z"/><text text-anchor="middle" x="186.838" y="-171.228" font-family="Times,serif" font-size="14">Paris</text></g><g class="node"><path fill="none" stroke="#000" d="M291.864-185.277h-54v36h54v-36z"/><text text-anchor="middle" x="264.864" y="-163.077" font-family="Times,serif" font-size="14">Berlin</text></g><g class="edge"><path fill="none" stroke="#000" d="m214.128-172.577 23.594 2.464"/></g><g class="node"><path fill="none" stroke="#000" d="M236.356-119.589h-54v36h54v-36z"/><text text-anchor="middle" x="209.356" y="-97.389" font-family="Times,serif" font-size="14">Rome</text></g><g class="edge"><path fill="none" stroke="#000" d="m192.404-157.176 11.45 37.545"/></g><g class="node"><path fill="none" stroke="#000" d="M141.697-232.246H84.276v36h57.421v-36z"/><text text-anchor="middle" x="112.987" y="-210.046" font-family="Times,serif" font-size="14">Madrid</text></g><g class="edge"><path fill="none" stroke="#000" d="m159.758-189.662-17.956-9.438"/></g><g class="node"><path fill="none" stroke="#000" d="M261.509-251.346h-63.875v36h63.875v-36z"/><text text-anchor="middle" x="229.571" y="-229.146" font-family="Times,serif" font-size="14">Brussels</text></g><g class="edge"><path fill="none" stroke="#000" d="m200.125-193.436 16.02-21.714"/></g><g class="edge"><path fill="none" stroke="#000" d="m249.402-148.98-24.667 29.191"/></g><g class="edge"><path fill="none" stroke="#000" d="m255.22-185.33-16.016-29.984"/></g><g class="node"><path fill="none" stroke="#000" d="M379.512-199.489H317.8v36h61.712v-36z"/><text text-anchor="middle" x="348.656" y="-177.289" font-family="Times,serif" font-size="14">Warsaw</text></g><g class="edge"><path fill="none" stroke="#000" d="m292.3-171.93 25.375-4.304"/></g><g class="node"><path fill="none" stroke="#000" d="M346.563-108.127h-54.745v36h54.745v-36z"/><text text-anchor="middle" x="319.19" y="-85.927" font-family="Times,serif" font-size="14">Prague</text></g><g class="edge"><path fill="none" stroke="#000" d="m277.739-148.994 28.669 40.715"/></g><g class="node"><path fill="none" stroke="#000" d="M280.749-36h-54V0h54v-36z"/><text text-anchor="middle" x="253.749" y="-13.8" font-family="Times,serif" font-size="14">Milan</text></g><g class="edge"><path fill="none" stroke="#000" d="m218.988-83.451 25.147 47.349"/></g><g class="node"><path fill="none" stroke="#000" d="M121.063-55.546H66.321v36h54.742v-36z"/><text text-anchor="middle" x="93.692" y="-33.346" font-family="Times,serif" font-size="14">Naples</text></g><g class="edge"><path fill="none" stroke="#000" d="m182.238-86.574-60.794 33.662"/></g><g class="node"><path fill="none" stroke="#000" d="M72.62-210.029H.127v36H72.62v-36z"/><text text-anchor="middle" x="36.373" y="-187.829" font-family="Times,serif" font-size="14">Barcelona</text></g><g class="edge"><path fill="none" stroke="#000" d="m84.022-205.847-11.15 3.233"/></g><g class="node"><path fill="none" stroke="#000" d="M109.128-307.204H54.352v36h54.776v-36z"/><text text-anchor="middle" x="81.74" y="-285.005" font-family="Times,serif" font-size="14">Lisbon</text></g><g class="edge"><path fill="none" stroke="#000" d="m105.423-232.391-16.08-38.576"/></g><g class="edge"><path fill="none" stroke="#000" d="M342.834-163.44 325-108.14"/></g><g class="node"><path fill="none" stroke="#000" d="M452.708-222.746h-56.856v36h56.856v-36z"/><text text-anchor="middle" x="424.28" y="-200.546" font-family="Times,serif" font-size="14">Vienna</text></g><g class="edge"><path fill="none" stroke="#000" d="m379.852-191.083 16.211-4.986"/></g><g class="node"><path fill="none" stroke="#000" d="M434.242-131.724h-54v36h54v-36z"/><text text-anchor="middle" x="407.242" y="-109.524" font-family="Times,serif" font-size="14">Minsk</text></g><g class="edge"><path fill="none" stroke="#000" d="m364.356-163.33 27.143 31.396"/></g><g class="node"><path fill="none" stroke="#000" d="M403.766-278.671h-54v36h54v-36z"/><text text-anchor="middle" x="376.766" y="-256.471" font-family="Times,serif" font-size="14">Kiev</text></g><g class="edge"><path fill="none" stroke="#000" d="M355.176-199.854c4.54-12.792 10.572-29.782 15.106-42.552"/></g><g class="edge"><path fill="none" stroke="#000" d="M226.597-21.316 121.245-34.18"/></g><g class="node"><path fill="none" stroke="#000" d="M485.971-294.276h-64.953v36h64.953v-36z"/><text text-anchor="middle" x="453.495" y="-272.076" font-family="Times,serif" font-size="14">Bucharest</text></g><g class="edge"><path fill="none" stroke="#000" d="m404.034-266.217 16.766-3.41"/></g><g class="edge"><path fill="none" stroke="#000" d="M446.123-258.226c-4.395 10.76-9.96 24.384-14.371 35.187"/></g></g></svg>
 
 <label>A fictional rail network between European cities.</label>
 
@@ -397,7 +401,7 @@ There are two common ways to traverse a graph, which are kind of each other's du
             div.appendChild(label);
         }
         div.appendChild(svg);
-        const nodeMap = Object.fromEntries(svg.querySelectorAll(".node").values().map(node => [node.querySelector("text").textContent, {svgNode: node}]));
+        const nodeMap = Object.fromEntries(Array.from(svg.querySelectorAll(".node")).map(node => [node.querySelector("text").textContent, {svgNode: node}]));
 
         return {
             node: div,
@@ -672,7 +676,7 @@ For readability, enqueued nodes are annotated with their order in the queue: a n
 
 Even for graphs that contain cycles, such as the cities one, all nodes will be visited exactly once, because the algorithms keep a set of visited nodes to avoid visiting the same node multiple times.
 
-It it makes it easier for you to visualize, here are the graphs with the nodes annotated with the order in which they'll be visited:
+If it makes it easier for you to visualize, here are the graphs with the nodes annotated with the order in which they'll be visited:
 
 <style>
     #traversalOrders {
@@ -917,7 +921,7 @@ Here's a demo. If no node is highlighted and no path is displayed at the end, th
 
 The BFS is a great algorithm to find the shortest path between two nodes. So great, in fact, that it's the **optimal algorithm** for the general case. That's right. "But what about all those fast algorithms I've heard about, like Dijkstra's or A*?" you might ask. Well, two things:
 
-- Dijkstra's algorithm is a BFS. It's a generalized BFS, that handles giving different costs/weights to edges. 
+- Dijkstra's algorithm is a BFS on steroids, that can handle giving different costs/weights to edges. Where the BFS visits neighbors in insertion order, Dijkstra's uses a priority queue to order them based on the cost of the path. On an unweighted graph, Dijkstra's is equivalent to BFS.
 - The A* algorithm relies on the programmer providing a **heuristic** function that estimates the cost of reaching the destination from a given node. If the heuristic is well-chosen, A* will be faster than BFS, sure, but for a lot of cases, that's a big if. This is why I specifically said "general case": for a given graph $G$ that you know nothing about, BFS is the best you can do. A* is for when you know more about the graph, and can exploit that knowledge to make the search faster.
 
 My use case (large social graphs) doesn't have good, fast to compute cost functions that can be used as heuristics for algorithms such as A*, so I'm sticking with BFS. So, is BFS the fastest we can do? There is actually a slight variation of BFS that can be a lot faster in some cases: the **bidirectional BFS**. 
@@ -981,8 +985,49 @@ As a reference, finding the path between two nodes ~10 edges apart in my 2M node
 
 Here, play with it:
 
+<template id="bidi-template">
+        <!--
+    digraph G {
+    "Legend:" [shape=none];
+    "Visited" [class="visited"];
+    "Current" [class="current"];
+    "Queued\nforward" [class="queued queuedSrc"];
+    "Queued\nbackward" [class="queued queuedDst"];
+    "Found" [class="found"];
+    }
+    -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="575pt" height="67pt" viewBox="0 0 574.66 66.83"><g class="graph" transform="translate(4 62.83)"><path fill="#fff" d="M-4 4v-66.83h574.66V4H-4z"/><g class="node"><text text-anchor="middle" x="30.93" y="-25.22" font-family="Times,serif" font-size="14">Legend:</text></g><g class="node visited"><ellipse fill="none" stroke="#000" cx="118.93" cy="-29.42" rx="38.93" ry="18"/><text text-anchor="middle" x="118.93" y="-25.22" font-family="Times,serif" font-size="14">Visited</text></g><g class="node current"><ellipse fill="none" stroke="#000" cx="215.93" cy="-29.42" rx="40.54" ry="18"/><text text-anchor="middle" x="215.93" y="-25.22" font-family="Times,serif" font-size="14">Current</text></g><g class="node queued queuedSrc"><ellipse fill="none" stroke="#000" cx="316.93" cy="-29.42" rx="42.65" ry="29.42"/><text text-anchor="middle" x="316.93" y="-33.62" font-family="Times,serif" font-size="14">Queued</text><text text-anchor="middle" x="316.93" y="-16.82" font-family="Times,serif" font-size="14">forward</text></g><g class="node queued queuedDst"><ellipse fill="none" stroke="#000" cx="426.93" cy="-29.42" rx="49.79" ry="29.42"/><text text-anchor="middle" x="426.93" y="-33.62" font-family="Times,serif" font-size="14">Queued</text><text text-anchor="middle" x="426.93" y="-16.82" font-family="Times,serif" font-size="14">backward</text></g><g class="node found"><ellipse fill="none" stroke="#000" cx="530.93" cy="-29.42" rx="35.72" ry="18"/><text text-anchor="middle" x="530.93" y="-25.22" font-family="Times,serif" font-size="14">Found</text></g></g></svg>
+</template>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {   
+        const bidiTempl = document.getElementById("bidi-template").content;
+        const pathTempl = document.getElementById("shortestpath-template").content;
+        bidiTempl.insertBefore(
+            pathTempl.firstElementChild.cloneNode(true),
+            bidiTempl.firstElementChild
+        );
+    });
+</script>
+
 <figure id="bidi1">
 </figure>
+
+<style>
+    .algo-viewer {
+        & svg {
+            .node {
+                &.queuedSrc > :not(text) {
+                    stroke-dasharray: 2;
+                }
+
+                &.queuedDst > :not(text) {
+                    stroke-dasharray: 10;
+                }
+            }
+        }
+    }
+</style>
 
 <script>
     function interleave(q1, q2, swap) {
@@ -1016,6 +1061,8 @@ Here, play with it:
             queue: statesSrc[0].queue.concat(statesDst[0].queue),
             visited: new Set(),
             current: statesSrc[0].current.concat(statesDst[0].current),
+            queueSrc: statesSrc[0].queue.slice(),
+            queueDst: statesDst[0].queue.slice(),
         }];
         let bothStates = [statesSrc[0], statesDst[0]];
         let found = null;
@@ -1054,7 +1101,9 @@ Here, play with it:
             states.push({
                 queue: newQueue,
                 visited: new Set([...stateSrc.visited, ...stateDst.visited]),
-                current: stateSrc.current.concat(stateDst.current)
+                current: stateSrc.current.concat(stateDst.current),
+                queueSrc: stateSrc.queue.slice(),
+                queueDst: stateDst.queue.slice(),
             });
 
             if (!curState.continue) {
@@ -1070,6 +1119,8 @@ Here, play with it:
             current: lastSrc.current.concat(lastDst.current),
             predSrc: lastSrc.pred,
             predDst: lastDst.pred,
+            queueSrc: lastSrc.queue.slice(),
+            queueDst: lastDst.queue.slice(),
             found
         };
         states.push(last);
@@ -1103,11 +1154,16 @@ Here, play with it:
             }
         }
 
+        for (const [node, {svgNode}] of Object.entries(graph.nodeMap)) {
+            setClass(svgNode, "queuedSrc", state.queueSrc.includes(node));
+            setClass(svgNode, "queuedDst", state.queueDst.includes(node));
+        }
+
         pathNodeUpdate(algoState, idx, path);
     }
 
     document.addEventListener("DOMContentLoaded", function() {   
-        document.getElementById("bidi1").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+        document.getElementById("bidi1").appendChild(document.getElementById("bidi-template").content.cloneNode(true));
         initAlgo("bidi1", {
             algos: {
                 bidiBfs: {
@@ -1153,7 +1209,7 @@ digraph G {
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {   
-        document.getElementById("bidi2").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+        document.getElementById("bidi2").appendChild(document.getElementById("bidi-template").content.cloneNode(true));
 
         initAlgo("bidi2", {
             algos: {
@@ -1192,7 +1248,7 @@ The problem, specifically, is at this step:
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {   
-        document.getElementById("bidi3").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+        document.getElementById("bidi3").appendChild(document.getElementById("bidi-template").content.cloneNode(true));
 
         initAlgo("bidi3", {
             algos: {
@@ -1305,7 +1361,7 @@ digraph G {
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {   
-        document.getElementById("bidi4").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+        document.getElementById("bidi4").appendChild(document.getElementById("bidi-template").content.cloneNode(true));
 
         initAlgo("bidi4", {
             algos: {
@@ -1348,7 +1404,7 @@ We can also try the new algorithm on the example graphs. Two important points, t
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {   
-        document.getElementById("bidi5").appendChild(document.getElementById("shortestpath-template").content.cloneNode(true));
+        document.getElementById("bidi5").appendChild(document.getElementById("bidi-template").content.cloneNode(true));
         initAlgo("bidi5", {
             algos: {
                 bidiBfs: {
@@ -1423,10 +1479,10 @@ I only went up to page 5 of Google results, but other implementations may appear
 
 ## Finding the Right Path, Faster
 
-There's an additional easy optimization we can add on top of bidirectional BFS. Right now, we're alternating sides, with each advancing one level at a time. But instead of alternating between sides, it appears that advancing on whichever side has visited the fewest nodes yet accelerates the algorithm in a lot of cases. The intuition behind is that:
+There's an additional easy optimization we can add on top of bidirectional BFS. Right now, we're alternating sides, with each advancing one level at a time. But instead of alternating between sides, it appears that advancing on whichever side has the fewest nodes in its queue accelerates the algorithm in a lot of cases. The intuition behind is that:
 - if a path exists, both sides will end up meeting at a midpoint that is on the shortest path
 - advancing one level, no matter how many nodes we visit, will **always** get us **closer** to the midpoint by **exactly one level**
-- if we're getting one level closer, we might as well advance on the side that has visited the fewest nodes, since that means we'll have less nodes to visit in the future (while still getting closer to the midpoint as fast as possible, but with less work)
+- if we're getting one level closer, we might as well advance on the side that has the fewest queued nodes, since that means we'll have less nodes to visit in the future (while still getting closer to the midpoint as fast as possible, but with less work)
 
 On my test graph, this sped up some long paths by about 100 times: without the optimization, most paths take about 3-4ms but very long paths (>10 edges) can take up to 400ms. With the optimization, all queries take about 3-4ms.
 
