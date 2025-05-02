@@ -11,7 +11,7 @@ This is the Burroughs C3155:
 
 {% picture DSC02668.JPG --alt A dark grey calculator with a dark VFD (Vacuum Fluorescent) display on top showing zeroes, and a keyboard of thick plastic keys. --cover true %}
 
-It's a charming old 1970s calculator rocking a VFD display and an ostensibly 1970s design. It's also known, maybe more widely, as the Sharp QT-8D, of which it is a clone made by Burroughs for sale in the US. Both devices are pretty much identical, except for the layout of the operation keys.
+It's a charming old 1970s calculator rocking a VFD display and an ostensibly 1970s design. It's also known, maybe more widely, as the Sharp QT-8D, of which it is a clone made by Burroughs for sale in the US. Both devices are pretty much identical, except for the layout of the operation keys. It was also sold in other countries under the names Facit 1115 and Addo-X 9354, and reverse-engineered in the USSR under the name Elektronika EKVM 24-71.
 
 ## The Outside
 
@@ -62,12 +62,17 @@ The first thing that jumped to my eyes was the peculiar wiring. It's quite commo
 Next, we have the four main LSI chips, clockwise:
 - a [Rockwell NRD2256](https://wiki.calcverse.net/index.php/Rockwell_NRD2256) keypad decoder
 - a [Rockwell DC2266](https://commons.wikimedia.org/wiki/File:DC2266.jpg) decimal point manager
-- a [Rockwell AU2271](https://wiki.calcverse.net/index.php/Rockwell_AU2271) arithmetic unit/register store (the QT-8D used the AU2276)
-- a [Rockwell AC2261](https://wiki.calcverse.net/index.php/Rockwell_AC2261) control logic unit (the QT-8D used the AC2266)
+- a [Rockwell AU2271](https://wiki.calcverse.net/index.php/Rockwell_AU2271) arithmetic unit/register store
+- a [Rockwell AC2261](https://wiki.calcverse.net/index.php/Rockwell_AC2261) control logic unit
+
+> In the original version of this post, I indicated that the QT-8D, that the Burroughs model clones, used the AU2276 and AC2266 chips. The information came from [this website](http://www.vintagecalculators.com/html/sharp_qt-8d.html), which cited the [a 1969 edition of *Electronics*](https://www.worldradiohistory.com/Archive-Electronics/60s/69/Electronics-1969-03-17.pdf) (page 204) as a source. It seems that either the magazine made a mistake, or the choice of chips changed during the development of the product: the QT-8D did indeed use the AU2271 and AC2261 chip. This is also mentioned on the QT-8D's [Wikipedia page](https://en.wikipedia.org/wiki/Sharp_QT-8D#cite_note-12).
+{: .prompt-info }
 
 In the bottom left, we have:
 - a Rockwell CG2341 clock generator with its star-shaped heatsink
 - a [Hitachi HD3103](https://www.oldcalculatormuseum.com/t-hitachihd31xxdata.pdf) chip that provides 5 MOSFETs
+
+A detailed reverse-engineering of the calculator's internals can be found in [this article](https://www.righto.com/2020/12/reverse-engineering-early-calculator.html) by Ken Shirriff.
 
 Notice how the chips are packaged in ceramic instead of the nowadays more usual black plastic.
 
@@ -171,6 +176,31 @@ You can try the calculator with this simulator I made.
   width: 100%;
   border-radius: 1%;
   overflow: hidden;
+
+  * {
+    grid-gap: var(--gap);
+  }
+
+  button {
+    font-size: 6cqw;
+    border-radius: 1cqw;
+    border: 1cqw outset #ddd;
+    outline: none;
+
+    &:active {
+      --shift: 0.1cqw;
+      --new-big: calc(1cqw + var(--shift));
+      --new-small: calc(1cqw - var(--shift));
+      border-width: var(--new-big) var(--new-small) var(--new-small) var(--new-big);
+      border-style: inset;
+    }
+
+    br {
+      display: block;
+      content: " ";
+      margin-top: -2.5cqw;
+    }
+  }
 }
 
 #calc-display-container {
@@ -180,37 +210,17 @@ You can try the calculator with this simulator I made.
   width: 100%;
 }
 
-#calc * {
-  grid-gap: var(--gap);
-}
-
-#calc button {
-  font-size: 6cqw;
-  border-radius: 1cqw;
-  border: 1cqw outset #ddd;
-  outline: none;
-}
-
-#calc button:active {
-  --shift: 0.1cqw;
-  --new-big: calc(1cqw + var(--shift));
-  --new-small: calc(1cqw - var(--shift));
-  border-width: var(--new-big) var(--new-small) var(--new-small) var(--new-big);
-  border-style: inset;
-}
-
-#calc br {
-  display: block;
-  content: " ";
-  margin-top: -2.5cqw;
-}
-
 #calc-keyboard {
   aspect-ratio: 1.42;
   padding: 7.2% 11.5% 9.4% 14.4%;
   background: #333;
   display: flex;
-  width: 100%;
+  width: 100%;  
+
+  & > * {
+    background-color: #111;
+    border-radius: 0.7cqw;
+  }
 }
 
 #calc-left {
@@ -218,19 +228,19 @@ You can try the calculator with this simulator I made.
   padding: var(--gap);
   display: flex;
   flex-direction: column;
-}
 
-#calc-left> :nth-child(1) {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  height: 75%;
-}
+  & > :nth-child(1) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 75%;
+  }
 
-#calc-left> :nth-child(2) {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  height: 25%;
+  & > :nth-child(2) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    height: 25%;
+  }
 }
 
 #calc-right {
@@ -240,17 +250,12 @@ You can try the calculator with this simulator I made.
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
-}
 
-#calc-right>button:first-child {
-  background-color: red;
-  color: white;
-  border-color: #d00;
-}
-
-#calc-keyboard>* {
-  background-color: #111;
-  border-radius: 0.7cqw;
+  & > button:first-child {
+    background-color: red;
+    color: white;
+    border-color: #d00;
+  }
 }
 
 #calc-display {
@@ -261,48 +266,48 @@ You can try the calculator with this simulator I made.
   grid-gap: 1cqw;
   width: 100%;
   height: 100%;
-}
 
-#calc-display>* {
-  color: #02bb78;
-  font-size: 13cqw;
-  text-align: center;
-  position: relative;
-  top: -2.5cqw;
-  height: calc(100% + 2.5cqw);
-  text-shadow: 0 0 5cqw #02bb78;
-  overflow: hidden;
-}
+  & > * {
+    color: #02bb78;
+    font-size: 13cqw;
+    text-align: center;
+    position: relative;
+    top: -2.5cqw;
+    height: calc(100% + 2.5cqw);
+    text-shadow: 0 0 5cqw #02bb78;
+    overflow: hidden;
 
-#calc-display>*[comma="true"]::after {
-  position: absolute;
-  bottom: -7cqw;
-  right: 0.5cqw;
-  content: "⋅";
-  font-family: "Arial";
-  font-size: 90%;
-}
+    &[comma="true"]::after {
+      position: absolute;
+      bottom: -7cqw;
+      right: 0.5cqw;
+      content: "⋅";
+      font-family: "Sharp EL-8";
+      font-size: 90%;
+    }
 
-#calc-display>*:not(:last-child) {
-  font-family: "Sharp EL-8";
-}
+    &:not(:last-child) {
+      font-family: "Sharp EL-8";
+    }
 
-#calc-display>*:last-child {
-  font-family: "Arial";
-}
+    &:last-child {
+      font-family: "Arial";
+    }
 
-#calc-display>*[minus="true"]::before {
-  position: absolute;
-  left: 1.75cqw;
-  content: "-";
-}
+    &[minus="true"]::before {
+      position: absolute;
+      left: 1.75cqw;
+      content: "-";
+    }
 
-#calc-display>*[infinite="true"]::after {
-  position: absolute;
-  left: 2cqw;
-  top: 4cqw;
-  content: "Ｉ";
-  font-size: 4cqw;
+    &[infinite="true"]::after {
+      position: absolute;
+      left: 2cqw;
+      top: 4cqw;
+      content: "Ｉ";
+      font-size: 4cqw;
+    }
+  }
 }
 </style>
 
